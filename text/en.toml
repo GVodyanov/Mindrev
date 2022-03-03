@@ -1,0 +1,39 @@
+[sidebar]
+home = "Home"
+settings = "Settings"
+help = "Help"
+about = "About"
+
+[home]
+create = "It seems like you haven't created any classes yet, click the button below to get started"
+new = "Class"
+
+[newClass]
+title = "Create a new class"
+label = "Class name"
+submit = "Submit"
+cancel = "Cancel"
+errorNoText = "Please enter some text"
+chooseColor = "Choose a color"
+chooseColorDetails = "Choose a color for your new class"
+
+[topics]
+create = "It seems like you haven't created any topics yet, click the button below to get started"
+new = "Topic"
+
+[newTopic]
+title = "Create a new topic"
+label = "Topic name"
+submit = "Submit"
+errorNoText = "Please enter some text"
+
+[materials]
+create = "It seems like you don't have any material to study yet, click the button below to get started"
+new = "Material"
+
+[newMaterial]
+title = "Create some new study material"
+label = "Material name"
+submit = "Submit"
+errorNoText = "Please enter some text"
+type = "Choose a material type"
