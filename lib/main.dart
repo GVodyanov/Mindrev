@@ -6,6 +6,7 @@ import 'package:mindrev/pages/topics/new_topic.dart';
 import 'package:mindrev/pages/materials/materials.dart';
 import 'package:mindrev/pages/materials/new_material.dart';
 
+//main
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

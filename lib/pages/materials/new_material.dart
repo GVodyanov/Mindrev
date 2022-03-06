@@ -31,8 +31,25 @@ class _NewMaterialState extends State<NewMaterial> {
 
 	//function to create a new material
 	Future<bool> newMaterial (String name, String type, String topic, String className) async {
-  	print('$name $type $topic $className');
-  	return true;	
+
+  	//first we need a record where we store a list of all materials in a topic
+    dynamic existingTopicImmutable = await local.read(topic, className);
+    if (existingTopicImmutable == null) {
+      await local.write([name], topic, className);
+    } else {
+    	List? existingTopic = cloneValue(existingTopicImmutable);
+    	existingTopic?.add(name);
+    	await local.update(existingTopic, topic, className);
+    }
+
+    //second we need a record for the info of the material
+    dynamic existingMaterialImmutable = await local.read(name, className);
+    if (existingMaterialImmutable == null) {
+      await local.write({'type' : type, 'date' : DateTime.now().toIso8601String(), "contents" : null}, name, className);
+      return true;
+    } else {
+      return false;
+    }
 	}
 
 	List<Widget> displayMaterial (rawTOML, Color accentColor, Color contrastColor) {
@@ -142,9 +159,27 @@ class _NewMaterialState extends State<NewMaterial> {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState?.save();
                             if (newMaterialName != null && type != null) {
-                              await newMaterial('$newMaterialName', '$type', routeData['selection'], routeData['className']);
-                              Navigator.pop(context);
-                              Navigator.pushReplacementNamed(context, '/topics',arguments: routeData);
+                              bool outcome = await newMaterial('$newMaterialName', '$type', routeData['selection'], routeData['className']);
+                              if (outcome == true) {
+                                Navigator.pop(context);
+                                Navigator.pushReplacementNamed(context, '/materials',arguments: routeData);
+                              } else {
+                                showDialog<String> (
+                                  context: ctx,
+                                  builder: (BuildContext ctx) => 
+                                  AlertDialog (
+                                  	title: Text(snapshot.data![0]['duplicate'], style: defaultPrimaryTextStyle),
+  												          actions: <Widget>[
+    												          coloredButton(
+      												          snapshot.data![0]['close'],
+      												          () {Navigator.pop(context, snapshot.data![0]['close']);},
+      												          HexColor(routeData['color']),
+      												          contrastColor
+      												        )
+  												          ]
+                                	)
+                                );
+                              }
                             }
                           }
                       	}), HexColor(routeData['color']), contrastColor)
