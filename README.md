@@ -27,5 +27,5 @@ A flutter application to help you study
 This is absolutely not in a usable state yet but if you really want to run this just make sure you have the flutter SDK and git installed and run this
 
 ```bash
-git clone https://github.com/ScratchX98/mindrev.git && cd mindrev && flutter run
+git clone https://github.com/ScratchX98/Mindrev.git && cd Mindrev && flutter run
 ```
