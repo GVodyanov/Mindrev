@@ -10,7 +10,7 @@ A flutter application to help you study
 - [ ] Ordered Notes
 - [ ] Graphs
 - [ ] Mind Maps
-- [ ] Maybe we synchronization?
+- [ ] Maybe web synchronization?
 
 ### Supported Platforms
 - Desktop
