@@ -33,9 +33,13 @@ class _NewMaterialState extends State<NewMaterial> {
     //first we need a record where we store a list of all materials in a topic
     dynamic existingTopicImmutable = await local.read(topic, className);
     if (existingTopicImmutable == null) {
-      await local.write([
-        name
-      ], topic, className);
+      await local.write(
+        [
+          name
+        ],
+        topic,
+        className,
+      );
     } else {
       List? existingTopic = cloneValue(existingTopicImmutable);
       existingTopic?.add(name);
@@ -45,11 +49,15 @@ class _NewMaterialState extends State<NewMaterial> {
     //second we need a record for the info of the material
     dynamic existingMaterialImmutable = await local.read(name, className);
     if (existingMaterialImmutable == null) {
-      await local.write({
-        'type': type,
-        'date': DateTime.now().toIso8601String(),
-        "contents": null
-      }, name, className);
+      await local.write(
+        {
+          'type': type,
+          'date': DateTime.now().toIso8601String(),
+          'contents': null
+        },
+        name,
+        className,
+      );
       return true;
     } else {
       return false;
@@ -62,7 +70,8 @@ class _NewMaterialState extends State<NewMaterial> {
     int j = material['materials'].length;
     for (int i = j - 1; i >= 0; i--) {
       if (selected == i) type = material['materials'][i]['name'];
-      result.add(Padding(
+      result.add(
+        Padding(
           padding: const EdgeInsets.all(8),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -73,20 +82,25 @@ class _NewMaterialState extends State<NewMaterial> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
             ),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SvgPicture.asset(
-                'assets/study_material_icons/${material['materials'][i]['icon']}.svg',
-                color: selected == i ? contrastColor : accentColor,
-              ),
-              const SizedBox(height: 10, width: 100),
-              Text(material['materials'][i]['name'], style: TextStyle(color: selected == i ? contrastColor : theme.primaryText))
-            ]),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/study_material_icons/${material['materials'][i]['icon']}.svg',
+                  color: selected == i ? contrastColor : accentColor,
+                ),
+                const SizedBox(height: 10, width: 100),
+                Text(material['materials'][i]['name'], style: TextStyle(color: selected == i ? contrastColor : theme.primaryText))
+              ],
+            ),
             onPressed: () {
               setState(() {
                 selected = i;
               });
             },
-          )));
+          ),
+        ),
+      );
     }
     return result;
   }
@@ -96,82 +110,111 @@ class _NewMaterialState extends State<NewMaterial> {
     routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
     Color contrastColor = textColor(routeData['color']);
     return FutureBuilder(
-        future: Future.wait([
-          text,
-          materials
-        ]),
-        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
-            ? Scaffold(
-                appBar: AppBar(
-                  foregroundColor: contrastColor,
-                  title: Text(snapshot.data![0]['title']),
-                  elevation: 10,
-                  centerTitle: true,
-                  backgroundColor: HexColor(routeData['color']),
+      future: Future.wait([
+        text,
+        materials
+      ]),
+      builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
+          ? Scaffold(
+              appBar: AppBar(
+                foregroundColor: contrastColor,
+                title: Text(snapshot.data![0]['title']),
+                elevation: 10,
+                centerTitle: true,
+                backgroundColor: HexColor(routeData['color']),
+              ),
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              cursorColor: HexColor(routeData['color']),
+                              style: defaultPrimaryTextStyle,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return snapshot.data![0]['errorNoText'];
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                setState(() {
+                                  newMaterialName = value;
+                                });
+                              },
+                              decoration: defaultPrimaryInputDecoration(snapshot.data![0]['label']),
+                            ),
+                            const SizedBox(height: 20),
+                            Material(
+                              borderRadius: const BorderRadius.all(Radius.circular(15)),
+                              elevation: 8,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  children: [
+                                    Text(snapshot.data![0]['type'], style: defaultPrimaryTextStyle),
+                                    const SizedBox(height: 20, width: double.infinity),
+                                    Wrap(
+                                      children: [
+                                        for (Widget i in displayMaterial(snapshot.data![1], HexColor(routeData['color']), contrastColor)) i
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            coloredButton(
+                              snapshot.data![0]['submit'],
+                              (() async {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState?.save();
+                                  if (newMaterialName != null && type != null) {
+                                    bool outcome = await newMaterial('$newMaterialName', '$type', routeData['selection'], routeData['className']);
+                                    if (outcome == true) {
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacementNamed(context, '/materials', arguments: routeData);
+                                    } else {
+                                      showDialog<String>(
+                                        context: ctx,
+                                        builder: (BuildContext ctx) => AlertDialog(
+                                          title: Text(snapshot.data![0]['duplicate'], style: defaultPrimaryTextStyle),
+                                          actions: <Widget>[
+                                            coloredButton(
+                                              snapshot.data![0]['close'],
+                                              () {
+                                                Navigator.pop(context, snapshot.data![0]['close']);
+                                              },
+                                              HexColor(routeData['color']),
+                                              contrastColor,
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }
+                              }),
+                              HexColor(routeData['color']),
+                              contrastColor,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-                body: SingleChildScrollView(
-                    child: Center(
-                        child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: ConstrainedBox(
-                                constraints: const BoxConstraints(maxWidth: 600),
-                                child: Form(
-                                    key: _formKey,
-                                    child: Column(children: [
-                                      TextFormField(
-                                        cursorColor: HexColor(routeData['color']),
-                                        style: defaultPrimaryTextStyle,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return snapshot.data![0]['errorNoText'];
-                                          }
-                                          return null;
-                                        },
-                                        onSaved: (value) {
-                                          setState(() {
-                                            newMaterialName = value;
-                                          });
-                                        },
-                                        decoration: defaultPrimaryInputDecoration(snapshot.data![0]['label']),
-                                      ),
-                                      const SizedBox(height: 20),
-                                      Material(
-                                          borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                          elevation: 8,
-                                          child: Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: Column(children: [
-                                                Text(snapshot.data![0]['type'], style: defaultPrimaryTextStyle),
-                                                const SizedBox(height: 20, width: double.infinity),
-                                                Wrap(children: [
-                                                  for (Widget i in displayMaterial(snapshot.data![1], HexColor(routeData['color']), contrastColor)) i
-                                                ])
-                                              ]))),
-                                      const SizedBox(height: 30),
-                                      coloredButton(snapshot.data![0]['submit'], (() async {
-                                        if (_formKey.currentState!.validate()) {
-                                          _formKey.currentState?.save();
-                                          if (newMaterialName != null && type != null) {
-                                            bool outcome = await newMaterial('$newMaterialName', '$type', routeData['selection'], routeData['className']);
-                                            if (outcome == true) {
-                                              Navigator.pop(context);
-                                              Navigator.pushReplacementNamed(context, '/materials', arguments: routeData);
-                                            } else {
-                                              showDialog<String>(
-                                                  context: ctx,
-                                                  builder: (BuildContext ctx) => AlertDialog(title: Text(snapshot.data![0]['duplicate'], style: defaultPrimaryTextStyle), actions: <Widget>[
-                                                        coloredButton(snapshot.data![0]['close'], () {
-                                                          Navigator.pop(context, snapshot.data![0]['close']);
-                                                        }, HexColor(routeData['color']), contrastColor)
-                                                      ]));
-                                            }
-                                          }
-                                        }
-                                      }), HexColor(routeData['color']), contrastColor)
-                                    ])))))),
-              )
-            : Scaffold(
-                //loading screen to be shown until Future is found
-                body: loading));
+              ),
+            )
+          : Scaffold(
+              //loading screen to be shown until Future is found
+              body: loading,
+            ),
+    );
   }
 }

@@ -51,9 +51,13 @@ class _NewClassState extends State<NewClass> {
     dynamic existing = await local.read('classes', null);
     List newList = [];
     if (existing == null) {
-      local.write([
-        name
-      ], 'classes', null);
+      local.write(
+        [
+          name
+        ],
+        'classes',
+        null,
+      );
     } else {
       newList = cloneList(existing as List);
     }
@@ -61,10 +65,14 @@ class _NewClassState extends State<NewClass> {
       newList.add(name);
       local.update(newList, 'classes', null);
     }
-    await local.write({
-      'color': color,
-      'date': DateTime.now().toIso8601String()
-    }, 'properties', name);
+    await local.write(
+      {
+        'color': color,
+        'date': DateTime.now().toIso8601String()
+      },
+      'properties',
+      name,
+    );
     return true;
   }
 
@@ -72,92 +80,105 @@ class _NewClassState extends State<NewClass> {
   Widget build(BuildContext context) {
     Future text = readText('newClass');
     return FutureBuilder(
-        future: text,
-        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
-            ? Scaffold(
-                appBar: AppBar(
-                  title: Text(snapshot.data!['title'], style: defaultSecondaryTextStyle),
-                  elevation: 10,
-                  centerTitle: true,
-                  backgroundColor: theme.secondary,
-                ),
-                body: SingleChildScrollView(
-                    child: Center(
-                        child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 600),
-                              child: Column(
-                                children: [
-                                  Form(
-                                    key: _formKey,
-                                    child: Column(
-                                      children: <Widget>[
-                                        TextFormField(
-                                          cursorColor: theme.accent,
-                                          style: defaultPrimaryTextStyle,
-                                          validator: (value) {
-                                            if (value == null || value.isEmpty) {
-                                              return snapshot.data!['errorNoText'];
-                                            }
-                                            return null;
-                                          },
-                                          onSaved: (value) {
-                                            setState(() {
-                                              newClassName = value;
-                                            });
-                                          },
-                                          decoration: defaultPrimaryInputDecoration(snapshot.data!['label']),
-                                        ),
-                                        const SizedBox(height: 20),
-                                        Container(
-                                          child: ListTile(
-                                            trailing: defaultButton(snapshot.data!['chooseColor'], (() {
-                                              openDialog(
-                                                  MaterialColorPicker(
-                                                    selectedColor: mainColor,
-                                                    onColorChange: (color) => setState(() {
-                                                      tempColor = color;
-                                                    }),
-                                                  ),
-                                                  snapshot.data);
-                                            })),
-                                            leading: CircleColor(
-                                              circleSize: 30,
-                                              color: mainColor,
-                                            ),
+      future: text,
+      builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
+          ? Scaffold(
+              appBar: AppBar(
+                title: Text(snapshot.data!['title'], style: defaultSecondaryTextStyle),
+                elevation: 10,
+                centerTitle: true,
+                backgroundColor: theme.secondary,
+              ),
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      child: Column(
+                        children: [
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: <Widget>[
+                                TextFormField(
+                                  cursorColor: theme.accent,
+                                  style: defaultPrimaryTextStyle,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return snapshot.data!['errorNoText'];
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      newClassName = value;
+                                    });
+                                  },
+                                  decoration: defaultPrimaryInputDecoration(snapshot.data!['label']),
+                                ),
+                                const SizedBox(height: 20),
+                                Container(
+                                  child: ListTile(
+                                    trailing: defaultButton(
+                                      snapshot.data!['chooseColor'],
+                                      (() {
+                                        openDialog(
+                                          MaterialColorPicker(
+                                            selectedColor: mainColor,
+                                            onColorChange: (color) => setState(() {
+                                              tempColor = color;
+                                            }),
                                           ),
-                                          padding: const EdgeInsets.all(1),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: theme.primaryText!),
-                                            borderRadius: BorderRadius.circular(15),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 30),
-                                        defaultButton(snapshot.data!['submit'], (() async {
-                                          if (_formKey.currentState!.validate()) {
-                                            _formKey.currentState?.save();
-                                            if (newClassName != null) {
-                                              String mainColorString = mainColor.toString();
-                                              const start = 'Color(0xff';
-                                              const end = ')';
-
-                                              final startIndex = mainColorString.indexOf(start);
-                                              final endIndex = mainColorString.indexOf(end, startIndex + start.length);
-                                              await newClass('$newClassName', '#' + mainColorString.substring(startIndex + start.length, endIndex));
-                                              Navigator.pop(context);
-                                              Navigator.pushReplacementNamed(context, '/home');
-                                            }
-                                          }
-                                        }))
-                                      ],
+                                          snapshot.data,
+                                        );
+                                      }),
+                                    ),
+                                    leading: CircleColor(
+                                      circleSize: 30,
+                                      color: mainColor,
                                     ),
                                   ),
-                                ],
-                              ),
-                            )))))
-            : Scaffold(
-                //loading screen to be shown until Future is found
-                body: loading));
+                                  padding: const EdgeInsets.all(1),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: theme.primaryText!),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                defaultButton(
+                                  snapshot.data!['submit'],
+                                  (() async {
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState?.save();
+                                      if (newClassName != null) {
+                                        String mainColorString = mainColor.toString();
+                                        const start = 'Color(0xff';
+                                        const end = ')';
+
+                                        final startIndex = mainColorString.indexOf(start);
+                                        final endIndex = mainColorString.indexOf(end, startIndex + start.length);
+                                        await newClass('$newClassName', '#' + mainColorString.substring(startIndex + start.length, endIndex));
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacementNamed(context, '/home');
+                                      }
+                                    }
+                                  }),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : Scaffold(
+              //loading screen to be shown until Future is found
+              body: loading,
+            ),
+    );
   }
 }

@@ -150,14 +150,18 @@ InputDecoration defaultSecondaryInputDecoration(String text) {
 }
 
 Center loading = Center(
-    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-  Text('Mindrev', style: TextStyle(color: theme.accent, fontFamily: 'Comfortaa-Bold', fontWeight: FontWeight.bold, fontSize: 40)),
-  const SizedBox(height: 30),
-  SpinKitFadingGrid(
-    color: theme.accent,
-    size: 50.0,
-  )
-]));
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text('Mindrev', style: TextStyle(color: theme.accent, fontFamily: 'Comfortaa-Bold', fontWeight: FontWeight.bold, fontSize: 40)),
+      const SizedBox(height: 30),
+      SpinKitFadingGrid(
+        color: theme.accent,
+        size: 50.0,
+      )
+    ],
+  ),
+);
 
 TextStyle defaultPrimaryTextStyle = TextStyle(color: theme.primaryText);
 
