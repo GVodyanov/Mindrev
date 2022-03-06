@@ -5,12 +5,12 @@ A flutter application to help you study
 ### Features
 
 - [x] Divided into classes, topics, and materials
-- [] Flashcards
-- [] Notes
-- [] Ordered Notes
-- [] Graphs
-- [] Mind Maps
-- [] Maybe we synchronization?
+- [ ] Flashcards
+- [ ] Notes
+- [ ] Ordered Notes
+- [ ] Graphs
+- [ ] Mind Maps
+- [ ] Maybe we synchronization?
 
 ### Supported Platforms
 - Desktop
