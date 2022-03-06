@@ -68,9 +68,9 @@ class Local {
     } else {
       store = StoreRef<String, String>.main();
     }
-    var finder = Finder(
-        filter: Filter.not(Filter.lessThan('', '')),
-        sortOrders: [SortOrder('')]);
+    var finder = Finder(filter: Filter.not(Filter.lessThan('', '')), sortOrders: [
+      SortOrder('')
+    ]);
     return await store.find(db, finder: finder);
   }
 }

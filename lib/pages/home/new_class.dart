@@ -30,8 +30,7 @@ class _NewClassState extends State<NewClass> {
         return AlertDialog(
           backgroundColor: theme.secondary,
           contentPadding: const EdgeInsets.all(8.0),
-          title: Text(text['chooseColorDetails'],
-              style: TextStyle(color: theme.secondaryText)),
+          title: Text(text['chooseColorDetails'], style: TextStyle(color: theme.secondaryText)),
           content: content,
           actions: [
             defaultButton(text['cancel'], Navigator.of(context).pop),
@@ -52,7 +51,9 @@ class _NewClassState extends State<NewClass> {
     dynamic existing = await local.read('classes', null);
     List newList = [];
     if (existing == null) {
-      local.write([name], 'classes', null);
+      local.write([
+        name
+      ], 'classes', null);
     } else {
       newList = cloneList(existing as List);
     }
@@ -60,10 +61,10 @@ class _NewClassState extends State<NewClass> {
       newList.add(name);
       local.update(newList, 'classes', null);
     }
-    await local.write(
-        {'color': color, 'date': DateTime.now().toIso8601String()},
-        'properties',
-        name);
+    await local.write({
+      'color': color,
+      'date': DateTime.now().toIso8601String()
+    }, 'properties', name);
     return true;
   }
 
@@ -72,12 +73,10 @@ class _NewClassState extends State<NewClass> {
     Future text = readText('newClass');
     return FutureBuilder(
         future: text,
-        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot
-                .hasData
+        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
             ? Scaffold(
                 appBar: AppBar(
-                  title: Text(snapshot.data!['title'],
-                      style: defaultSecondaryTextStyle),
+                  title: Text(snapshot.data!['title'], style: defaultSecondaryTextStyle),
                   elevation: 10,
                   centerTitle: true,
                   backgroundColor: theme.secondary,
@@ -98,10 +97,8 @@ class _NewClassState extends State<NewClass> {
                                           cursorColor: theme.accent,
                                           style: defaultPrimaryTextStyle,
                                           validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return snapshot
-                                                  .data!['errorNoText'];
+                                            if (value == null || value.isEmpty) {
+                                              return snapshot.data!['errorNoText'];
                                             }
                                             return null;
                                           },
@@ -110,21 +107,16 @@ class _NewClassState extends State<NewClass> {
                                               newClassName = value;
                                             });
                                           },
-                                          decoration:
-                                              defaultPrimaryInputDecoration(
-                                                  snapshot.data!['label']),
+                                          decoration: defaultPrimaryInputDecoration(snapshot.data!['label']),
                                         ),
                                         const SizedBox(height: 20),
                                         Container(
                                           child: ListTile(
-                                            trailing: defaultButton(
-                                                snapshot.data!['chooseColor'],
-                                                (() {
+                                            trailing: defaultButton(snapshot.data!['chooseColor'], (() {
                                               openDialog(
                                                   MaterialColorPicker(
                                                     selectedColor: mainColor,
-                                                    onColorChange: (color) =>
-                                                        setState(() {
+                                                    onColorChange: (color) => setState(() {
                                                       tempColor = color;
                                                     }),
                                                   ),
@@ -137,41 +129,24 @@ class _NewClassState extends State<NewClass> {
                                           ),
                                           padding: const EdgeInsets.all(1),
                                           decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: theme.primaryText!),
-                                            borderRadius:
-                                                BorderRadius.circular(15),
+                                            border: Border.all(color: theme.primaryText!),
+                                            borderRadius: BorderRadius.circular(15),
                                           ),
                                         ),
                                         const SizedBox(height: 30),
-                                        defaultButton(snapshot.data!['submit'],
-                                            (() async {
-                                          if (_formKey.currentState!
-                                              .validate()) {
+                                        defaultButton(snapshot.data!['submit'], (() async {
+                                          if (_formKey.currentState!.validate()) {
                                             _formKey.currentState?.save();
                                             if (newClassName != null) {
-                                              String mainColorString =
-                                                  mainColor.toString();
+                                              String mainColorString = mainColor.toString();
                                               const start = 'Color(0xff';
                                               const end = ')';
 
-                                              final startIndex = mainColorString
-                                                  .indexOf(start);
-                                              final endIndex =
-                                                  mainColorString.indexOf(
-                                                      end,
-                                                      startIndex +
-                                                          start.length);
-                                              await newClass(
-                                                  '$newClassName',
-                                                  '#' +
-                                                      mainColorString.substring(
-                                                          startIndex +
-                                                              start.length,
-                                                          endIndex));
+                                              final startIndex = mainColorString.indexOf(start);
+                                              final endIndex = mainColorString.indexOf(end, startIndex + start.length);
+                                              await newClass('$newClassName', '#' + mainColorString.substring(startIndex + start.length, endIndex));
                                               Navigator.pop(context);
-                                              Navigator.pushReplacementNamed(
-                                                  context, '/home');
+                                              Navigator.pushReplacementNamed(context, '/home');
                                             }
                                           }
                                         }))

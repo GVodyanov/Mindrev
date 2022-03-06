@@ -26,9 +26,7 @@ class _NewTopicState extends State<NewTopic> {
   //function to create a new topic
   Future<bool> newTopic(String name, String className) async {
     dynamic existingImmutable = await local.read('topics', className);
-    List? existing = existingImmutable != null
-        ? cloneValue(existingImmutable) as List
-        : null;
+    List? existing = existingImmutable != null ? cloneValue(existingImmutable) as List : null;
     if (existingImmutable != null) {
       for (Map i in existingImmutable) {
         if (i['name'] == name) return false;
@@ -38,11 +36,17 @@ class _NewTopicState extends State<NewTopic> {
     List newList;
     if (existing == null) {
       newList = [
-        {'name': name, 'date': DateTime.now().toIso8601String()}
+        {
+          'name': name,
+          'date': DateTime.now().toIso8601String()
+        }
       ];
       await local.write(newList, 'topics', className);
     } else {
-      existing.add({'name': name, 'date': DateTime.now().toIso8601String()});
+      existing.add({
+        'name': name,
+        'date': DateTime.now().toIso8601String()
+      });
       newList = existing;
       await local.update(newList, 'topics', className);
     }
@@ -51,14 +55,11 @@ class _NewTopicState extends State<NewTopic> {
 
   @override
   Widget build(BuildContext context) {
-    routeData = routeData.isNotEmpty
-        ? routeData
-        : ModalRoute.of(context)?.settings.arguments as Map;
+    routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
     Color contrastColor = textColor(routeData['color']);
     return FutureBuilder(
         future: text,
-        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot
-                .hasData
+        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
             ? Scaffold(
                 appBar: AppBar(
                   foregroundColor: contrastColor,
@@ -72,22 +73,18 @@ class _NewTopicState extends State<NewTopic> {
                         child: Padding(
                             padding: const EdgeInsets.all(20),
                             child: ConstrainedBox(
-                                constraints:
-                                    const BoxConstraints(maxWidth: 600),
+                                constraints: const BoxConstraints(maxWidth: 600),
                                 child: Column(
                                   children: <Widget>[
                                     Form(
                                         key: _formKey,
                                         child: Column(children: <Widget>[
                                           TextFormField(
-                                            cursorColor:
-                                                HexColor(routeData['color']),
+                                            cursorColor: HexColor(routeData['color']),
                                             style: defaultPrimaryTextStyle,
                                             validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return snapshot
-                                                    .data!['errorNoText'];
+                                              if (value == null || value.isEmpty) {
+                                                return snapshot.data!['errorNoText'];
                                               }
                                               return null;
                                             },
@@ -96,28 +93,19 @@ class _NewTopicState extends State<NewTopic> {
                                                 newTopicName = value;
                                               });
                                             },
-                                            decoration:
-                                                defaultPrimaryInputDecoration(
-                                                    snapshot.data!['label']),
+                                            decoration: defaultPrimaryInputDecoration(snapshot.data!['label']),
                                           ),
                                           const SizedBox(height: 30),
-                                          coloredButton(
-                                              snapshot.data!['submit'],
-                                              (() async {
-                                            if (_formKey.currentState!
-                                                .validate()) {
+                                          coloredButton(snapshot.data!['submit'], (() async {
+                                            if (_formKey.currentState!.validate()) {
                                               _formKey.currentState?.save();
                                               if (newTopicName != null) {
-                                                await newTopic('$newTopicName',
-                                                    routeData['selection']);
+                                                await newTopic('$newTopicName', routeData['selection']);
                                                 Navigator.pop(context);
-                                                Navigator.pushReplacementNamed(
-                                                    context, '/topics',
-                                                    arguments: routeData);
+                                                Navigator.pushReplacementNamed(context, '/topics', arguments: routeData);
                                               }
                                             }
-                                          }), HexColor(routeData['color']),
-                                              contrastColor)
+                                          }), HexColor(routeData['color']), contrastColor)
                                         ]))
                                   ],
                                 ))))))

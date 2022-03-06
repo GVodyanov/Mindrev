@@ -45,8 +45,10 @@ class _HomeState extends State<Home> {
           leading: CircleColor(color: HexColor(i['color']), circleSize: 30),
           trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
           onTap: () {
-            Navigator.pushNamed(context, '/topics',
-                arguments: {'selection': i['name'], 'color': i['color']});
+            Navigator.pushNamed(context, '/topics', arguments: {
+              'selection': i['name'],
+              'color': i['color']
+            });
           },
         ),
       ));
@@ -58,22 +60,24 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     //futures that will be awaited by FutureBuilder
     Future<List?> classes = getClasses();
-    List<Future>? text = [readText('home'), readText('sidebar')];
+    List<Future>? text = [
+      readText('home'),
+      readText('sidebar')
+    ];
 
     return FutureBuilder(
-        future: Future.wait([text[0], text[1], classes]),
-        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot
-                .hasData
+        future: Future.wait([
+          text[0],
+          text[1],
+          classes
+        ]),
+        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
             ? Scaffold(
                 backgroundColor: theme.primary,
 
                 //appbar
                 appBar: AppBar(
-                  title: Text('Mindrev',
-                      style: TextStyle(
-                          color: theme.accent,
-                          fontFamily: 'Comfortaa-Bold',
-                          fontWeight: FontWeight.bold)),
+                  title: Text('Mindrev', style: TextStyle(color: theme.accent, fontFamily: 'Comfortaa-Bold', fontWeight: FontWeight.bold)),
                   elevation: 10,
                   centerTitle: true,
                   backgroundColor: theme.secondary,
@@ -102,27 +106,22 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.zero,
                       children: [
                         ListTile(
-                          title: Text(snapshot.data![1]['home'],
-                              style: defaultSecondaryTextStyle),
+                          title: Text(snapshot.data![1]['home'], style: defaultSecondaryTextStyle),
                           leading: Icon(Icons.home, color: theme.secondaryText),
                           onTap: () {},
                         ),
                         ListTile(
-                          title: Text(snapshot.data![1]['settings'],
-                              style: defaultSecondaryTextStyle),
-                          leading:
-                              Icon(Icons.settings, color: theme.secondaryText),
+                          title: Text(snapshot.data![1]['settings'], style: defaultSecondaryTextStyle),
+                          leading: Icon(Icons.settings, color: theme.secondaryText),
                           onTap: () {},
                         ),
                         ListTile(
-                          title: Text(snapshot.data![1]['help'],
-                              style: defaultSecondaryTextStyle),
+                          title: Text(snapshot.data![1]['help'], style: defaultSecondaryTextStyle),
                           leading: Icon(Icons.help, color: theme.secondaryText),
                           onTap: () {},
                         ),
                         ListTile(
-                          title: Text(snapshot.data![1]['about'],
-                              style: defaultSecondaryTextStyle),
+                          title: Text(snapshot.data![1]['about'], style: defaultSecondaryTextStyle),
                           leading: Icon(Icons.info, color: theme.secondaryText),
                           onTap: () {},
                         ),
@@ -131,53 +130,39 @@ class _HomeState extends State<Home> {
 
                 //body with everything
                 body: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //check if there are any classes, and if there are display them
-                        if (snapshot.data[2].toString() !=
-                            List.empty().toString())
-                          Center(
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 600),
-                              child: ListView(
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                children: ListTile.divideTiles(
-                                    context: context,
-                                    tiles: [
-                                      for (Widget i
-                                          in displayClasses(snapshot.data[2]))
-                                        i
-                                    ]).toList(),
-                              ),
-                            ),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    //check if there are any classes, and if there are display them
+                    if (snapshot.data[2].toString() != List.empty().toString())
+                      Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 600),
+                          child: ListView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: ListTile.divideTiles(context: context, tiles: [
+                              for (Widget i in displayClasses(snapshot.data[2])) i
+                            ]).toList(),
                           ),
-                        //if there are no classes prompt user to create some
-                        if (snapshot.data[2].toString() ==
-                            List.empty().toString())
-                          Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(20, 20, 20, 80),
-                              child: ConstrainedBox(
-                                child: Material(
-                                    elevation: 8,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(15)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20),
-                                      child: Text(snapshot.data![0]['create'],
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: theme.primaryText)),
-                                    )),
-                                constraints: const BoxConstraints(
-                                    maxWidth: 500, maxHeight: 300),
-                              ),
-                            ),
-                          )
-                      ]),
+                        ),
+                      ),
+                    //if there are no classes prompt user to create some
+                    if (snapshot.data[2].toString() == List.empty().toString())
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
+                          child: ConstrainedBox(
+                            child: Material(
+                                elevation: 8,
+                                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Text(snapshot.data![0]['create'], style: TextStyle(fontSize: 20, color: theme.primaryText)),
+                                )),
+                            constraints: const BoxConstraints(maxWidth: 500, maxHeight: 300),
+                          ),
+                        ),
+                      )
+                  ]),
                 ))
             : Scaffold(
                 //loading screen to be shown until Future is found
