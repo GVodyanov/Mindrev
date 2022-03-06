@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:mindrev/services/db.dart';
 import 'package:mindrev/services/text.dart';
@@ -7,6 +8,8 @@ import 'package:mindrev/widgets/widgets.dart';
 import 'package:mindrev/services/text_color.dart';
 
 import 'package:hexcolor/hexcolor.dart';
+import 'package:toml/toml.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Materials extends StatefulWidget {
   const Materials({Key? key}) : super(key: key);
@@ -18,6 +21,7 @@ class Materials extends StatefulWidget {
 class _MaterialsState extends State<Materials> {
   Future text = readText('materials');
   Map routeData = {};
+  Future typeIcons = rootBundle.loadString('assets/materials.toml');
 
   //this is a function which retrieves all materials and their properties
   Future<List> getMaterials(String topic, String className) async {
@@ -31,11 +35,28 @@ class _MaterialsState extends State<Materials> {
   }
 
   //function to display materials when getMaterials() retrieves them
-  List<Widget> displayMaterials(List gotMaterials) {
+  List<Widget> displayMaterials(List gotMaterials, String gotIcons, Color accentColor) {
     List<Widget> result = [];
-    for (var i in gotMaterials) {
-      // result.add(
-      // );
+    Map icons = TomlDocument.parse(gotIcons).toMap();
+    for (Map i in gotMaterials) {
+      String? icon;
+      for (Map j in icons['materials']) {
+        if (i['type'] == j['name']) icon = j['icon'];
+      }
+      result.add(
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            leading: SvgPicture.asset(
+              'assets/study_material_icons/$icon.svg',
+              color: accentColor,
+            ),
+            title: Text(i['name']),
+            trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
+            onTap: () {},
+          ),
+        ),
+      );
     }
     return result;
   }
@@ -48,7 +69,8 @@ class _MaterialsState extends State<Materials> {
     return FutureBuilder(
       future: Future.wait([
         text,
-        materials
+        materials,
+        typeIcons,
       ]),
       builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
           ? Scaffold(
@@ -90,7 +112,7 @@ class _MaterialsState extends State<Materials> {
                             children: ListTile.divideTiles(
                               context: context,
                               tiles: [
-                                for (Widget i in displayMaterials(snapshot.data[1])) i
+                                for (Widget i in displayMaterials(snapshot.data[1], snapshot.data[2], HexColor(routeData['color']))) i
                               ],
                             ).toList(),
                           ),

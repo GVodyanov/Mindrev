@@ -35,7 +35,10 @@ class _NewMaterialState extends State<NewMaterial> {
     if (existingTopicImmutable == null) {
       await local.write(
         [
-          name
+          {
+            'name': name,
+            'type': type
+          }
         ],
         topic,
         className,

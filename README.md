@@ -5,6 +5,8 @@ A flutter application to help you study
 ### Features
 
 - [x] Divided into classes, topics, and materials
+- [ ] Multilingual
+- [ ] Themable
 - [ ] Flashcards
 - [ ] Notes
 - [ ] Ordered Notes
