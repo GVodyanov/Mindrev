@@ -7,9 +7,8 @@ import 'package:sembast_web/sembast_web.dart';
 
 //this is the class that we will use for managing local storage
 class Local {
-
   //init method to set up db
-  Future<Database> init () async {
+  Future<Database> init() async {
     Database db;
     //writing data is obv different on native and web so we have to check
     if (kIsWeb) {
@@ -25,7 +24,7 @@ class Local {
   }
 
   //method for saving data to specific store
-  write (var data, String recordName, String? storeName) async {
+  write(var data, String recordName, String? storeName) async {
     Database db = await init();
     StoreRef store;
     if (storeName != null) {
@@ -36,7 +35,7 @@ class Local {
     await store.record(recordName).add(db, data);
   }
 
-  update (var data, String recordName, String? storeName) async {
+  update(var data, String recordName, String? storeName) async {
     Database db = await init();
     StoreRef store;
     if (storeName != null) {
@@ -48,7 +47,7 @@ class Local {
   }
 
   //read data from record and store
-  Future read (String recordName, String? storeName) async {
+  Future read(String recordName, String? storeName) async {
     Database db = await init();
     StoreRef store;
     if (storeName != null) {
@@ -61,7 +60,7 @@ class Local {
   }
 
   //find all data in a store
-  Future<dynamic> findAll (String? storeName) async {
+  Future<dynamic> findAll(String? storeName) async {
     Database db = await init();
     StoreRef store;
     if (storeName != null) {
@@ -77,4 +76,3 @@ class Local {
 }
 
 Local local = Local();
-

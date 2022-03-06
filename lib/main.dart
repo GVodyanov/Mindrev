@@ -11,16 +11,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MaterialApp(
-     
     //routes for navigation
     initialRoute: '/home',
     routes: {
       '/home': (context) => const Home(),
-      '/newClass' : (context) => const NewClass(),
-      '/topics' : (context) => const Topics(),
-      '/newTopic' : (context) => const NewTopic(),
-      '/materials' : (context) => const Materials(),
-      '/newMaterial' : (context) => const NewMaterial(),
+      '/newClass': (context) => const NewClass(),
+      '/topics': (context) => const Topics(),
+      '/newTopic': (context) => const NewTopic(),
+      '/materials': (context) => const Materials(),
+      '/newMaterial': (context) => const NewMaterial(),
     },
   ));
 }

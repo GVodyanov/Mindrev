@@ -12,8 +12,7 @@ AlertStyle defaultAlert = AlertStyle(
   animationDuration: const Duration(milliseconds: 300),
   alertBorder: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(15),
-    side: const BorderSide(
-    ),
+    side: const BorderSide(),
   ),
   backgroundColor: theme.secondary,
   titleStyle: TextStyle(
@@ -21,7 +20,7 @@ AlertStyle defaultAlert = AlertStyle(
   ),
 );
 
-DialogButton defaultDialogButton (String text, context, Function onPressed) {
+DialogButton defaultDialogButton(String text, context, Function onPressed) {
   return DialogButton(
     child: Text(
       text,
@@ -32,7 +31,7 @@ DialogButton defaultDialogButton (String text, context, Function onPressed) {
   );
 }
 
-ElevatedButton defaultButton (String text, Function onPressed) {
+ElevatedButton defaultButton(String text, Function onPressed) {
   return ElevatedButton(
     child: Text(text, style: TextStyle(color: theme.accentText)),
     style: ElevatedButton.styleFrom(
@@ -47,7 +46,8 @@ ElevatedButton defaultButton (String text, Function onPressed) {
   );
 }
 
-ElevatedButton coloredButton (String text, Function onPressed, Color color, Color textColor) {
+ElevatedButton coloredButton(
+    String text, Function onPressed, Color color, Color textColor) {
   return ElevatedButton(
     child: Text(text, style: TextStyle(color: textColor)),
     style: ElevatedButton.styleFrom(
@@ -62,40 +62,40 @@ ElevatedButton coloredButton (String text, Function onPressed, Color color, Colo
   );
 }
 
-InputDecoration defaultPrimaryInputDecoration (String text) {
-  return InputDecoration (
+InputDecoration defaultPrimaryInputDecoration(String text) {
+  return InputDecoration(
     labelStyle: TextStyle(color: theme.primaryText),
-    enabledBorder: OutlineInputBorder (
+    enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.primaryText ??= Colors.white,
       ),
     ),
-    disabledBorder: OutlineInputBorder (
+    disabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.primaryText ??= Colors.white,
       ),
     ),
-    focusedBorder: OutlineInputBorder (
+    focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.primaryText ??= Colors.white,
       ),
     ),
-    border: OutlineInputBorder (
+    border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.primaryText ??= Colors.white,
       ),
     ),
-    errorBorder: OutlineInputBorder (
+    errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.primaryText ??= Colors.white,
       ),
     ),
-    focusedErrorBorder: OutlineInputBorder (
+    focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.primaryText ??= Colors.white,
@@ -106,40 +106,40 @@ InputDecoration defaultPrimaryInputDecoration (String text) {
   );
 }
 
-InputDecoration defaultSecondaryInputDecoration (String text) {
-  return InputDecoration (
+InputDecoration defaultSecondaryInputDecoration(String text) {
+  return InputDecoration(
     labelStyle: TextStyle(color: theme.secondaryText),
-    enabledBorder: OutlineInputBorder (
+    enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.secondaryText ??= Colors.white,
       ),
     ),
-    disabledBorder: OutlineInputBorder (
+    disabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.secondaryText ??= Colors.white,
       ),
     ),
-    focusedBorder: OutlineInputBorder (
+    focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.secondaryText ??= Colors.white,
       ),
     ),
-    border: OutlineInputBorder (
+    border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.secondaryText ??= Colors.white,
       ),
     ),
-    errorBorder: OutlineInputBorder (
+    errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.secondaryText ??= Colors.white,
       ),
     ),
-    focusedErrorBorder: OutlineInputBorder (
+    focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
         color: theme.secondaryText ??= Colors.white,
@@ -150,32 +150,21 @@ InputDecoration defaultSecondaryInputDecoration (String text) {
   );
 }
 
-Center loading = Center (
-    child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Mindrev',
-              style: TextStyle(
-                  color: theme.accent,
-                  fontFamily: 'Comfortaa-Bold',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40
-              )
-          ),
-          const SizedBox(height: 30),
-          SpinKitFadingGrid(
-            color: theme.accent,
-            size: 50.0,
-          )
-        ]
-    )
-);
+Center loading = Center(
+    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+  Text('Mindrev',
+      style: TextStyle(
+          color: theme.accent,
+          fontFamily: 'Comfortaa-Bold',
+          fontWeight: FontWeight.bold,
+          fontSize: 40)),
+  const SizedBox(height: 30),
+  SpinKitFadingGrid(
+    color: theme.accent,
+    size: 50.0,
+  )
+]));
 
-TextStyle defaultPrimaryTextStyle = TextStyle(
-  color: theme.primaryText
-);
+TextStyle defaultPrimaryTextStyle = TextStyle(color: theme.primaryText);
 
-
-TextStyle defaultSecondaryTextStyle = TextStyle(
-    color: theme.secondaryText
-);
+TextStyle defaultSecondaryTextStyle = TextStyle(color: theme.secondaryText);
