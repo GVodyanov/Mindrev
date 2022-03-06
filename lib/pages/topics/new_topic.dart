@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/services/db.dart';
 import 'package:mindrev/services/text.dart';
 import 'package:mindrev/services/text_color.dart';
@@ -58,59 +57,74 @@ class _NewTopicState extends State<NewTopic> {
     routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
     Color contrastColor = textColor(routeData['color']);
     return FutureBuilder(
-        future: text,
-        builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
-            ? Scaffold(
-                appBar: AppBar(
-                  foregroundColor: contrastColor,
-                  title: Text(snapshot.data!['title']),
-                  elevation: 10,
-                  centerTitle: true,
-                  backgroundColor: HexColor(routeData['color']),
+      future: text,
+      builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
+          ? Scaffold(
+              appBar: AppBar(
+                foregroundColor: contrastColor,
+                title: Text(snapshot.data!['title']),
+                elevation: 10,
+                centerTitle: true,
+                backgroundColor: HexColor(routeData['color']),
+              ),
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      child: Column(
+                        children: <Widget>[
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: <Widget>[
+                                TextFormField(
+                                  cursorColor: HexColor(routeData['color']),
+                                  style: defaultPrimaryTextStyle,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return snapshot.data!['errorNoText'];
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    setState(() {
+                                      newTopicName = value;
+                                    });
+                                  },
+                                  decoration: defaultPrimaryInputDecoration(snapshot.data!['label']),
+                                ),
+                                const SizedBox(height: 30),
+                                coloredButton(
+                                  snapshot.data!['submit'],
+                                  (() async {
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState?.save();
+                                      if (newTopicName != null) {
+                                        await newTopic('$newTopicName', routeData['selection']);
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacementNamed(context, '/topics', arguments: routeData);
+                                      }
+                                    }
+                                  }),
+                                  HexColor(routeData['color']),
+                                  contrastColor,
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                body: SingleChildScrollView(
-                    child: Center(
-                        child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: ConstrainedBox(
-                                constraints: const BoxConstraints(maxWidth: 600),
-                                child: Column(
-                                  children: <Widget>[
-                                    Form(
-                                        key: _formKey,
-                                        child: Column(children: <Widget>[
-                                          TextFormField(
-                                            cursorColor: HexColor(routeData['color']),
-                                            style: defaultPrimaryTextStyle,
-                                            validator: (value) {
-                                              if (value == null || value.isEmpty) {
-                                                return snapshot.data!['errorNoText'];
-                                              }
-                                              return null;
-                                            },
-                                            onSaved: (value) {
-                                              setState(() {
-                                                newTopicName = value;
-                                              });
-                                            },
-                                            decoration: defaultPrimaryInputDecoration(snapshot.data!['label']),
-                                          ),
-                                          const SizedBox(height: 30),
-                                          coloredButton(snapshot.data!['submit'], (() async {
-                                            if (_formKey.currentState!.validate()) {
-                                              _formKey.currentState?.save();
-                                              if (newTopicName != null) {
-                                                await newTopic('$newTopicName', routeData['selection']);
-                                                Navigator.pop(context);
-                                                Navigator.pushReplacementNamed(context, '/topics', arguments: routeData);
-                                              }
-                                            }
-                                          }), HexColor(routeData['color']), contrastColor)
-                                        ]))
-                                  ],
-                                ))))))
-            : Scaffold(
-                //loading screen to be shown until Future is found
-                body: loading));
+              ),
+            )
+          : Scaffold(
+              //loading screen to be shown until Future is found
+              body: loading,
+            ),
+    );
   }
 }
