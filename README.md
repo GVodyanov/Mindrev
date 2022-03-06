@@ -1,4 +1,4 @@
-# Mindrev
+# Mindrev [WIP]
 
 A flutter application to help you study
 
