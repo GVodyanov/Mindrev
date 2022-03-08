@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:mindrev/extra/theme.dart';
-import 'package:mindrev/services/db.dart';
+import 'package:mindrev/models/db.dart';
 import 'package:mindrev/services/text.dart';
 import 'package:mindrev/services/text_color.dart';
 import 'package:mindrev/widgets/widgets.dart';
