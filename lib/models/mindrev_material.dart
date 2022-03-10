@@ -1,21 +1,17 @@
-enum types {
-  notes,
-  orderedNotes,
-  flashcards,
-  graphs,
-	mindmaps,
-}
+import 'package:hive_flutter/hive_flutter.dart';
 
+part 'mindrev_material.g.dart';
+
+@HiveType(typeId: 2)
 class MindrevMaterial {
+  @HiveField(0)
   String name = '';
-  types? type;
-	String date = DateTime.now().toIso8601String();
-	// ignore: prefer_typing_uninitialized_variables
-	var contents;
 
-	MindrevMaterial(this.name, this.type);
+  @HiveField(1)
+  String type = '';
 
-	void fill (var content) {
-  	contents = content;
-	}
+  @HiveField(2)
+  String date = DateTime.now().toIso8601String();
+
+  MindrevMaterial(this.name, this.type);
 }

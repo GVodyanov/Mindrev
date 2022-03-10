@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:mindrev/models/mindrev_class.dart';
 import 'package:mindrev/extra/theme.dart';
-import 'package:mindrev/models/db.dart';
 import 'package:mindrev/services/text.dart';
 import 'package:mindrev/widgets/widgets.dart';
 
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-import 'package:sembast/utils/value_utils.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class NewClass extends StatefulWidget {
   const NewClass({Key? key}) : super(key: key);
@@ -16,8 +17,11 @@ class NewClass extends StatefulWidget {
 }
 
 class _NewClassState extends State<NewClass> {
-  final _formKey = GlobalKey<FormState>();
+  //futures that will be awaited by FutureBuilder
+  Future futureText = readText('newClass');
 
+  //variables for form
+  final _formKey = GlobalKey<FormState>();
   Color? tempColor;
   Color mainColor = Colors.lightBlue;
   String? newClassName;
@@ -48,137 +52,152 @@ class _NewClassState extends State<NewClass> {
 
   //this is a function to obv create a new class
   Future<bool> newClass(String name, String color) async {
-    dynamic existing = await local.read('classes', null);
-    List newList = [];
-    if (existing == null) {
-      local.write(
-        [
-          name
-        ],
-        'classes',
-        null,
-      );
-    } else {
-      newList = cloneList(existing as List);
+    var box = Hive.lazyBox('mindrev');
+
+    //check if the class already exists
+    List classes = await box.get('classes') ?? [];
+    for (MindrevClass i in classes) {
+      if (i.name == name) return false;
     }
-    if (newList.contains(name) == false) {
-      newList.add(name);
-      local.update(newList, 'classes', null);
-    }
-    await local.write(
-      {
-        'color': color,
-        'date': DateTime.now().toIso8601String()
-      },
-      'properties',
-      name,
-    );
+
+    //write the information
+    MindrevClass newClass = MindrevClass(name, color);
+    classes.add(newClass);
+    await box.put('classes', classes);
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    Future text = readText('newClass');
     return FutureBuilder(
-      future: text,
-      builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) => snapshot.hasData
-          ? Scaffold(
-              appBar: AppBar(
-                title: Text(snapshot.data!['title'], style: defaultSecondaryTextStyle),
-                elevation: 10,
-                centerTitle: true,
-                backgroundColor: theme.secondary,
-              ),
-              body: SingleChildScrollView(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 600),
-                      child: Column(
-                        children: [
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              children: <Widget>[
-                                TextFormField(
-                                  cursorColor: theme.accent,
-                                  style: defaultPrimaryTextStyle,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return snapshot.data!['errorNoText'];
-                                    }
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    setState(() {
-                                      newClassName = value;
-                                    });
-                                  },
-                                  decoration: defaultPrimaryInputDecoration(snapshot.data!['label']),
-                                ),
-                                const SizedBox(height: 20),
-                                Container(
-                                  child: ListTile(
-                                    trailing: defaultButton(
-                                      snapshot.data!['chooseColor'],
-                                      (() {
-                                        openDialog(
-                                          MaterialColorPicker(
-                                            selectedColor: mainColor,
-                                            onColorChange: (color) => setState(() {
-                                              tempColor = color;
-                                            }),
-                                          ),
-                                          snapshot.data,
-                                        );
-                                      }),
-                                    ),
-                                    leading: CircleColor(
-                                      circleSize: 30,
-                                      color: mainColor,
-                                    ),
-                                  ),
-                                  padding: const EdgeInsets.all(1),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: theme.primaryText!),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                ),
-                                const SizedBox(height: 30),
-                                defaultButton(
-                                  snapshot.data!['submit'],
-                                  (() async {
-                                    if (_formKey.currentState!.validate()) {
-                                      _formKey.currentState?.save();
-                                      if (newClassName != null) {
-                                        String mainColorString = mainColor.toString();
-                                        const start = 'Color(0xff';
-                                        const end = ')';
+      future: futureText,
+      builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
+        //only show page when data is loaded
+        if (snapshot.hasData) {
+          //data loaded with FutureBuilder
+          Map text = snapshot.data;
 
-                                        final startIndex = mainColorString.indexOf(start);
-                                        final endIndex = mainColorString.indexOf(end, startIndex + start.length);
-                                        await newClass('$newClassName', '#' + mainColorString.substring(startIndex + start.length, endIndex));
-                                        Navigator.pop(context);
-                                        Navigator.pushReplacementNamed(context, '/home');
-                                      }
+          return Scaffold(
+            backgroundColor: theme.primary,
+
+            //appbar
+            appBar: AppBar(
+              foregroundColor: theme.secondaryText,
+              title: Text(
+                text['title'],
+                style: defaultSecondaryTextStyle,
+              ),
+              elevation: 10,
+              centerTitle: true,
+              backgroundColor: theme.secondary,
+            ),
+
+            //body with everything else
+            body: SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    child: Column(
+                      children: [
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: <Widget>[
+                              TextFormField(
+                                cursorColor: theme.accent,
+                                style: defaultPrimaryTextStyle,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return text['errorNoText'];
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  setState(() {
+                                    newClassName = value;
+                                  });
+                                },
+                                decoration: defaultPrimaryInputDecoration(
+                                  text['label'],
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Container(
+                                child: ListTile(
+                                  trailing: defaultButton(
+                                    text['chooseColor'],
+                                    (() {
+                                      openDialog(
+                                        MaterialColorPicker(
+                                          selectedColor: mainColor,
+                                          onColorChange: (color) => setState(() {
+                                            tempColor = color;
+                                          }),
+                                        ),
+                                        snapshot.data,
+                                      );
+                                    }),
+                                  ),
+                                  leading: CircleColor(
+                                    circleSize: 30,
+                                    color: mainColor,
+                                  ),
+                                ),
+                                padding: const EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: theme.primaryText!),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+                              defaultButton(
+                                text['submit'],
+                                (() async {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState?.save();
+                                    if (newClassName != null) {
+                                      String mainColorString = mainColor.toString();
+                                      const start = 'Color(0xff';
+                                      const end = ')';
+
+                                      final startIndex = mainColorString.indexOf(start);
+                                      final endIndex = mainColorString.indexOf(end, startIndex + start.length);
+                                      await newClass(
+                                        '$newClassName',
+                                        '#' +
+                                            mainColorString.substring(
+                                              startIndex + start.length,
+                                              endIndex,
+                                            ),
+                                      );
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        '/home',
+                                      );
                                     }
-                                  }),
-                                )
-                              ],
-                            ),
+                                  }
+                                }),
+                              )
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-            )
-          : Scaffold(
-              //loading screen to be shown until Future is found
-              body: loading,
             ),
+          );
+        } else {
+          return Scaffold(
+            //loading screen to be shown until Future is found
+            body: loading,
+          );
+        }
+      },
     );
   }
 }
