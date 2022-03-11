@@ -53,7 +53,7 @@ class _TopicsState extends State<Topics> {
         ),
       );
     }
-    return result;
+    return result.reversed.toList();
   }
 
   @override

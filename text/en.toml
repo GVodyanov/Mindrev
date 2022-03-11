@@ -3,6 +3,7 @@ home = "Home"
 settings = "Settings"
 help = "Help"
 about = "About"
+header = "Hello!"
 
 [home]
 create = "It seems like you haven't created any classes yet, click the button below to get started"
@@ -16,6 +17,14 @@ cancel = "Cancel"
 errorNoText = "Please enter some text"
 chooseColor = "Choose a color"
 chooseColorDetails = "Choose a color for your new class"
+
+[settings]
+title = "Settings"
+save = "Save"
+ui = "User interface"
+uiColors = "Would you like the accent color of the application to change with the selected class?"
+theme = "Theme"
+language = "Language"
 
 [topics]
 create = "It seems like you haven't created any topics yet, click the button below to get started"

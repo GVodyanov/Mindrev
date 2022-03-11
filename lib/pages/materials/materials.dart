@@ -59,7 +59,7 @@ class _MaterialsState extends State<Materials> {
         ),
       );
     }
-    return result;
+    return result.reversed.toList();
   }
 
   @override

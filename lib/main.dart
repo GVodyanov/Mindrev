@@ -5,6 +5,7 @@ import 'package:mindrev/models/mindrev_topic.dart';
 import 'package:mindrev/models/mindrev_material.dart';
 import 'package:mindrev/pages/home/home.dart';
 import 'package:mindrev/pages/home/new_class.dart';
+import 'package:mindrev/pages/home/settings.dart';
 import 'package:mindrev/pages/topics/topics.dart';
 import 'package:mindrev/pages/topics/new_topic.dart';
 import 'package:mindrev/pages/materials/materials.dart';
@@ -28,11 +29,15 @@ void main() async {
 
   runApp(
     MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Montserrat',
+      ),
       //routes for navigation
       initialRoute: '/home',
       routes: {
         '/home': (context) => const Home(),
         '/newClass': (context) => const NewClass(),
+        '/settings': (context) => const Settings(),
         '/topics': (context) => const Topics(),
         '/newTopic': (context) => const NewTopic(),
         '/materials': (context) => const Materials(),

@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
   //futures that will be awaited by FutureBuilder
   List<Future>? futureText = [
     readText('home'),
-    readText('sidebar')
+    readText('sidebar'),
   ];
 
   //function which retrieves all saved classes and their properties
@@ -45,7 +45,8 @@ class _HomeState extends State<Home> {
                 '/topics',
                 arguments: {
                   'selection': i.name,
-                  'color': i.color
+                  'color': i.color,
+                  'secondColor': i.color,
                 },
               );
             },
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> {
         ),
       );
     }
-    return result;
+    return result.reversed.toList();
   }
 
   @override
@@ -116,6 +117,15 @@ class _HomeState extends State<Home> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: theme.secondary,
+                    ),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      const Expanded(child: SizedBox()),
+                      Text(sidebar['header'], style: TextStyle(color: theme.primaryText, fontWeight: FontWeight.bold, fontSize: 16))
+                    ],),
+                  ),
                   ListTile(
                     title: Text(sidebar['home'], style: defaultSecondaryTextStyle),
                     leading: Icon(Icons.home, color: theme.secondaryText),
@@ -124,7 +134,9 @@ class _HomeState extends State<Home> {
                   ListTile(
                     title: Text(sidebar['settings'], style: defaultSecondaryTextStyle),
                     leading: Icon(Icons.settings, color: theme.secondaryText),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/settings');
+                    },
                   ),
                   ListTile(
                     title: Text(sidebar['help'], style: defaultSecondaryTextStyle),
