@@ -31,3 +31,7 @@ This is absolutely not in a usable state yet but if you really want to run this 
 ```bash
 git clone https://github.com/ScratchX98/Mindrev.git && cd Mindrev && flutter run
 ```
+
+#### License
+
+Mindrev is licensed under the Gnu affero public license with the commons clause condition, meaning that the software is source available but using this software commercially is not permitted.
