@@ -2,7 +2,6 @@
 <img src="./assets/logo.svg" width="100%" height="144">
 
 <h1 align="center"> Mindrev [WIP] </h1>
-=
 
 A flutter application to help you study
 
