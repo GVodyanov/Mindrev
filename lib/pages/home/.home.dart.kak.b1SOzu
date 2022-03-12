@@ -149,19 +149,33 @@ class _HomeState extends State<Home> {
                         leading: Icon(Icons.info, color: theme.secondaryText),
                         onTap: () {},
                       ),
-                      const Divider(endIndent: 5, indent: 5),
-                      ListTile(
-                        leading: Icon(Icons.close, color: theme.secondaryText),
-                        onTap: () {
-													Navigator.pop(context);
-                        },
-                      ),
+                      Expanded(),
+                                Container(
+                                                child: Align(
+                                                                    alignment: FractionalOffset.bottomCenter,
+                                                                                      child: Column(
+                                                                                                            children: <Widget>[
+                                                                                                                                    Divider(),
+                                                                                                                                                          ListTile(
+                                                                                                                                                                                      leading: Icon(Icons.settings),
+                                                                                                                                                                                                                title: Text('Facebook')),
+                                                                                                                                                                                                                                      ListTile(
+                                                                                                                                                                                                                                                                  leading: Icon(Icons.help),
+                                                                                                                                                                                                                                                                                            title: Text('Instagram'))
+                                                                                                                                                                                                                                                                                                                ],
+                                                                                                                                                                                                                                                                                                                                  ))),
+                                                                                                                                                                                                                                      )
+                                                                                                                                                          )
+                                                                                                            ]
+                                                                                      )
+                                                )
+                                )
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
-            
+
             //body with everything
             body: SingleChildScrollView(
               child: Column(

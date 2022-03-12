@@ -62,21 +62,22 @@ class _SettingsState extends State<Settings> {
                           text['ui'],
                           style: TextStyle(color: theme.primaryText, fontWeight: FontWeight.bold, fontSize: 16),
                         ),
-                        Divider(),
+                        const Divider(),
                         ListTile(
-                            title: Text(text['uiColors'], style: defaultPrimaryTextStyle),
-                            leading: Icon(Icons.palette, color: theme.accent),
-                            trailing: Switch(
-                              value: true,
-                              onChanged: (value) {},
-                              activeColor: theme.accent,
-                            ))
+                          title: Text(text['uiColors'], style: defaultPrimaryTextStyle),
+                          leading: Icon(Icons.palette, color: theme.accent),
+                          trailing: Switch(
+                            value: true,
+                            onChanged: (value) {},
+                            activeColor: theme.accent,
+                          ),
+                      	)
                       ],
                     ),
                   ),
                 ),
               ),
-            )),
+            ),),
           );
         } else {
           return Scaffold(

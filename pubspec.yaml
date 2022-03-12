@@ -49,3 +49,7 @@ flutter:
     - family: Comfortaa-Bold
       fonts:
         - asset: assets/fonts/Comfortaa-Bold.ttf
+
+    - family: LiberationSerif
+      fonts:
+        - asset: assets/fonts/LiberationSerif-Regular.ttf
