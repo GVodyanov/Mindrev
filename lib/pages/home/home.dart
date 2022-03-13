@@ -17,6 +17,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  //open box
+  var box = Hive.lazyBox('mindrev');
+
   //futures that will be awaited by FutureBuilder
   List<Future>? futureText = [
     readText('home'),
@@ -25,12 +28,16 @@ class _HomeState extends State<Home> {
 
   //function which retrieves all saved classes and their properties
   Future getClasses() async {
-    var box = Hive.lazyBox('mindrev');
     return box.get('classes');
   }
 
+  //function to get settings
+  Future getSettings() async {
+    return await box.get('settings');
+  }
+
   //function to display classes when getClasses() retrieves them
-  List<Widget> displayClasses(List gotClasses) {
+  List<Widget> displayClasses(List gotClasses, bool? uiColors) {
     List<Widget> result = [];
     for (var i in gotClasses) {
       result.add(
@@ -46,8 +53,8 @@ class _HomeState extends State<Home> {
                 '/topics',
                 arguments: {
                   'selection': i.name,
-                  'color': i.color,
-                  'secondColor': i.color,
+                  'accentColor': uiColors == false ? theme.accent : HexColor(i.color),
+                  'secondaryColor': uiColors == false ? theme.secondary : HexColor(i.color),
                 },
               );
             },
@@ -60,14 +67,12 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    //futures that will be awaited by FutureBuilder that need to be in build
-    Future futureClasses = getClasses();
-
     return FutureBuilder(
       future: Future.wait([
         futureText![0],
         futureText![1],
-        futureClasses,
+        getClasses(),
+        getSettings(),
       ]),
       builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
         //only show page when data is loaded
@@ -76,6 +81,7 @@ class _HomeState extends State<Home> {
           Map text = snapshot.data![0];
           Map sidebar = snapshot.data![1];
           List classes = snapshot.data![2] ?? List.empty();
+          Map settings = snapshot.data![3] ?? {};
 
           return Scaffold(
             backgroundColor: theme.primary,
@@ -153,7 +159,7 @@ class _HomeState extends State<Home> {
                       ListTile(
                         leading: Icon(Icons.close, color: theme.secondaryText),
                         onTap: () {
-													Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                       ),
                     ],
@@ -161,7 +167,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            
+
             //body with everything
             body: SingleChildScrollView(
               child: Column(
@@ -178,7 +184,7 @@ class _HomeState extends State<Home> {
                           children: ListTile.divideTiles(
                             context: context,
                             tiles: [
-                              for (Widget i in displayClasses(classes)) i
+                              for (Widget i in displayClasses(classes, settings['uiColors'])) i
                             ],
                           ).toList(),
                         ),

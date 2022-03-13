@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
+
 import 'package:mindrev/models/mindrev_topic.dart';
+import 'package:mindrev/services/color_to_hex.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
 part 'mindrev_class.g.dart';
@@ -9,7 +13,7 @@ class MindrevClass {
   String name = '';
 
   @HiveField(1)
-  String color = '03A9F4';
+  String color = colorToHex(Colors.lightBlue);
 
   @HiveField(2)
   String date = DateTime.now().toIso8601String();

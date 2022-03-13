@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mindrev/models/mindrev_class.dart';
 import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/services/text.dart';
+import 'package:mindrev/services/color_to_hex.dart';
 import 'package:mindrev/widgets/widgets.dart';
 
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
@@ -51,7 +52,7 @@ class _NewClassState extends State<NewClass> {
   }
 
   //this is a function to obv create a new class
-  Future<bool> newClass(String name, String color) async {
+  Future<bool> newClass(String name, Color color) async {
     var box = Hive.lazyBox('mindrev');
 
     //check if the class already exists
@@ -61,7 +62,7 @@ class _NewClassState extends State<NewClass> {
     }
 
     //write the information
-    MindrevClass newClass = MindrevClass(name, color);
+    MindrevClass newClass = MindrevClass(name, colorToHex(color).toString());
     classes.add(newClass);
     await box.put('classes', classes);
     return true;
@@ -158,19 +159,9 @@ class _NewClassState extends State<NewClass> {
                                   if (_formKey.currentState!.validate()) {
                                     _formKey.currentState?.save();
                                     if (newClassName != null) {
-                                      String mainColorString = mainColor.toString();
-                                      const start = 'Color(0xff';
-                                      const end = ')';
-
-                                      final startIndex = mainColorString.indexOf(start);
-                                      final endIndex = mainColorString.indexOf(end, startIndex + start.length);
                                       await newClass(
                                         '$newClassName',
-                                        '#' +
-                                            mainColorString.substring(
-                                              startIndex + start.length,
-                                              endIndex,
-                                            ),
+                                        mainColor,
                                       );
                                       Navigator.pop(context);
                                       Navigator.pushReplacementNamed(

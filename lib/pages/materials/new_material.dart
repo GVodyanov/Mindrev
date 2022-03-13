@@ -7,7 +7,6 @@ import 'package:mindrev/services/text.dart';
 import 'package:mindrev/services/text_color.dart';
 import 'package:mindrev/widgets/widgets.dart';
 
-import 'package:hexcolor/hexcolor.dart';
 import 'package:toml/toml.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -100,7 +99,10 @@ class _NewMaterialState extends State<NewMaterial> {
   Widget build(BuildContext context) {
     //route data to get class information
     routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
-    Color contrastColor = textColor(routeData['color']);
+
+    //set contrast color according to color passed through route data, if uiColors isn't set
+    Color? contrastAccentColor = routeData['accentColor'] == theme.accent ? theme.accentText : textColor(routeData['accentColor']);
+    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
 
     return FutureBuilder(
       future: Future.wait([
@@ -115,11 +117,11 @@ class _NewMaterialState extends State<NewMaterial> {
           return Scaffold(
             backgroundColor: theme.primary,
             appBar: AppBar(
-              foregroundColor: contrastColor,
+              foregroundColor: contrastSecondaryColor,
               title: Text(text['title']),
               elevation: 10,
               centerTitle: true,
-              backgroundColor: HexColor(routeData['color']),
+              backgroundColor: routeData['secondaryColor'],
             ),
             body: SingleChildScrollView(
               child: Center(
@@ -132,7 +134,7 @@ class _NewMaterialState extends State<NewMaterial> {
                       child: Column(
                         children: [
                           TextFormField(
-                            cursorColor: HexColor(routeData['color']),
+                            cursorColor: routeData['accentColor'],
                             style: defaultPrimaryTextStyle,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -160,7 +162,7 @@ class _NewMaterialState extends State<NewMaterial> {
                                   const SizedBox(height: 20, width: double.infinity),
                                   Wrap(
                                     children: [
-                                      for (Widget i in displayMaterial(materials, HexColor(routeData['color']), contrastColor)) i
+                                      for (Widget i in displayMaterial(materials, routeData['accentColor'], contrastAccentColor ?? Colors.white)) i
                                     ],
                                   )
                                 ],
@@ -189,8 +191,8 @@ class _NewMaterialState extends State<NewMaterial> {
                                             () {
                                               Navigator.pop(context, text['close']);
                                             },
-                                            HexColor(routeData['color']),
-                                            contrastColor,
+                                            routeData['accentColor'],
+                                            contrastAccentColor ?? Colors.white,
                                           )
                                         ],
                                       ),
@@ -199,8 +201,8 @@ class _NewMaterialState extends State<NewMaterial> {
                                 }
                               }
                             }),
-                            HexColor(routeData['color']),
-                            contrastColor,
+                            routeData['accentColor'],
+                            contrastAccentColor ?? Colors.white,
                           )
                         ],
                       ),

@@ -6,7 +6,6 @@ import 'package:mindrev/services/text_color.dart';
 import 'package:mindrev/widgets/widgets.dart';
 import 'package:mindrev/extra/theme.dart';
 
-import 'package:hexcolor/hexcolor.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class NewTopic extends StatefulWidget {
@@ -50,7 +49,10 @@ class _NewTopicState extends State<NewTopic> {
   Widget build(BuildContext context) {
     //route data to get class information
     routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
-    Color contrastColor = textColor(routeData['color']);
+
+    //set contrast color according to color passed through route data, if uiColors isn't set
+    Color? contrastAccentColor = routeData['accentColor'] == theme.accent ? theme.accentText : textColor(routeData['accentColor']);
+    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
 
     return FutureBuilder(
       future: futureText,
@@ -64,11 +66,11 @@ class _NewTopicState extends State<NewTopic> {
             backgroundColor: theme.primary,
             //appbar
             appBar: AppBar(
-              foregroundColor: contrastColor,
+              foregroundColor: contrastSecondaryColor,
               title: Text(text['title']),
               elevation: 10,
               centerTitle: true,
-              backgroundColor: HexColor(routeData['color']),
+              backgroundColor: routeData['secondaryColor'],
             ),
 
             //body with everything else
@@ -85,7 +87,7 @@ class _NewTopicState extends State<NewTopic> {
                           child: Column(
                             children: <Widget>[
                               TextFormField(
-                                cursorColor: HexColor(routeData['color']),
+                                cursorColor: routeData['accentColor'],
                                 style: defaultPrimaryTextStyle,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -113,8 +115,8 @@ class _NewTopicState extends State<NewTopic> {
                                     }
                                   }
                                 }),
-                                HexColor(routeData['color']),
-                                contrastColor,
+                                routeData['accentColor'],
+                                contrastAccentColor ?? Colors.white,
                               )
                             ],
                           ),

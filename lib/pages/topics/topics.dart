@@ -5,7 +5,6 @@ import 'package:mindrev/services/text_color.dart';
 import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/widgets/widgets.dart';
 
-import 'package:hexcolor/hexcolor.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class Topics extends StatefulWidget {
@@ -29,7 +28,7 @@ class _TopicsState extends State<Topics> {
   }
 
   //function to display topics when getTopics() retrieves them
-  List<Widget> displayTopics(List gotTopics, String color, String className) {
+  List<Widget> displayTopics(List gotTopics, Color accentColor, Color secondaryColor, String className) {
     List<Widget> result = [];
     for (var i in gotTopics) {
       result.add(
@@ -45,7 +44,8 @@ class _TopicsState extends State<Topics> {
                 arguments: {
                   'className': className,
                   'selection': i.name,
-                  'color': color
+                  'accentColor': accentColor,
+                  'secondaryColor': secondaryColor,
                 },
               );
             },
@@ -60,14 +60,17 @@ class _TopicsState extends State<Topics> {
   Widget build(BuildContext context) {
     //route data to get class information
     routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
-    Color contrastColor = textColor(routeData['color']);
+
+    //set contrast color according to color passed through route data, if uiColors isn't set
+    Color? contrastAccentColor = routeData['accentColor'] == theme.accent ? theme.accentText : textColor(routeData['accentColor']);
+    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
 
     //futures that will be awaited by FutureBuilder that need to be in build
     Future futureTopics = getTopics(routeData['selection']);
     return FutureBuilder(
       future: Future.wait([
         futureText,
-        futureTopics
+        futureTopics,
       ]),
       builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
         //only show page when data is loaded
@@ -79,23 +82,23 @@ class _TopicsState extends State<Topics> {
           return Scaffold(
             backgroundColor: theme.primary,
             appBar: AppBar(
-              foregroundColor: contrastColor,
+              foregroundColor: contrastSecondaryColor,
               title: Text(routeData['selection']),
               elevation: 10,
               centerTitle: true,
-              backgroundColor: HexColor(routeData['color']),
+              backgroundColor: routeData['secondaryColor'],
             ),
 
             //add new topic
             floatingActionButton: FloatingActionButton.extended(
-              foregroundColor: contrastColor,
+              foregroundColor: contrastAccentColor,
               icon: const Icon(
                 Icons.add,
               ),
               label: Text(
                 text['new'],
               ),
-              backgroundColor: HexColor(routeData['color']),
+              backgroundColor: routeData['accentColor'],
               onPressed: () {
                 Navigator.pushNamed(context, '/newTopic', arguments: routeData);
               },
@@ -116,7 +119,7 @@ class _TopicsState extends State<Topics> {
                           children: ListTile.divideTiles(
                             context: context,
                             tiles: [
-                              for (Widget i in displayTopics(topics, routeData['color'], routeData['selection'])) i
+                              for (Widget i in displayTopics(topics, routeData['accentColor'], routeData['secondaryColor'], routeData['selection'])) i
                             ],
                           ).toList(),
                         ),

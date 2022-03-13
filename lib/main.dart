@@ -1,4 +1,6 @@
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 
 import 'package:mindrev/models/mindrev_class.dart';
 import 'package:mindrev/models/mindrev_topic.dart';
@@ -18,7 +20,12 @@ import 'package:hive_flutter/adapters.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //hive
-  await Hive.initFlutter();
+  if (Platform.isLinux) {
+    var dir = await getApplicationSupportDirectory();
+    Hive.init(dir.path);
+  } else {
+    await Hive.initFlutter();
+  }
   //register adapters
   Hive.registerAdapter(MindrevClassAdapter());
   Hive.registerAdapter(MindrevTopicAdapter());

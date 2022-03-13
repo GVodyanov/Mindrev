@@ -5,6 +5,7 @@ import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/widgets/widgets.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -14,44 +15,45 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  //open box
   var box = Hive.lazyBox('mindrev');
+  
   //futures that will be awaited by FutureBuilder
   Future futureText = readText('settings');
 
   //variables for form
-  //final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   bool uiColors = true;
 
   //function to get old settings
-  void getSettings() async {
-    var settings = await box.get('settings');
+  void getSettings () async {
+  	var settings = await box.get('settings');
 
     //update pre set form vars
     try {
       uiColors = settings!['uiColors'];
     } catch (e) {
-      uiColors = true;
+			uiColors = true;
     }
-  }
 
-  @override
-  void initState() {
-    super.initState();
-    getSettings();
   }
+  
+	@override
+	void initState() {
+  	super.initState();
+		getSettings();
+	}
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.wait([
-        futureText
-      ]),
+      future: Future.wait([futureText]),
       builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
         //only show page when data is loaded
         if (snapshot.hasData) {
           //data loaded with FutureBuilder
           Map text = snapshot.data![0];
-
+          
           return Scaffold(
             //appbar
             appBar: AppBar(
@@ -73,11 +75,9 @@ class _SettingsState extends State<Settings> {
               foregroundColor: theme.accentText,
               backgroundColor: theme.accent,
               onPressed: () async {
-                await box.put('settings', {
-                  'uiColors': uiColors
-                });
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/home');
+								await box.put('settings', {'uiColors' : uiColors});
+								Navigator.pop(context);
+								Navigator.pushReplacementNamed(context, '/home');
               },
             ),
 
@@ -103,9 +103,7 @@ class _SettingsState extends State<Settings> {
                             trailing: Switch(
                               value: uiColors,
                               onChanged: (bool value) {
-                                setState(() {
-                                  uiColors = value;
-                                });
+																setState(() {uiColors = value;});
                               },
                               activeColor: theme.accent,
                             ),

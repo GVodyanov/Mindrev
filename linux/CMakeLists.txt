@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
 set(BINARY_NAME "mindrev")
-set(APPLICATION_ID "com.example.mindrev")
+set(APPLICATION_ID "scratchx98.mindrev")
 
 cmake_policy(SET CMP0063 NEW)
 

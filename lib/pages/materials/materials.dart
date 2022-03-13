@@ -6,7 +6,6 @@ import 'package:mindrev/services/text.dart';
 import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/widgets/widgets.dart';
 
-import 'package:hexcolor/hexcolor.dart';
 import 'package:toml/toml.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -66,7 +65,10 @@ class _MaterialsState extends State<Materials> {
   Widget build(BuildContext context) {
     //route data to get class information
     routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
-    Color contrastColor = textColor(routeData['color']);
+
+    //set contrast color according to color passed through route data, if uiColors isn't set
+    Color? contrastAccentColor = routeData['accentColor'] == theme.accent ? theme.accentText : textColor(routeData['accentColor']);
+    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
 
     //futures that will be awaited by FutureBuilder that need to be in build
     Future futureMaterials = getMaterials(routeData['selection'], routeData['className']);
@@ -88,23 +90,23 @@ class _MaterialsState extends State<Materials> {
             backgroundColor: theme.primary,
             //appbar
             appBar: AppBar(
-              foregroundColor: contrastColor,
+              foregroundColor: contrastSecondaryColor,
               title: Text(routeData['selection']),
               elevation: 10,
               centerTitle: true,
-              backgroundColor: HexColor(routeData['color']),
+              backgroundColor: routeData['secondaryColor'],
             ),
 
             //add new topic
             floatingActionButton: FloatingActionButton.extended(
-              foregroundColor: contrastColor,
+              foregroundColor: contrastAccentColor,
               icon: const Icon(
                 Icons.add,
               ),
               label: Text(
                 text['new'],
               ),
-              backgroundColor: HexColor(routeData['color']),
+              backgroundColor: routeData['accentColor'],
               onPressed: () {
                 Navigator.pushNamed(context, '/newMaterial', arguments: routeData);
               },
@@ -126,7 +128,7 @@ class _MaterialsState extends State<Materials> {
                           children: ListTile.divideTiles(
                             context: context,
                             tiles: [
-                              for (Widget i in displayMaterials(materials, typeIcons, HexColor(routeData['color']))) i
+                              for (Widget i in displayMaterials(materials, typeIcons, routeData['accentColor'])) i
                             ],
                           ).toList(),
                         ),
