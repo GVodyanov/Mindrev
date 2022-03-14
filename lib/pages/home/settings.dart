@@ -109,7 +109,33 @@ class _SettingsState extends State<Settings> {
                               },
                               activeColor: theme.accent,
                             ),
-                          )
+                          ),
+                          const SizedBox(height: 30),
+                          Text(
+                            text['theme'],
+                            style: TextStyle(color: theme.primaryText, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          const Divider(),
+                          Row (
+                            children: [
+                              const SizedBox(width: 15),
+                            	Icon (Icons.brush, color: theme.accent),
+                            	const SizedBox(width: 25),
+                              Material(
+                                color: theme.primary,
+                                elevation: 8,
+                                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column (
+                                    children: const [
+                                      Text('THEMES GO HERE') //to remove
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
