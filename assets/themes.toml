@@ -1,0 +1,25 @@
+[themes]
+mindrev.name = "Default"
+mindrev.primary = "#FAFAFA"
+mindrev.primaryText = "#0B0B0B"
+mindrev.secondary = "#212121"
+mindrev.secondaryText = "#FAFAFA"
+mindrev.accent = "#03A9F4"
+mindrev.accentText = "#FAFAFA"
+
+light.name = "Light"
+light.primary = "#FAFAFA"
+light.primaryText = "#0B0B0B"
+light.secondary = "#F5F5F5"
+light.secondaryText = "#0B0B0B"
+light.accent = "#B3E5FC"
+light.accentText = "#0B0B0B"
+
+discord.name = "Discord"
+discord.primary = "#36393F"
+discord.primaryText = "#FFFFFF"
+discord.secondary = "#2F3136"
+discord.secondaryText = "#FFFFFF"
+discord.accent = "#5865F2"
+discord.accentText = "#FFFFFF"
+

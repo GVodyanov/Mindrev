@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:mindrev/services/text.dart';
 import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/widgets/widgets.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:toml/toml.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -17,10 +20,13 @@ class _SettingsState extends State<Settings> {
   var box = Hive.lazyBox('mindrev');
   //futures that will be awaited by FutureBuilder
   Future futureText = readText('settings');
+  Future futureThemes = rootBundle.loadString('assets/themes.toml');
 
   //variables for form
   //final _formKey = GlobalKey<FormState>();
   bool uiColors = true;
+  int? selectedTheme;
+  String currentTheme = 'default';
 
   //function to get old settings
   void getSettings() async {
@@ -32,6 +38,87 @@ class _SettingsState extends State<Settings> {
     } catch (e) {
       uiColors = true;
     }
+
+    try {
+      selectedTheme = settings!['theme'];
+    } catch (e) {
+      selectedTheme = 0;
+    }
+  }
+
+	//function to get themes from theme file
+  List<Widget> displayThemes(rawTOML) {
+    Map themesMap = TomlDocument.parse(rawTOML).toMap();
+    //convert map to list for easier cycling
+    List themesList = [];
+    themesMap['themes'].forEach((k, v) => themesList.add(v));
+    List<Widget> result = [];
+    int j = themesList.length;
+    for (int i = j - 1; i >= 0; i--) {
+      if (selectedTheme == i) currentTheme = themesList[i]['name'];
+      result.add(
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.all(20),
+              primary: selectedTheme == i ? theme.accent : theme.primary,
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: theme.primary ?? Colors.white, width: 10),
+                  ),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 200, minWidth: 100, maxHeight: 200),
+                    child: Row(
+                      children: [
+                      	Expanded(
+                      	  child: Container(
+                        	color: HexColor(themesList[i]['primary']),
+                      	  ),
+                      	),
+                      	Expanded(
+                      	  child: Container(
+                        	color: HexColor(themesList[i]['secondary']),
+                      	  ),
+                      	),
+                      	Expanded(
+                      	  child: Container(
+                        	color: HexColor(themesList[i]['accent']),
+                      	  ),
+                      	),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(themesList[i]['name'], style: TextStyle(color: selectedTheme == i ? theme.accentText : theme.primaryText))
+              ],
+            ),
+            onPressed: () {
+              //logic for changing selected theme
+              setState(() {
+                selectedTheme = i;
+              });
+            },
+          ),
+        ),
+      );
+    }
+    return result.reversed.toList();
+  }
+
+  void getThemes() async {
+    dynamic themes = await rootBundle.loadString('assets/themes.toml');
+    themes = TomlDocument.parse(themes).toMap();
+    
   }
 
   @override
@@ -44,13 +131,15 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Future.wait([
-        futureText
+        futureText,
+        futureThemes,
       ]),
       builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
         //only show page when data is loaded
         if (snapshot.hasData) {
           //data loaded with FutureBuilder
           Map text = snapshot.data![0];
+          String themes = snapshot.data![1];
 
           return Scaffold(
             //appbar
@@ -127,9 +216,9 @@ class _SettingsState extends State<Settings> {
                                 borderRadius: const BorderRadius.all(Radius.circular(15)),
                                 child: Padding(
                                   padding: const EdgeInsets.all(20),
-                                  child: Column (
-                                    children: const [
-                                      Text('THEMES GO HERE') //to remove
+                                  child: Wrap (
+                                    children: [
+                                      // for (Widget i in displayThemes(themes)) i
                                     ],
                                   ),
                                 ),
