@@ -35,7 +35,7 @@ void main() async {
   //open box
   await Hive.openLazyBox('mindrev');
 
-	await getTheme();
+  await getTheme();
 
   runApp(
     MaterialApp(

@@ -18,6 +18,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   var box = Hive.lazyBox('mindrev');
+  var settings = {};
   //futures that will be awaited by FutureBuilder
   Future futureText = readText('settings');
   Future futureThemes = rootBundle.loadString('assets/themes.toml');
@@ -30,37 +31,39 @@ class _SettingsState extends State<Settings> {
   String currentTheme = 'default';
 
   //function to get old settings
-  void getSettings() async {
-    var settings = await box.get('settings');
+  Future getSettings() async {
+    settings = await box.get('settings');
 
     //update pre set form vars
     try {
-      uiColors = settings!['uiColors'];
+      uiColors = settings['uiColors'];
     } catch (e) {
       uiColors = true;
     }
 
     try {
-      selectedTheme = settings!['theme'];
+      selectedTheme = settings['theme'];
     } catch (e) {
-      selectedTheme = 0;
+      selectedTheme = null;
     }
   }
 
-	//function to load themes from theme file
+  //function to load themes from theme file
   void getThemes() async {
     dynamic themes = await rootBundle.loadString('assets/themes.toml');
-    themes = TomlDocument.parse(themes).toMap(); 
+    themes = TomlDocument.parse(themes).toMap();
   }
 
-	//function to display themes from getThemes
-  List<Widget> displayThemes(rawTOML) {
+  //function to display themes from getThemes
+  List<Widget> displayThemes(String rawTOML) {
     Map themesMap = TomlDocument.parse(rawTOML).toMap();
     //convert map to list for easier cycling
     List themesList = [];
     themesMap['themes'].forEach((k, v) => themesList.add(v));
     List<Widget> result = [];
     for (int i = themesList.length - 1; i >= 0; i--) {
+      if (settings['theme'] == themesList[i]['name'] && selectedTheme == null) selectedTheme = i;
+      if (settings['theme'] == null) selectedTheme = 0;
       if (selectedTheme == i) currentTheme = themesList[i]['name'];
       result.add(
         Padding(
@@ -85,21 +88,21 @@ class _SettingsState extends State<Settings> {
                     constraints: const BoxConstraints(maxWidth: 80, minWidth: 50, maxHeight: 80),
                     child: Row(
                       children: [
-                      	Expanded(
-                      	  child: Container(
-                        	color: HexColor(themesList[i]['primary']),
-                      	  ),
-                      	),
-                      	Expanded(
-                      	  child: Container(
-                        	color: HexColor(themesList[i]['secondary']),
-                      	  ),
-                      	),
-                      	Expanded(
-                      	  child: Container(
-                        	color: HexColor(themesList[i]['accent']),
-                      	  ),
-                      	),
+                        Expanded(
+                          child: Container(
+                            color: HexColor(themesList[i]['primary']),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            color: HexColor(themesList[i]['secondary']),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            color: HexColor(themesList[i]['accent']),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -123,10 +126,10 @@ class _SettingsState extends State<Settings> {
   }
 
   //function to save settings
-  Future<bool> saveSettings () async {
+  Future<bool> saveSettings() async {
     await box.put('settings', {
       'uiColors': uiColors,
-      'theme' : selectedThemeName,
+      'theme': selectedThemeName,
     });
     return true;
   }
@@ -152,8 +155,8 @@ class _SettingsState extends State<Settings> {
           String themes = snapshot.data![1];
 
           return Scaffold(
-						backgroundColor: theme.primary,
-           
+            backgroundColor: theme.primary,
+
             //appbar
             appBar: AppBar(
               foregroundColor: theme.secondaryText,
@@ -218,11 +221,11 @@ class _SettingsState extends State<Settings> {
                           const Divider(),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row (
-                              mainAxisAlignment: MainAxisAlignment.center, 
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                              	Icon (Icons.brush, color: theme.accent),
-                              	const SizedBox(width: 25),
+                                Icon(Icons.brush, color: theme.accent),
+                                const SizedBox(width: 25),
                                 Expanded(
                                   child: Material(
                                     color: theme.primary,
@@ -230,14 +233,14 @@ class _SettingsState extends State<Settings> {
                                     borderRadius: const BorderRadius.all(Radius.circular(15)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(20),
-                                        child: Wrap (
-                                          alignment: WrapAlignment.center,
-                                          direction: Axis.horizontal, 
-                                          children: [
-                                            for (Widget i in displayThemes(themes)) i
-                                          ],
-                                        ),
-                                     ),
+                                      child: Wrap(
+                                        alignment: WrapAlignment.center,
+                                        direction: Axis.horizontal,
+                                        children: [
+                                          for (Widget i in displayThemes(themes)) i
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],

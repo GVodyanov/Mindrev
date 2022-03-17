@@ -20,11 +20,11 @@ dynamic theme;
 
 //function to get themes from theme file and return the theme set in settings
 Future<bool> getTheme() async {
-	//load and parse theme file
+  //load and parse theme file
   dynamic themesMap = await rootBundle.loadString('assets/themes.toml');
   themesMap = TomlDocument.parse(themesMap).toMap();
 
-	//get theme set in settings from hive
+  //get theme set in settings from hive
   var box = Hive.lazyBox('mindrev');
   var settings = await box.get('settings');
 
@@ -34,27 +34,29 @@ Future<bool> getTheme() async {
   themesMap['themes'].forEach((k, v) => themesList.add(v));
 
   for (int i = themesList.length - 1; i >= 0; i--) {
-		if (themesList[i]['name'] == settings['theme']) {theme = MindrevTheme(
-			HexColor(themesList[i]['primary']),
-			HexColor(themesList[i]['primaryText']),
-			HexColor(themesList[i]['secondary']),
-			HexColor(themesList[i]['secondaryText']),
-			HexColor(themesList[i]['accent']),
-			HexColor(themesList[i]['accentText']),
-		);}
+    if (themesList[i]['name'] == settings['theme']) {
+      theme = MindrevTheme(
+        HexColor(themesList[i]['primary']),
+        HexColor(themesList[i]['primaryText']),
+        HexColor(themesList[i]['secondary']),
+        HexColor(themesList[i]['secondaryText']),
+        HexColor(themesList[i]['accent']),
+        HexColor(themesList[i]['accentText']),
+      );
+    }
   }
 
   //if nothing is found just return default
   if (settings['theme'] == null) {
     theme = MindrevTheme(
-  		HexColor(themesList[0]['primary']),
-  		HexColor(themesList[0]['primaryText']),
-  		HexColor(themesList[0]['secondary']),
-  		HexColor(themesList[0]['secondaryText']),
-  		HexColor(themesList[0]['accent']),
-  		HexColor(themesList[0]['accentText']),
+      HexColor(themesList[0]['primary']),
+      HexColor(themesList[0]['primaryText']),
+      HexColor(themesList[0]['secondary']),
+      HexColor(themesList[0]['secondaryText']),
+      HexColor(themesList[0]['accent']),
+      HexColor(themesList[0]['accentText']),
     );
   }
 
-	return true;
+  return true;
 }
