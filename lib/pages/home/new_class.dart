@@ -86,7 +86,7 @@ class _NewClassState extends State<NewClass> {
               foregroundColor: theme.secondaryText,
               title: Text(
                 text['title'],
-                style: defaultSecondaryTextStyle,
+                style: defaultSecondaryTextStyle(),
               ),
               elevation: 10,
               centerTitle: true,
@@ -108,7 +108,7 @@ class _NewClassState extends State<NewClass> {
                             children: <Widget>[
                               TextFormField(
                                 cursorColor: theme.accent,
-                                style: defaultPrimaryTextStyle,
+                                style: defaultPrimaryTextStyle(),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return text['errorNoText'];
@@ -184,8 +184,8 @@ class _NewClassState extends State<NewClass> {
           );
         } else {
           return Scaffold(
-            //loading screen to be shown until Future is found
-            body: loading,
+            //loading() screen to be shown until Future is found
+            body: loading(),
           );
         }
       },

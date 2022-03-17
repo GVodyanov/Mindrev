@@ -35,7 +35,7 @@ class _TopicsState extends State<Topics> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-            title: Text(i.name, style: defaultPrimaryTextStyle),
+            title: Text(i.name, style: defaultPrimaryTextStyle()),
             trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
             onTap: () {
               Navigator.pushNamed(
@@ -151,8 +151,8 @@ class _TopicsState extends State<Topics> {
           );
         } else {
           return Scaffold(
-            //loading screen to be shown until Future is found
-            body: loading,
+            //loading() screen to be shown until Future is found
+            body: loading(),
           );
         }
       },

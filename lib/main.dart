@@ -2,6 +2,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 
+import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/models/mindrev_class.dart';
 import 'package:mindrev/models/mindrev_topic.dart';
 import 'package:mindrev/models/mindrev_material.dart';
@@ -33,6 +34,8 @@ void main() async {
 
   //open box
   await Hive.openLazyBox('mindrev');
+
+	await getTheme();
 
   runApp(
     MaterialApp(

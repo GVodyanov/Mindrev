@@ -26,6 +26,7 @@ class _SettingsState extends State<Settings> {
   //final _formKey = GlobalKey<FormState>();
   bool uiColors = true;
   int? selectedTheme;
+  String? selectedThemeName;
   String currentTheme = 'default';
 
   //function to get old settings
@@ -46,15 +47,20 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-	//function to get themes from theme file
+	//function to load themes from theme file
+  void getThemes() async {
+    dynamic themes = await rootBundle.loadString('assets/themes.toml');
+    themes = TomlDocument.parse(themes).toMap(); 
+  }
+
+	//function to display themes from getThemes
   List<Widget> displayThemes(rawTOML) {
     Map themesMap = TomlDocument.parse(rawTOML).toMap();
     //convert map to list for easier cycling
     List themesList = [];
     themesMap['themes'].forEach((k, v) => themesList.add(v));
     List<Widget> result = [];
-    int j = themesList.length;
-    for (int i = j - 1; i >= 0; i--) {
+    for (int i = themesList.length - 1; i >= 0; i--) {
       if (selectedTheme == i) currentTheme = themesList[i]['name'];
       result.add(
         Padding(
@@ -76,7 +82,7 @@ class _SettingsState extends State<Settings> {
                     border: Border.all(color: theme.primary ?? Colors.white, width: 10),
                   ),
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 200, minWidth: 100, maxHeight: 200),
+                    constraints: const BoxConstraints(maxWidth: 80, minWidth: 50, maxHeight: 80),
                     child: Row(
                       children: [
                       	Expanded(
@@ -98,7 +104,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Text(themesList[i]['name'], style: TextStyle(color: selectedTheme == i ? theme.accentText : theme.primaryText))
               ],
             ),
@@ -106,6 +112,7 @@ class _SettingsState extends State<Settings> {
               //logic for changing selected theme
               setState(() {
                 selectedTheme = i;
+                selectedThemeName = themesList[i]['name'];
               });
             },
           ),
@@ -115,10 +122,13 @@ class _SettingsState extends State<Settings> {
     return result.reversed.toList();
   }
 
-  void getThemes() async {
-    dynamic themes = await rootBundle.loadString('assets/themes.toml');
-    themes = TomlDocument.parse(themes).toMap();
-    
+  //function to save settings
+  Future<bool> saveSettings () async {
+    await box.put('settings', {
+      'uiColors': uiColors,
+      'theme' : selectedThemeName,
+    });
+    return true;
   }
 
   @override
@@ -142,6 +152,8 @@ class _SettingsState extends State<Settings> {
           String themes = snapshot.data![1];
 
           return Scaffold(
+						backgroundColor: theme.primary,
+           
             //appbar
             appBar: AppBar(
               foregroundColor: theme.secondaryText,
@@ -154,17 +166,16 @@ class _SettingsState extends State<Settings> {
             //button to save
             floatingActionButton: FloatingActionButton.extended(
               icon: const Icon(
-                Icons.save,
+                Icons.check,
               ),
               label: Text(
-                text['save'],
+                text['apply'],
               ),
               foregroundColor: theme.accentText,
               backgroundColor: theme.accent,
               onPressed: () async {
-                await box.put('settings', {
-                  'uiColors': uiColors
-                });
+                await saveSettings();
+                await getTheme();
                 Navigator.pop(context);
                 Navigator.pushReplacementNamed(context, '/home');
               },
@@ -187,7 +198,7 @@ class _SettingsState extends State<Settings> {
                           ),
                           const Divider(),
                           ListTile(
-                            title: Text(text['uiColors'], style: defaultPrimaryTextStyle),
+                            title: Text(text['uiColors'], style: defaultPrimaryTextStyle()),
                             leading: Icon(Icons.palette, color: theme.accent),
                             trailing: Switch(
                               value: uiColors,
@@ -205,25 +216,32 @@ class _SettingsState extends State<Settings> {
                             style: TextStyle(color: theme.primaryText, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           const Divider(),
-                          Row (
-                            children: [
-                              const SizedBox(width: 15),
-                            	Icon (Icons.brush, color: theme.accent),
-                            	const SizedBox(width: 25),
-                              Material(
-                                color: theme.primary,
-                                elevation: 8,
-                                borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Wrap (
-                                    children: [
-                                      // for (Widget i in displayThemes(themes)) i
-                                    ],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row (
+                              mainAxisAlignment: MainAxisAlignment.center, 
+                              children: [
+                              	Icon (Icons.brush, color: theme.accent),
+                              	const SizedBox(width: 25),
+                                Expanded(
+                                  child: Material(
+                                    color: theme.primary,
+                                    elevation: 8,
+                                    borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                        child: Wrap (
+                                          alignment: WrapAlignment.center,
+                                          direction: Axis.horizontal, 
+                                          children: [
+                                            for (Widget i in displayThemes(themes)) i
+                                          ],
+                                        ),
+                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -235,8 +253,8 @@ class _SettingsState extends State<Settings> {
           );
         } else {
           return Scaffold(
-            //loading screen to be shown until Future is found
-            body: loading,
+            //loading() screen to be shown until Future is found
+            body: loading(),
           );
         }
       },

@@ -88,7 +88,7 @@ class _NewTopicState extends State<NewTopic> {
                             children: <Widget>[
                               TextFormField(
                                 cursorColor: routeData['accentColor'],
-                                style: defaultPrimaryTextStyle,
+                                style: defaultPrimaryTextStyle(),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return text['errorNoText'];
@@ -130,8 +130,8 @@ class _NewTopicState extends State<NewTopic> {
           );
         } else {
           return Scaffold(
-            //loading screen to be shown until Future is found
-            body: loading,
+            //loading() screen to be shown until Future is found
+            body: loading(),
           );
         }
       },

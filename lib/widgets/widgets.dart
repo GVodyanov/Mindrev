@@ -5,6 +5,11 @@ import 'package:mindrev/extra/theme.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+
+TextStyle defaultPrimaryTextStyle() => TextStyle(color: theme.primaryText);
+
+TextStyle defaultSecondaryTextStyle() => TextStyle(color: theme.secondaryText);
+
 AlertStyle defaultAlert = AlertStyle(
   animationType: AnimationType.grow,
   isCloseButton: true,
@@ -149,7 +154,7 @@ InputDecoration defaultSecondaryInputDecoration(String text) {
   );
 }
 
-Center loading = Center(
+Center loading() => Center(
   child: Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -162,7 +167,3 @@ Center loading = Center(
     ],
   ),
 );
-
-TextStyle defaultPrimaryTextStyle = TextStyle(color: theme.primaryText);
-
-TextStyle defaultSecondaryTextStyle = TextStyle(color: theme.secondaryText);

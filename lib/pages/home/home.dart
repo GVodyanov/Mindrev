@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-            title: Text(i.name, style: defaultPrimaryTextStyle),
+            title: Text(i.name, style: defaultPrimaryTextStyle()),
             leading: CircleColor(color: HexColor(i.color), circleSize: 30),
             trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
             onTap: () {
@@ -134,24 +134,24 @@ class _HomeState extends State<Home> {
                         child: SvgPicture.asset('assets/logo.svg', color: theme.accent),
                       ),
                       ListTile(
-                        title: Text(sidebar['home'], style: defaultSecondaryTextStyle),
+                        title: Text(sidebar['home'], style: defaultSecondaryTextStyle()),
                         leading: Icon(Icons.home, color: theme.secondaryText),
                         onTap: () {},
                       ),
                       ListTile(
-                        title: Text(sidebar['settings'], style: defaultSecondaryTextStyle),
+                        title: Text(sidebar['settings'], style: defaultSecondaryTextStyle()),
                         leading: Icon(Icons.settings, color: theme.secondaryText),
                         onTap: () {
                           Navigator.pushNamed(context, '/settings');
                         },
                       ),
                       ListTile(
-                        title: Text(sidebar['help'], style: defaultSecondaryTextStyle),
+                        title: Text(sidebar['help'], style: defaultSecondaryTextStyle()),
                         leading: Icon(Icons.help, color: theme.secondaryText),
                         onTap: () {},
                       ),
                       ListTile(
-                        title: Text(sidebar['about'], style: defaultSecondaryTextStyle),
+                        title: Text(sidebar['about'], style: defaultSecondaryTextStyle()),
                         leading: Icon(Icons.info, color: theme.secondaryText),
                         onTap: () {},
                       ),
@@ -224,8 +224,8 @@ class _HomeState extends State<Home> {
           );
         } else {
           return Scaffold(
-            //loading screen to be shown until Future is found
-            body: loading,
+            //loading() screen to be shown until Future is found
+            body: loading(),
           );
         }
       },

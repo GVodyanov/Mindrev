@@ -135,7 +135,7 @@ class _NewMaterialState extends State<NewMaterial> {
                         children: [
                           TextFormField(
                             cursorColor: routeData['accentColor'],
-                            style: defaultPrimaryTextStyle,
+                            style: defaultPrimaryTextStyle(),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return text['errorNoText'];
@@ -158,7 +158,7 @@ class _NewMaterialState extends State<NewMaterial> {
                               padding: const EdgeInsets.all(8),
                               child: Column(
                                 children: [
-                                  Text(text['type'], style: defaultPrimaryTextStyle),
+                                  Text(text['type'], style: defaultPrimaryTextStyle()),
                                   const SizedBox(height: 20, width: double.infinity),
                                   Wrap(
                                     children: [
@@ -184,7 +184,7 @@ class _NewMaterialState extends State<NewMaterial> {
                                     showDialog<String>(
                                       context: ctx,
                                       builder: (BuildContext ctx) => AlertDialog(
-                                        title: Text(text['duplicate'], style: defaultPrimaryTextStyle),
+                                        title: Text(text['duplicate'], style: defaultPrimaryTextStyle()),
                                         actions: <Widget>[
                                           coloredButton(
                                             text['close'],
@@ -214,8 +214,8 @@ class _NewMaterialState extends State<NewMaterial> {
           );
         } else {
           return Scaffold(
-            //loading screen to be shown until Future is found
-            body: loading,
+            //loading() screen to be shown until Future is found
+            body: loading(),
           );
         }
       },

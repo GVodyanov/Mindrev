@@ -20,7 +20,7 @@ chooseColorDetails = "Choose a color for your new class"
 
 [settings]
 title = "Settings"
-save = "Save"
+apply = "Apply"
 ui = "User interface"
 uiColors = "Would you like the accent color of the application to change with the selected class?"
 theme = "Theme"

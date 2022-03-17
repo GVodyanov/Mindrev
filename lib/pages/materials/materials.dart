@@ -51,7 +51,7 @@ class _MaterialsState extends State<Materials> {
               'assets/study_material_icons/$icon.svg',
               color: accentColor,
             ),
-            title: Text(i.name, style: defaultPrimaryTextStyle),
+            title: Text(i.name, style: defaultPrimaryTextStyle()),
             trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
             onTap: () {},
           ),
@@ -159,8 +159,8 @@ class _MaterialsState extends State<Materials> {
           );
         } else {
           return Scaffold(
-            //loading screen to be shown until Future is found
-            body: loading,
+            //loading() screen to be shown until Future is found
+            body: loading(),
           );
         }
       },
