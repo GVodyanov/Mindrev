@@ -33,21 +33,21 @@ Future<bool> getTheme() async {
   List themesList = [];
   themesMap['themes'].forEach((k, v) => themesList.add(v));
 
-  for (int i = themesList.length - 1; i >= 0; i--) {
-    if (themesList[i]['name'] == settings['theme']) {
-      theme = MindrevTheme(
-        HexColor(themesList[i]['primary']),
-        HexColor(themesList[i]['primaryText']),
-        HexColor(themesList[i]['secondary']),
-        HexColor(themesList[i]['secondaryText']),
-        HexColor(themesList[i]['accent']),
-        HexColor(themesList[i]['accentText']),
-      );
+  try {
+    for (int i = themesList.length - 1; i >= 0; i--) {
+      if (themesList[i]!['name'] == settings!['theme']) {
+        theme = MindrevTheme(
+          HexColor(themesList[i]['primary']),
+          HexColor(themesList[i]['primaryText']),
+          HexColor(themesList[i]['secondary']),
+          HexColor(themesList[i]['secondaryText']),
+          HexColor(themesList[i]['accent']),
+          HexColor(themesList[i]['accentText']),
+        );
+      }
     }
-  }
-
-  //if nothing is found just return default
-  if (settings['theme'] == null) {
+  } catch (e) {
+    //if nothing is found just return default
     theme = MindrevTheme(
       HexColor(themesList[0]['primary']),
       HexColor(themesList[0]['primaryText']),
@@ -56,6 +56,7 @@ Future<bool> getTheme() async {
       HexColor(themesList[0]['accent']),
       HexColor(themesList[0]['accentText']),
     );
+
   }
 
   return true;

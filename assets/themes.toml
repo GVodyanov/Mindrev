@@ -47,3 +47,12 @@ andromeda.secondaryText = "#D5CED9"
 andromeda.accent = "#07c1a6"
 andromeda.accentText = "#23262e"
 
+darcula.name = "Darcula"
+darcula.primary = "#313335"
+darcula.primaryText = "#AFB1B3"
+darcula.secondary = "#2B2B2B"
+darcula.secondaryText = "#AFB1B3"
+darcula.accent = "#C96A2E"
+darcula.accentText = "#2B2B2B"
+
+

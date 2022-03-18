@@ -5,9 +5,9 @@ import 'package:mindrev/extra/theme.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-TextStyle defaultPrimaryTextStyle() => TextStyle(color: theme.primaryText);
+TextStyle defaultPrimaryTextStyle() => TextStyle(color: theme.primaryText, fontSize: 17);
 
-TextStyle defaultSecondaryTextStyle() => TextStyle(color: theme.secondaryText);
+TextStyle defaultSecondaryTextStyle() => TextStyle(color: theme.secondaryText, fontSize: 17);
 
 AlertStyle defaultAlert = AlertStyle(
   animationType: AnimationType.grow,

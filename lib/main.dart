@@ -1,6 +1,6 @@
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
-import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart';
 
 import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/models/mindrev_class.dart';
@@ -21,9 +21,12 @@ import 'package:hive_flutter/adapters.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //hive
-  if (Platform.isLinux) {
-    var dir = await getApplicationSupportDirectory();
-    Hive.init(dir.path);
+  if (defaultTargetPlatform == TargetPlatform.linux) {
+    try {
+      var dir = await getApplicationSupportDirectory();
+      Hive.init(dir.path);
+    // ignore: empty_catches
+    } catch (e) {}
   } else {
     await Hive.initFlutter();
   }
@@ -40,7 +43,7 @@ void main() async {
   runApp(
     MaterialApp(
       theme: ThemeData(
-        fontFamily: 'Montserrat',
+        fontFamily: 'NunitoSans',
       ),
       //routes for navigation
       initialRoute: '/home',

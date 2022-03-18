@@ -32,7 +32,11 @@ class _SettingsState extends State<Settings> {
 
   //function to get old settings
   Future getSettings() async {
-    settings = await box.get('settings');
+    try {
+      settings = await box.get('settings');
+    } catch (e) {
+      //no settings set yet
+    }
 
     //update pre set form vars
     try {
@@ -41,11 +45,7 @@ class _SettingsState extends State<Settings> {
       uiColors = true;
     }
 
-    try {
-      selectedTheme = settings['theme'];
-    } catch (e) {
-      selectedTheme = null;
-    }
+    settings['theme'] ??= 0;
   }
 
   //function to load themes from theme file
@@ -62,8 +62,8 @@ class _SettingsState extends State<Settings> {
     themesMap['themes'].forEach((k, v) => themesList.add(v));
     List<Widget> result = [];
     for (int i = themesList.length - 1; i >= 0; i--) {
+      //pre select set theme
       if (settings['theme'] == themesList[i]['name'] && selectedTheme == null) selectedTheme = i;
-      if (settings['theme'] == null) selectedTheme = 0;
       if (selectedTheme == i) currentTheme = themesList[i]['name'];
       result.add(
         Padding(

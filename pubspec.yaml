@@ -43,14 +43,12 @@ flutter:
     - assets/study_material_icons/
 
   fonts:
-    - family: Montserrat
+    - family: NunitoSans
       fonts:
-       - asset: assets/fonts/Montserrat-Medium.ttf
+       - asset: assets/fonts/NunitoSans-Bold.ttf
+       - asset: assets/fonts/NunitoSans-Italic.ttf
+       - asset: assets/fonts/NunitoSans-Regular.ttf
 
     - family: Comfortaa-Bold
       fonts:
         - asset: assets/fonts/Comfortaa-Bold.ttf
-
-    - family: LiberationSerif
-      fonts:
-        - asset: assets/fonts/LiberationSerif-Regular.ttf

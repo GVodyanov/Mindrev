@@ -93,7 +93,8 @@ class _HomeState extends State<Home> {
                 'Mindrev',
                 style: TextStyle(
                   color: theme.accent,
-                  fontFamily: 'Comfortaa-Bold',
+                  fontFamily: 'NunitoSans',
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
