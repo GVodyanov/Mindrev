@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              elevation: 10,
+              elevation: 4,
               centerTitle: true,
               backgroundColor: theme.secondary,
             ),
@@ -199,7 +199,7 @@ class _HomeState extends State<Home> {
                         child: ConstrainedBox(
                           child: Material(
                             color: theme.primary,
-                            elevation: 8,
+                            elevation: 4,
                             borderRadius: const BorderRadius.all(Radius.circular(15)),
                             child: Padding(
                               padding: const EdgeInsets.all(20),

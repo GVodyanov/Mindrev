@@ -72,7 +72,7 @@ class _SettingsState extends State<Settings> {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(20),
               primary: selectedTheme == i ? theme.accent : theme.primary,
-              elevation: 8,
+              elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
@@ -162,7 +162,7 @@ class _SettingsState extends State<Settings> {
               foregroundColor: theme.secondaryText,
               title: Text(text['title']),
               centerTitle: true,
-              elevation: 10,
+              elevation: 4,
               backgroundColor: theme.secondary,
             ),
 
@@ -229,7 +229,7 @@ class _SettingsState extends State<Settings> {
                                 Expanded(
                                   child: Material(
                                     color: theme.primary,
-                                    elevation: 8,
+                                    elevation: 4,
                                     borderRadius: const BorderRadius.all(Radius.circular(15)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(20),

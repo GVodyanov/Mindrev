@@ -48,7 +48,3 @@ flutter:
        - asset: assets/fonts/NunitoSans-Bold.ttf
        - asset: assets/fonts/NunitoSans-Italic.ttf
        - asset: assets/fonts/NunitoSans-Regular.ttf
-
-    - family: Comfortaa-Bold
-      fonts:
-        - asset: assets/fonts/Comfortaa-Bold.ttf

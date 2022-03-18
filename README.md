@@ -8,8 +8,8 @@ A flutter application to help you study
 ### Features
 
 - [x] Divided into classes, topics, and materials
+- [x] Themable
 - [ ] Multilingual
-- [ ] Themable
 - [ ] Flashcards
 - [ ] Notes
 - [ ] Ordered Notes

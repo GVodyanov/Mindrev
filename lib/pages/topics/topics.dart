@@ -84,7 +84,7 @@ class _TopicsState extends State<Topics> {
             appBar: AppBar(
               foregroundColor: contrastSecondaryColor,
               title: Text(routeData['selection']),
-              elevation: 10,
+              elevation: 4,
               centerTitle: true,
               backgroundColor: routeData['secondaryColor'],
             ),
@@ -134,7 +134,7 @@ class _TopicsState extends State<Topics> {
                         child: ConstrainedBox(
                           child: Material(
                             color: theme.primary,
-                            elevation: 8,
+                            elevation: 4,
                             borderRadius: const BorderRadius.all(Radius.circular(15)),
                             child: Padding(
                               padding: const EdgeInsets.all(20),

@@ -68,7 +68,7 @@ class _NewTopicState extends State<NewTopic> {
             appBar: AppBar(
               foregroundColor: contrastSecondaryColor,
               title: Text(text['title']),
-              elevation: 10,
+              elevation: 4,
               centerTitle: true,
               backgroundColor: routeData['secondaryColor'],
             ),

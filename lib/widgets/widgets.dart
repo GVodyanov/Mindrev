@@ -41,7 +41,7 @@ ElevatedButton defaultButton(String text, Function onPressed) {
     style: ElevatedButton.styleFrom(
       padding: const EdgeInsets.all(20),
       primary: theme.accent,
-      elevation: 12,
+      elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -56,7 +56,7 @@ ElevatedButton coloredButton(String text, Function onPressed, Color color, Color
     style: ElevatedButton.styleFrom(
       padding: const EdgeInsets.all(20),
       primary: color,
-      elevation: 12,
+      elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),

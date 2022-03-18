@@ -88,7 +88,7 @@ class _NewClassState extends State<NewClass> {
                 text['title'],
                 style: defaultSecondaryTextStyle(),
               ),
-              elevation: 10,
+              elevation: 4,
               centerTitle: true,
               backgroundColor: theme.secondary,
             ),

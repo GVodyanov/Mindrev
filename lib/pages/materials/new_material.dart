@@ -67,7 +67,7 @@ class _NewMaterialState extends State<NewMaterial> {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(20),
               primary: selected == i ? accentColor : theme.primary,
-              elevation: 8,
+              elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
               ),
@@ -119,7 +119,7 @@ class _NewMaterialState extends State<NewMaterial> {
             appBar: AppBar(
               foregroundColor: contrastSecondaryColor,
               title: Text(text['title']),
-              elevation: 10,
+              elevation: 4,
               centerTitle: true,
               backgroundColor: routeData['secondaryColor'],
             ),
@@ -153,7 +153,7 @@ class _NewMaterialState extends State<NewMaterial> {
                           Material(
                             color: theme.primary,
                             borderRadius: const BorderRadius.all(Radius.circular(15)),
-                            elevation: 8,
+                            elevation: 4,
                             child: Padding(
                               padding: const EdgeInsets.all(8),
                               child: Column(
