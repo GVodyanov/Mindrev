@@ -43,7 +43,7 @@ void main() async {
   runApp(
     MaterialApp(
       theme: ThemeData(
-        fontFamily: 'NunitoSans',
+        fontFamily: 'SourceSansPro',
       ),
       //routes for navigation
       initialRoute: '/home',

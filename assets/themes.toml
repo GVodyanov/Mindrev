@@ -8,7 +8,7 @@ mindrev.accent = "#03A9F4"
 mindrev.accentText = "#FAFAFA"
 
 dark.name = "Dark"
-dark.primary = "#2F2F2F"
+dark.primary = "#242323"
 dark.primaryText = "#FAFAFA"
 dark.secondary = "#171717"
 dark.secondaryText = "#FAFAFA"
@@ -54,5 +54,13 @@ darcula.secondary = "#2B2B2B"
 darcula.secondaryText = "#AFB1B3"
 darcula.accent = "#C96A2E"
 darcula.accentText = "#2B2B2B"
+
+contrast.name = "Contrast"
+contrast.primary = "#FFFFFF"
+contrast.primaryText = "#171A21"
+contrast.secondary = "#171A21"
+contrast.secondaryText = "#BFC0C0"
+contrast.accent = "#EF8354"
+contrast.accentText = "#FFFFFF"
 
 

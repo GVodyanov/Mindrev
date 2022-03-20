@@ -43,8 +43,8 @@ flutter:
     - assets/study_material_icons/
 
   fonts:
-    - family: NunitoSans
+    - family: SourceSansPro
       fonts:
-       - asset: assets/fonts/NunitoSans-Bold.ttf
-       - asset: assets/fonts/NunitoSans-Italic.ttf
-       - asset: assets/fonts/NunitoSans-Regular.ttf
+       - asset: assets/fonts/SourceSansPro-Bold.ttf
+       - asset: assets/fonts/SourceSansPro-Italic.ttf
+       - asset: assets/fonts/SourceSansPro-Regular.ttf
