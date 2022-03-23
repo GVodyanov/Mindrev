@@ -24,6 +24,7 @@ class _HomeState extends State<Home> {
   List<Future>? futureText = [
     readText('home'),
     readText('sidebar'),
+    readText('about'),
   ];
 
   //function which retrieves all saved classes and their properties
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> {
                 arguments: {
                   'selection': i.name,
                   'accentColor': uiColors == false ? theme.accent : HexColor(i.color),
-                  'secondaryColor': uiColors == false ? theme.secondary : HexColor(i.color),
+                  'secondaryColor': uiColors == false ? theme.secondary : HexColor(i.color)
                 },
               );
             },
@@ -71,6 +72,7 @@ class _HomeState extends State<Home> {
       future: Future.wait([
         futureText![0],
         futureText![1],
+        futureText![2],
         getClasses(),
         getSettings(),
       ]),
@@ -80,6 +82,7 @@ class _HomeState extends State<Home> {
           //data loaded with FutureBuilder
           Map text = snapshot.data![0];
           Map sidebar = snapshot.data![1];
+          Map about = snapshot.data![2];
           List classes = snapshot.data![2] ?? List.empty();
           Map settings = snapshot.data![3] ?? {};
 
