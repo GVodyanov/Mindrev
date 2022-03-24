@@ -9,20 +9,22 @@ TextStyle defaultPrimaryTextStyle() => TextStyle(color: theme.primaryText, fontS
 
 TextStyle defaultSecondaryTextStyle() => TextStyle(color: theme.secondaryText, fontSize: 17);
 
-AlertStyle defaultAlert = AlertStyle(
-  animationType: AnimationType.grow,
-  isCloseButton: true,
-  isOverlayTapDismiss: true,
-  animationDuration: const Duration(milliseconds: 300),
-  alertBorder: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(15),
-    side: const BorderSide(),
-  ),
-  backgroundColor: theme.secondary,
-  titleStyle: TextStyle(
-    color: theme.secondaryText,
-  ),
-);
+AlertStyle defaultAlertStyle() {
+  return AlertStyle(
+    animationType: AnimationType.grow,
+    isCloseButton: true,
+    isOverlayTapDismiss: true,
+    animationDuration: const Duration(milliseconds: 300),
+    alertBorder: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15),
+      side: const BorderSide(),
+    ),
+    backgroundColor: theme.secondary,
+    titleStyle: TextStyle(
+      color: theme.secondaryText,
+    ),
+  );
+}
 
 DialogButton defaultDialogButton(String text, context, Function onPressed) {
   return DialogButton(
@@ -157,7 +159,7 @@ Center loading() => Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Mindrev', style: TextStyle(color: theme.accent, fontFamily: 'Comfortaa-Bold', fontWeight: FontWeight.bold, fontSize: 40)),
+          Text('Mindrev', style: TextStyle(color: theme.accent, fontSize: 40)),
           const SizedBox(height: 30),
           SpinKitFadingGrid(
             color: theme.accent,

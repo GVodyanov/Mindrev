@@ -32,7 +32,7 @@ class _MaterialsState extends State<Materials> {
   }
 
   //function to display materials when getMaterials() retrieves them
-  List<Widget> displayMaterials(List gotMaterials, String gotIcons, Color accentColor) {
+  List<Widget> displayMaterials(List gotMaterials, String gotIcons, Color accentColor, Map routeData) {
     List<Widget> result = [];
     Map icons = TomlDocument.parse(gotIcons).toMap();
 
@@ -53,7 +53,10 @@ class _MaterialsState extends State<Materials> {
             ),
             title: Text(i.name, style: defaultPrimaryTextStyle()),
             trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
-            onTap: () {},
+            onTap: () {
+              routeData['name'] = i.name;
+							Navigator.pushNamed(context, '/$icon', arguments: routeData);
+            },
           ),
         ),
       );
@@ -71,7 +74,7 @@ class _MaterialsState extends State<Materials> {
     Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
 
     //futures that will be awaited by FutureBuilder that need to be in build
-    Future futureMaterials = getMaterials(routeData['selection'], routeData['className']);
+    Future futureMaterials = getMaterials(routeData['topicName'], routeData['className']);
     return FutureBuilder(
       future: Future.wait([
         futureText,
@@ -91,7 +94,7 @@ class _MaterialsState extends State<Materials> {
             //appbar
             appBar: AppBar(
               foregroundColor: contrastSecondaryColor,
-              title: Text(routeData['selection']),
+              title: Text(routeData['topicName']),
               elevation: 4,
               centerTitle: true,
               backgroundColor: routeData['secondaryColor'],
@@ -128,7 +131,7 @@ class _MaterialsState extends State<Materials> {
                           children: ListTile.divideTiles(
                             context: context,
                             tiles: [
-                              for (Widget i in displayMaterials(materials, typeIcons, routeData['accentColor'])) i
+                              for (Widget i in displayMaterials(materials, typeIcons, routeData['accentColor'], routeData)) i
                             ],
                           ).toList(),
                         ),

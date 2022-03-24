@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mindrev/services/text.dart';
 import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/widgets/widgets.dart';
+import 'package:mindrev/pages/home/about.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> {
                 context,
                 '/topics',
                 arguments: {
-                  'selection': i.name,
+                  'topicName': i.name,
                   'accentColor': uiColors == false ? theme.accent : HexColor(i.color),
                   'secondaryColor': uiColors == false ? theme.secondary : HexColor(i.color)
                 },
@@ -83,8 +84,8 @@ class _HomeState extends State<Home> {
           Map text = snapshot.data![0];
           Map sidebar = snapshot.data![1];
           Map about = snapshot.data![2];
-          List classes = snapshot.data![2] ?? List.empty();
-          Map settings = snapshot.data![3] ?? {};
+          List classes = snapshot.data![3] ?? List.empty();
+          Map settings = snapshot.data![4] ?? {};
 
           return Scaffold(
             backgroundColor: theme.primary,
@@ -96,9 +97,7 @@ class _HomeState extends State<Home> {
                 'Mindrev',
                 style: TextStyle(
                   color: theme.accent,
-                  fontFamily: 'NunitoSans',
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
               elevation: 4,
@@ -157,7 +156,9 @@ class _HomeState extends State<Home> {
                       ListTile(
                         title: Text(sidebar['about'], style: defaultSecondaryTextStyle()),
                         leading: Icon(Icons.info, color: theme.secondaryText),
-                        onTap: () {},
+                        onTap: () {
+													showAbout(about, context);
+                        },
                       ),
                       const Divider(endIndent: 5, indent: 5),
                       ListTile(

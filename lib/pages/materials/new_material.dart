@@ -6,6 +6,7 @@ import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/services/text.dart';
 import 'package:mindrev/services/text_color.dart';
 import 'package:mindrev/widgets/widgets.dart';
+import 'package:mindrev/models/mindrev_flashcards.dart';
 
 import 'package:toml/toml.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -50,6 +51,8 @@ class _NewMaterialState extends State<NewMaterial> {
     topics[topics.indexWhere((element) => element.name == topicName)].materials = materials;
     classes[classes.indexWhere((element) => element.name == className)].topics = topics;
     await box.put('classes', classes);
+
+		if (type == 'Flashcards') await box.put('$className/$topicName/$name', MindrevFlashcards(name));
     return true;
   }
 
@@ -176,7 +179,7 @@ class _NewMaterialState extends State<NewMaterial> {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState?.save();
                                 if (newMaterialName != null && type != null) {
-                                  bool outcome = await newMaterial('$newMaterialName', '$type', routeData['selection'], routeData['className']);
+                                  bool outcome = await newMaterial('$newMaterialName', '$type', routeData['topicName'], routeData['className']);
                                   if (outcome == true) {
                                     Navigator.pop(context);
                                     Navigator.pushReplacementNamed(context, '/materials', arguments: routeData);

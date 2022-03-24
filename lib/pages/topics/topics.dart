@@ -43,7 +43,7 @@ class _TopicsState extends State<Topics> {
                 '/materials',
                 arguments: {
                   'className': className,
-                  'selection': i.name,
+                  'topicName': i.name,
                   'accentColor': accentColor,
                   'secondaryColor': secondaryColor,
                 },
@@ -66,7 +66,7 @@ class _TopicsState extends State<Topics> {
     Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
 
     //futures that will be awaited by FutureBuilder that need to be in build
-    Future futureTopics = getTopics(routeData['selection']);
+    Future futureTopics = getTopics(routeData['topicName']);
     return FutureBuilder(
       future: Future.wait([
         futureText,
@@ -83,7 +83,7 @@ class _TopicsState extends State<Topics> {
             backgroundColor: theme.primary,
             appBar: AppBar(
               foregroundColor: contrastSecondaryColor,
-              title: Text(routeData['selection']),
+              title: Text(routeData['topicName']),
               elevation: 4,
               centerTitle: true,
               backgroundColor: routeData['secondaryColor'],
@@ -119,7 +119,7 @@ class _TopicsState extends State<Topics> {
                           children: ListTile.divideTiles(
                             context: context,
                             tiles: [
-                              for (Widget i in displayTopics(topics, routeData['accentColor'], routeData['secondaryColor'], routeData['selection'])) i
+                              for (Widget i in displayTopics(topics, routeData['accentColor'], routeData['secondaryColor'], routeData['topicName'])) i
                             ],
                           ).toList(),
                         ),

@@ -12,6 +12,11 @@ new = "Class"
 [about]
 title = "About"
 close = "Close"
+version = "Version"
+versionNumber = "Alpha 0.1"
+author = "Author"
+source = "Source Code"
+license = "License"
 
 [newClass]
 title = "Create a new class"
