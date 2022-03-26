@@ -20,9 +20,7 @@ class MindrevFlashcardsAdapter extends TypeAdapter<MindrevFlashcards> {
       fields[0] as String,
     )
       ..date = fields[1] as String
-      ..cards = (fields[2] as List?)
-          ?.map((dynamic e) => (e as Map).cast<dynamic, dynamic>())
-          .toList();
+      ..cards = (fields[2] as List?)?.map((dynamic e) => (e as Map).cast<dynamic, dynamic>()).toList();
   }
 
   @override
@@ -41,9 +39,5 @@ class MindrevFlashcardsAdapter extends TypeAdapter<MindrevFlashcards> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MindrevFlashcardsAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is MindrevFlashcardsAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

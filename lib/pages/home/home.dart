@@ -157,7 +157,7 @@ class _HomeState extends State<Home> {
                         title: Text(sidebar['about'], style: defaultSecondaryTextStyle()),
                         leading: Icon(Icons.info, color: theme.secondaryText),
                         onTap: () {
-													showAbout(about, context);
+                          showAbout(about, context);
                         },
                       ),
                       const Divider(endIndent: 5, indent: 5),

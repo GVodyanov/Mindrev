@@ -56,7 +56,6 @@ Future<bool> getTheme() async {
       HexColor(themesList[0]['accent']),
       HexColor(themesList[0]['accentText']),
     );
-
   }
 
   return true;

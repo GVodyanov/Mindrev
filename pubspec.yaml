@@ -29,6 +29,7 @@ dependencies:
   build_runner: ^2.1.7
   flutter_linkify: ^5.0.2
   flash_card: ^0.0.7
+  scroll_snap_list: ^0.8.4
 
 dev_dependencies:
   flutter_test:

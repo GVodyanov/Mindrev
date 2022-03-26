@@ -55,7 +55,7 @@ class _MaterialsState extends State<Materials> {
             trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
             onTap: () {
               routeData['name'] = i.name;
-							Navigator.pushNamed(context, '/$icon', arguments: routeData);
+              Navigator.pushNamed(context, '/$icon', arguments: routeData);
             },
           ),
         ),

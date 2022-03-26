@@ -26,7 +26,7 @@ void main() async {
     try {
       var dir = await getApplicationSupportDirectory();
       Hive.init(dir.path);
-    // ignore: empty_catches
+      // ignore: empty_catches
     } catch (e) {}
   } else {
     await Hive.initFlutter();

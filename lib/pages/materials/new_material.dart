@@ -52,7 +52,7 @@ class _NewMaterialState extends State<NewMaterial> {
     classes[classes.indexWhere((element) => element.name == className)].topics = topics;
     await box.put('classes', classes);
 
-		if (type == 'Flashcards') await box.put('$className/$topicName/$name', MindrevFlashcards(name));
+    if (type == 'Flashcards') await box.put('$className/$topicName/$name', MindrevFlashcards(name));
     return true;
   }
 
