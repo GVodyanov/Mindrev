@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:flip_card/flip_card.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flash_card/flash_card.dart';
+import 'package:mindrev/extra/theme.dart';
+import 'package:mindrev/widgets/widgets.dart';
 
 part 'mindrev_flashcards.g.dart';
 
@@ -25,11 +27,32 @@ class MindrevFlashcards {
     List<Widget> result = [];
     for (Map i in cards ??= []) {
       result.add(
-        FlashCard(
+        FlipCard(
           /// TODO add support for images and various other material
-          // honestly not sure why front and back are inverted
-          frontWidget: Text(i['back']),
-          backWidget: Text(i['front']),
+          fill: Fill.fillBack,
+          speed: 200,
+          front: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              color: theme.primary,
+            ),
+            width: 200,
+            height: 200,
+            child: Center(
+              child: Text(i['front'], style: defaultPrimaryTextStyle()),
+            ),
+          ),
+          back: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              color: theme.primary,
+            ),
+            width: 200,
+            height: 200,
+            child: Center(
+              child: Text(i['back'], style: defaultPrimaryTextStyle()),
+            ),
+          ),
         ),
       );
     }

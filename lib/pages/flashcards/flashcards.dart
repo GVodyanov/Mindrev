@@ -9,7 +9,7 @@ import 'package:mindrev/services/text_color.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
-import 'package:flash_card/flash_card.dart';
+import 'package:flip_card/flip_card.dart';
 
 class Flashcards extends StatefulWidget {
   const Flashcards({Key? key}) : super(key: key);
@@ -27,7 +27,7 @@ class _FlashcardsState extends State<Flashcards> {
   int focused = 0;
 
   //futures that will be awaited by FutureBuilder
-  Future futureText = readText('materials');
+  Future futureText = readText('flashcards');
   Map routeData = {};
 
   Future<MindrevFlashcards> getFlashcards(String materialName, String topicName, String className) async {
@@ -59,6 +59,7 @@ class _FlashcardsState extends State<Flashcards> {
           Map text = snapshot.data![0];
           MindrevFlashcards flashcards = snapshot.data![1];
           List displayCards = flashcards.displayCards() ?? [];
+
           return Scaffold(
             backgroundColor: theme.primary,
 
@@ -71,58 +72,125 @@ class _FlashcardsState extends State<Flashcards> {
               backgroundColor: routeData['secondaryColor'],
             ),
 
+            //new flashcard button
+            floatingActionButton: FloatingActionButton.extended(
+              foregroundColor: contrastAccentColor,
+              icon: const Icon(
+                Icons.add,
+              ),
+              label: Text(
+                text['new'],
+              ),
+              backgroundColor: routeData['accentColor'],
+              onPressed: () {
+                Navigator.pushNamed(context, '/newFlashcards', arguments: routeData);
+              },
+            ),
+
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Material(
-                    color: theme.secondary,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: IconButton(
-                            color: theme.secondaryText,
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () {
-                              focused = (focused == 0) ? 0 : focused - 1;
-                              scrollKey.currentState!.focusToItem(focused);
-                            },
+                  //section to preview flashcards
+                  if (displayCards.isNotEmpty)
+                    Material(
+                      color: theme.secondary,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: IconButton(
+                              color: theme.secondaryText,
+                              icon: const Icon(Icons.arrow_back),
+                              onPressed: () {
+                                focused = (focused == 0) ? 0 : focused - 1;
+                                scrollKey.currentState!.focusToItem(focused);
+                              },
+                            ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 50),
-                            child: SizedBox(
-                              height: 200,
-                              child: ScrollSnapList(
-                                key: scrollKey,
-                                onItemFocus: (index) {},
-                                itemSize: 200,
-                                itemCount: displayCards.length,
-                                itemBuilder: (context, index) {
-                                  return displayCards[index];
-                                },
+                          Flexible(
+                            flex: 5,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 50),
+                              child: SizedBox(
+                                height: 200,
+                                child: ScrollSnapList(
+                                  key: scrollKey,
+                                  onItemFocus: (index) {},
+                                  itemSize: 200,
+                                  itemCount: displayCards.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      child: displayCards[index],
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: IconButton(
-                            color: theme.secondaryText,
-                            icon: const Icon(Icons.arrow_forward),
-                            onPressed: () {
-                              focused = (focused == displayCards.length) ? displayCards.length : focused + 1;
-                              scrollKey.currentState!.focusToItem(focused);
-                            },
+                          Flexible(
+                            flex: 1,
+                            child: IconButton(
+                              color: theme.secondaryText,
+                              icon: const Icon(Icons.arrow_forward),
+                              onPressed: () {
+                                focused = (focused == displayCards.length) ? displayCards.length : focused + 1;
+                                scrollKey.currentState!.focusToItem(focused);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  //section for different flashcard actions
+                  if (displayCards.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 600),
+                          child: ListView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: ListTile.divideTiles(
+                              context: context,
+                              tiles: [
+                                ListTile(
+                                  leading: Icon(Icons.book, color: routeData['accentColor']),
+                                  title: Text(text['learn'], style: defaultPrimaryTextStyle()),
+                                  trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
+                                ),
+                                ListTile(
+                                  leading: Icon(Icons.quiz, color: routeData['accentColor']),
+                                  title: Text(text['quiz'], style: defaultPrimaryTextStyle()),
+                                  trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
+                                ),
+                              ],
+                            ).toList(),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  if (displayCards.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
+                        child: ConstrainedBox(
+                          child: Material(
+                            color: theme.primary,
+                            elevation: 4,
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Text(text['create'], style: TextStyle(fontSize: 20, color: theme.primaryText)),
+                            ),
+                          ),
+                          constraints: const BoxConstraints(maxWidth: 500, maxHeight: 300),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

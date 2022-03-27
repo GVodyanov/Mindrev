@@ -57,3 +57,10 @@ errorNoText = "Please enter some text"
 type = "Choose a material type"
 duplicate = "Looks like a material with that name already exists"
 close = "Close"
+
+[flashcards]
+learn = "Learn"
+quiz = "Quiz"
+new = "Flashcards"
+create = "It seems like you haven't created any flashcards yet, click the button below to get started"
+
