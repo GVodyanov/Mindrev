@@ -7,9 +7,7 @@ import 'package:mindrev/services/text.dart';
 import 'package:mindrev/services/text_color.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
-import 'package:flip_card/flip_card.dart';
 
 class Flashcards extends StatefulWidget {
   const Flashcards({Key? key}) : super(key: key);

@@ -64,3 +64,6 @@ quiz = "Quiz"
 new = "Flashcards"
 create = "It seems like you haven't created any flashcards yet, click the button below to get started"
 
+[newFlashcards]
+title = "New Flashcards"
+new = "Flashcard"
