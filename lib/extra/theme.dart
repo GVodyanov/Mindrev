@@ -13,7 +13,14 @@ class MindrevTheme {
   Color? accent;
   Color? accentText;
 
-  MindrevTheme(this.primary, this.primaryText, this.secondary, this.secondaryText, this.accent, this.accentText);
+  MindrevTheme(
+    this.primary,
+    this.primaryText,
+    this.secondary,
+    this.secondaryText,
+    this.accent,
+    this.accentText,
+  );
 }
 
 dynamic theme;

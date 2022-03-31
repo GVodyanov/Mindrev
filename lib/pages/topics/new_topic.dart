@@ -48,11 +48,16 @@ class _NewTopicState extends State<NewTopic> {
   @override
   Widget build(BuildContext context) {
     //route data to get class information
-    routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
+    routeData =
+        routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
 
     //set contrast color according to color passed through route data, if uiColors isn't set
-    Color? contrastAccentColor = routeData['accentColor'] == theme.accent ? theme.accentText : textColor(routeData['accentColor']);
-    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
+    Color? contrastAccentColor = routeData['accentColor'] == theme.accent
+        ? theme.accentText
+        : textColor(routeData['accentColor']);
+    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary
+        ? theme.secondaryText
+        : textColor(routeData['secondaryColor']);
 
     return FutureBuilder(
       future: futureText,
@@ -111,7 +116,11 @@ class _NewTopicState extends State<NewTopic> {
                                     if (newTopicName != null) {
                                       await newTopic('$newTopicName', routeData['topicName']);
                                       Navigator.pop(context);
-                                      Navigator.pushReplacementNamed(context, '/topics', arguments: routeData);
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        '/topics',
+                                        arguments: routeData,
+                                      );
                                     }
                                   }
                                 }),

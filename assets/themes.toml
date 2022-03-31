@@ -63,4 +63,12 @@ contrast.secondaryText = "#BFC0C0"
 contrast.accent = "#EF8354"
 contrast.accentText = "#FFFFFF"
 
+monokai.name = "Monokai"
+monokai.primary = "#3B3539"
+monokai.primaryText = "#FCFCFA"
+monokai.secondary = "#2D2A2E"
+monokai.secondaryText = "#FCFCFA"
+monokai.accent = "#F4CE63"
+monokai.accentText = "#2D2A2E"
+
 

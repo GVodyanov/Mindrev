@@ -28,18 +28,27 @@ class _FlashcardsState extends State<Flashcards> {
   Future futureText = readText('flashcards');
   Map routeData = {};
 
-  Future<MindrevFlashcards> getFlashcards(String materialName, String topicName, String className) async {
+  Future<MindrevFlashcards> getFlashcards(
+    String materialName,
+    String topicName,
+    String className,
+  ) async {
     return await box.get('$className/$topicName/$materialName');
   }
 
   @override
   Widget build(BuildContext context) {
     //route data to get class information
-    routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
+    routeData =
+        routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
 
     //set contrast color according to color passed through route data, if uiColors isn't set
-    Color? contrastAccentColor = routeData['accentColor'] == theme.accent ? theme.accentText : textColor(routeData['accentColor']);
-    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
+    Color? contrastAccentColor = routeData['accentColor'] == theme.accent
+        ? theme.accentText
+        : textColor(routeData['accentColor']);
+    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary
+        ? theme.secondaryText
+        : textColor(routeData['secondaryColor']);
 
     return FutureBuilder(
       future: Future.wait([
@@ -134,7 +143,9 @@ class _FlashcardsState extends State<Flashcards> {
                               color: theme.secondaryText,
                               icon: const Icon(Icons.arrow_forward),
                               onPressed: () {
-                                focused = (focused == displayCards.length) ? displayCards.length : focused + 1;
+                                focused = (focused == displayCards.length)
+                                    ? displayCards.length
+                                    : focused + 1;
                                 scrollKey.currentState!.focusToItem(focused);
                               },
                             ),
@@ -158,12 +169,18 @@ class _FlashcardsState extends State<Flashcards> {
                                 ListTile(
                                   leading: Icon(Icons.book, color: routeData['accentColor']),
                                   title: Text(text['learn'], style: defaultPrimaryTextStyle()),
-                                  trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
+                                  trailing: Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: theme.primaryText,
+                                  ),
                                 ),
                                 ListTile(
                                   leading: Icon(Icons.quiz, color: routeData['accentColor']),
                                   title: Text(text['quiz'], style: defaultPrimaryTextStyle()),
-                                  trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
+                                  trailing: Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: theme.primaryText,
+                                  ),
                                 ),
                               ],
                             ).toList(),
@@ -182,7 +199,10 @@ class _FlashcardsState extends State<Flashcards> {
                             borderRadius: const BorderRadius.all(Radius.circular(15)),
                             child: Padding(
                               padding: const EdgeInsets.all(20),
-                              child: Text(text['create'], style: TextStyle(fontSize: 20, color: theme.primaryText)),
+                              child: Text(
+                                text['create'],
+                                style: TextStyle(fontSize: 20, color: theme.primaryText),
+                              ),
                             ),
                           ),
                           constraints: const BoxConstraints(maxWidth: 500, maxHeight: 300),

@@ -59,7 +59,7 @@ void main() async {
         '/materials': (context) => const Materials(),
         '/newMaterial': (context) => const NewMaterial(),
         '/flashcards': (context) => const Flashcards(),
-        '/newFlashcards' : (context) => const NewFlashcards(),
+        '/newFlashcards': (context) => const NewFlashcards(),
       },
     ),
   );

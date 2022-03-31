@@ -32,7 +32,12 @@ class _MaterialsState extends State<Materials> {
   }
 
   //function to display materials when getMaterials() retrieves them
-  List<Widget> displayMaterials(List gotMaterials, String gotIcons, Color accentColor, Map routeData) {
+  List<Widget> displayMaterials(
+    List gotMaterials,
+    String gotIcons,
+    Color accentColor,
+    Map routeData,
+  ) {
     List<Widget> result = [];
     Map icons = TomlDocument.parse(gotIcons).toMap();
 
@@ -67,11 +72,16 @@ class _MaterialsState extends State<Materials> {
   @override
   Widget build(BuildContext context) {
     //route data to get class information
-    routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
+    routeData =
+        routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
 
     //set contrast color according to color passed through route data, if uiColors isn't set
-    Color? contrastAccentColor = routeData['accentColor'] == theme.accent ? theme.accentText : textColor(routeData['accentColor']);
-    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
+    Color? contrastAccentColor = routeData['accentColor'] == theme.accent
+        ? theme.accentText
+        : textColor(routeData['accentColor']);
+    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary
+        ? theme.secondaryText
+        : textColor(routeData['secondaryColor']);
 
     //futures that will be awaited by FutureBuilder that need to be in build
     Future futureMaterials = getMaterials(routeData['topicName'], routeData['className']);
@@ -131,7 +141,13 @@ class _MaterialsState extends State<Materials> {
                           children: ListTile.divideTiles(
                             context: context,
                             tiles: [
-                              for (Widget i in displayMaterials(materials, typeIcons, routeData['accentColor'], routeData)) i
+                              for (Widget i in displayMaterials(
+                                materials,
+                                typeIcons,
+                                routeData['accentColor'],
+                                routeData,
+                              ))
+                                i
                             ],
                           ).toList(),
                         ),
@@ -149,7 +165,10 @@ class _MaterialsState extends State<Materials> {
                             borderRadius: const BorderRadius.all(Radius.circular(15)),
                             child: Padding(
                               padding: const EdgeInsets.all(20),
-                              child: Text(text['create'], style: TextStyle(fontSize: 20, color: theme.primaryText)),
+                              child: Text(
+                                text['create'],
+                                style: TextStyle(fontSize: 20, color: theme.primaryText),
+                              ),
                             ),
                           ),
                           constraints: const BoxConstraints(maxWidth: 500, maxHeight: 300),

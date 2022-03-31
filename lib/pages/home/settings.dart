@@ -63,7 +63,9 @@ class _SettingsState extends State<Settings> {
     List<Widget> result = [];
     for (int i = themesList.length - 1; i >= 0; i--) {
       //pre select set theme
-      if (settings['theme'] == themesList[i]['name'] && selectedTheme == null) selectedTheme = i;
+      if (settings['theme'] == themesList[i]['name'] && selectedTheme == null) {
+        selectedTheme = i;
+      }
       if (selectedTheme == i) currentTheme = themesList[i]['name'];
       result.add(
         Padding(
@@ -85,7 +87,8 @@ class _SettingsState extends State<Settings> {
                     border: Border.all(color: theme.primary ?? Colors.white, width: 10),
                   ),
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 80, minWidth: 50, maxHeight: 80),
+                    constraints:
+                        const BoxConstraints(maxWidth: 80, minWidth: 50, maxHeight: 80),
                     child: Row(
                       children: [
                         Expanded(
@@ -108,7 +111,12 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text(themesList[i]['name'], style: TextStyle(color: selectedTheme == i ? theme.accentText : theme.primaryText))
+                Text(
+                  themesList[i]['name'],
+                  style: TextStyle(
+                    color: selectedTheme == i ? theme.accentText : theme.primaryText,
+                  ),
+                )
               ],
             ),
             onPressed: () {
@@ -197,7 +205,11 @@ class _SettingsState extends State<Settings> {
                         children: [
                           Text(
                             text['ui'],
-                            style: TextStyle(color: theme.primaryText, fontWeight: FontWeight.bold, fontSize: 16),
+                            style: TextStyle(
+                              color: theme.primaryText,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                           const Divider(),
                           ListTile(
@@ -216,7 +228,11 @@ class _SettingsState extends State<Settings> {
                           const SizedBox(height: 30),
                           Text(
                             text['theme'],
-                            style: TextStyle(color: theme.primaryText, fontWeight: FontWeight.bold, fontSize: 16),
+                            style: TextStyle(
+                              color: theme.primaryText,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                           const Divider(),
                           Padding(
@@ -236,9 +252,7 @@ class _SettingsState extends State<Settings> {
                                       child: Wrap(
                                         alignment: WrapAlignment.center,
                                         direction: Axis.horizontal,
-                                        children: [
-                                          for (Widget i in displayThemes(themes)) i
-                                        ],
+                                        children: [for (Widget i in displayThemes(themes)) i],
                                       ),
                                     ),
                                   ),

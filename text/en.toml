@@ -67,3 +67,5 @@ create = "It seems like you haven't created any flashcards yet, click the button
 [newFlashcards]
 title = "New Flashcards"
 new = "Flashcard"
+front = "Front"
+back = "Back"

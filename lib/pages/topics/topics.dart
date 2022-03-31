@@ -28,7 +28,12 @@ class _TopicsState extends State<Topics> {
   }
 
   //function to display topics when getTopics() retrieves them
-  List<Widget> displayTopics(List gotTopics, Color accentColor, Color secondaryColor, String className) {
+  List<Widget> displayTopics(
+    List gotTopics,
+    Color accentColor,
+    Color secondaryColor,
+    String className,
+  ) {
     List<Widget> result = [];
     for (var i in gotTopics) {
       result.add(
@@ -59,11 +64,16 @@ class _TopicsState extends State<Topics> {
   @override
   Widget build(BuildContext context) {
     //route data to get class information
-    routeData = routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
+    routeData =
+        routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
 
     //set contrast color according to color passed through route data, if uiColors isn't set
-    Color? contrastAccentColor = routeData['accentColor'] == theme.accent ? theme.accentText : textColor(routeData['accentColor']);
-    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary ? theme.secondaryText : textColor(routeData['secondaryColor']);
+    Color? contrastAccentColor = routeData['accentColor'] == theme.accent
+        ? theme.accentText
+        : textColor(routeData['accentColor']);
+    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary
+        ? theme.secondaryText
+        : textColor(routeData['secondaryColor']);
 
     //futures that will be awaited by FutureBuilder that need to be in build
     Future futureTopics = getTopics(routeData['topicName']);
@@ -119,7 +129,13 @@ class _TopicsState extends State<Topics> {
                           children: ListTile.divideTiles(
                             context: context,
                             tiles: [
-                              for (Widget i in displayTopics(topics, routeData['accentColor'], routeData['secondaryColor'], routeData['topicName'])) i
+                              for (Widget i in displayTopics(
+                                topics,
+                                routeData['accentColor'],
+                                routeData['secondaryColor'],
+                                routeData['topicName'],
+                              ))
+                                i
                             ],
                           ).toList(),
                         ),
@@ -138,7 +154,10 @@ class _TopicsState extends State<Topics> {
                             borderRadius: const BorderRadius.all(Radius.circular(15)),
                             child: Padding(
                               padding: const EdgeInsets.all(20),
-                              child: Text(text['create'], style: TextStyle(fontSize: 20, color: theme.primaryText)),
+                              child: Text(
+                                text['create'],
+                                style: TextStyle(fontSize: 20, color: theme.primaryText),
+                              ),
                             ),
                           ),
                           constraints: const BoxConstraints(maxWidth: 500, maxHeight: 300),

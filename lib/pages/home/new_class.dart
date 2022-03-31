@@ -35,7 +35,8 @@ class _NewClassState extends State<NewClass> {
         return AlertDialog(
           backgroundColor: theme.secondary,
           contentPadding: const EdgeInsets.all(8.0),
-          title: Text(text['chooseColorDetails'], style: TextStyle(color: theme.secondaryText)),
+          title:
+              Text(text['chooseColorDetails'], style: TextStyle(color: theme.secondaryText)),
           content: content,
           actions: [
             defaultButton(text['cancel'], Navigator.of(context).pop),

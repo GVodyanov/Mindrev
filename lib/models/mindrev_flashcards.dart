@@ -61,9 +61,6 @@ class MindrevFlashcards {
 
   //method to add a card
   void newCard(String front, String back) {
-    cards!.add({
-      'front': front,
-      'back': back
-    });
+    cards!.add({'front': front, 'back': back});
   }
 }
