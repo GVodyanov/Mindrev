@@ -162,9 +162,7 @@ class _NewFlashcardsState extends State<NewFlashcards> {
               child: Center(
                 child: Column(
                   children: [
-                    //we need this weird loop so that we have values and keys
-                    //needed later for .removeAt(key) to be able to delete a specific entry
-                    for (MapEntry i in flashcardsList.asMap().entries)
+                    for (Map i in flashcardsList)
                       Wrap(
                         direction: Axis.horizontal,
                         crossAxisAlignment: WrapCrossAlignment.center,
@@ -181,9 +179,9 @@ class _NewFlashcardsState extends State<NewFlashcards> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(5),
                                   child: TextFormField(
-                                    initialValue: i.value['front'],
+                                    initialValue: i['front'],
                                     style: defaultPrimaryTextStyle(),
-                                    onChanged: (String value) => i.value['front'] = value,
+                                    onChanged: (String value) => i['front'] = value,
                                     cursorColor: routeData['accentColor'],
                                     decoration: InputDecoration(
                                       hintText: text['front'],
@@ -210,9 +208,9 @@ class _NewFlashcardsState extends State<NewFlashcards> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(5),
                                   child: TextFormField(
-                                    initialValue: i.value['back'],
+                                    initialValue: i['back'],
                                     style: defaultPrimaryTextStyle(),
-                                    onChanged: (String value) => i.value['back'] = value,
+                                    onChanged: (String value) => i['back'] = value,
                                     cursorColor: routeData['accentColor'],
                                     decoration: InputDecoration(
                                       hintText: text['back'],
@@ -229,7 +227,6 @@ class _NewFlashcardsState extends State<NewFlashcards> {
                           ),
                         ],
                       ),
-                    //delete button
                   ],
                 ),
               ),

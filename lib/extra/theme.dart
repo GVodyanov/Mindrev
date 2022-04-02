@@ -40,6 +40,16 @@ Future<bool> getTheme() async {
   List themesList = [];
   themesMap['themes'].forEach((k, v) => themesList.add(v));
 
+  //if nothing is found just return default
+  theme = MindrevTheme(
+    HexColor(themesList[0]['primary']),
+    HexColor(themesList[0]['primaryText']),
+    HexColor(themesList[0]['secondary']),
+    HexColor(themesList[0]['secondaryText']),
+    HexColor(themesList[0]['accent']),
+    HexColor(themesList[0]['accentText']),
+  );
+
   try {
     for (int i = themesList.length - 1; i >= 0; i--) {
       if (themesList[i]!['name'] == settings!['theme']) {
@@ -53,17 +63,8 @@ Future<bool> getTheme() async {
         );
       }
     }
-  } catch (e) {
-    //if nothing is found just return default
-    theme = MindrevTheme(
-      HexColor(themesList[0]['primary']),
-      HexColor(themesList[0]['primaryText']),
-      HexColor(themesList[0]['secondary']),
-      HexColor(themesList[0]['secondaryText']),
-      HexColor(themesList[0]['accent']),
-      HexColor(themesList[0]['accentText']),
-    );
-  }
+    // ignore: empty_catches
+  } catch (e) {}
 
   return true;
 }

@@ -69,3 +69,6 @@ title = "New Flashcards"
 new = "Flashcard"
 front = "Front"
 back = "Back"
+
+[learnFlashcards]
+title = "Practice"

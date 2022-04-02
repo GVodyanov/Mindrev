@@ -31,6 +31,7 @@ dependencies:
   flash_card: ^0.0.7
   scroll_snap_list: ^0.8.4
   flip_card: ^0.6.0
+  url_launcher: ^6.0.20
 
 dev_dependencies:
   flutter_test:

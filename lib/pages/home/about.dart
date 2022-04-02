@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mindrev/widgets/widgets.dart';
 import 'package:mindrev/extra/theme.dart';
 
-import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -31,19 +31,43 @@ void showAbout(Map text, var context) {
         ),
         ListTile(
           title: Text(text['author'], style: defaultSecondaryTextStyle()),
-          trailing: Text('ScratchX98', style: defaultSecondaryTextStyle()),
+          trailing: TextButton(
+            onPressed: () async {
+              await launch('https://github.com/ScratchX98');
+            },
+            child: const Text('ScratchX98'),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all(theme.accent),
+              textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 16)),
+            ),
+          ),
         ),
         ListTile(
           title: Text(text['source'], style: defaultSecondaryTextStyle()),
-          trailing: SelectableLinkify(
-            text: 'https://github.com/ScratchX98/Mindrev',
-            options: const LinkifyOptions(humanize: true),
-            style: defaultSecondaryTextStyle(),
+          trailing: TextButton(
+            onPressed: () async {
+              await launch('https://github.com/ScratchX98/Mindrev');
+            },
+            child: const Text('Github'),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all(theme.accent),
+              textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 16)),
+            ),
           ),
         ),
         ListTile(
           title: Text(text['license'], style: defaultSecondaryTextStyle()),
-          trailing: Text('AGPLv3 + Common clause', style: defaultSecondaryTextStyle()),
+          trailing: TextButton(
+            onPressed: () async {
+              await launch('https://github.com/ScratchX98/Mindrev/blob/main/LICENSE');
+            },
+            child: const Text('AGPLv3 +\nCommons clause'),
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(const EdgeInsets.all(2)),
+              foregroundColor: MaterialStateProperty.all(theme.accent),
+              textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 13)),
+            ),
+          ),
         ),
       ],
     ),
