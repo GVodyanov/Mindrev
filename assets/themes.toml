@@ -29,7 +29,7 @@ spacegray.primaryText = "#C0C5CE"
 spacegray.secondary = "#232830"
 spacegray.secondaryText = "#C0C5CE"
 spacegray.accent = "#8FA1B3"
-spacegray.accentText = "#C0C5CE"
+spacegray.accentText = "#232830"
 
 solarized.name = "Solarized"
 solarized.primary = "#073642"

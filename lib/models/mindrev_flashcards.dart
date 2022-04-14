@@ -23,8 +23,9 @@ class MindrevFlashcards {
   MindrevFlashcards(this.name);
 
   //method to give a list of all the flashcards
-  List<Widget>? displayCards() {
+  List<Widget>? displayCards(bool? reverse) {
     List<Widget> result = [];
+    reverse ??= false;
     for (Map i in cards ??= []) {
       result.add(
         FlipCard(
@@ -39,7 +40,16 @@ class MindrevFlashcards {
             width: 200,
             height: 200,
             child: Center(
-              child: Text(i['front'], style: defaultPrimaryTextStyle()),
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Text(
+                    i[reverse == true ? 'back' : 'front'],
+                    textAlign: TextAlign.center,
+                    style: defaultPrimaryTextStyle(),
+                  ),
+                ],
+              ),
             ),
           ),
           back: Container(
@@ -50,7 +60,16 @@ class MindrevFlashcards {
             width: 200,
             height: 200,
             child: Center(
-              child: Text(i['back'], style: defaultPrimaryTextStyle()),
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Text(
+                    i[reverse == true ? 'front' : 'back'],
+                    textAlign: TextAlign.center,
+                    style: defaultPrimaryTextStyle(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

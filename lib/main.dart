@@ -16,6 +16,9 @@ import 'package:mindrev/pages/materials/materials.dart';
 import 'package:mindrev/pages/materials/new_material.dart';
 import 'package:mindrev/pages/flashcards/flashcards.dart';
 import 'package:mindrev/pages/flashcards/new_flashcards.dart';
+import 'package:mindrev/pages/flashcards/learn_flashcards.dart';
+import 'package:mindrev/pages/flashcards/practice_flashcards.dart';
+import 'package:mindrev/pages/flashcards/quiz_flashcards.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -60,6 +63,9 @@ void main() async {
         '/newMaterial': (context) => const NewMaterial(),
         '/flashcards': (context) => const Flashcards(),
         '/newFlashcards': (context) => const NewFlashcards(),
+        '/learnFlashcards' : (context) => const LearnFlashcards(),
+        '/practiceFlashcards' : (context) => const PracticeFlashcards(),
+        '/quizFlashcards' : (context) => const QuizFlashcards(),
       },
     ),
   );

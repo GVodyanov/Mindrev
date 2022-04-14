@@ -23,6 +23,9 @@ AlertStyle defaultAlertStyle() {
     titleStyle: TextStyle(
       color: theme.secondaryText,
     ),
+    descStyle: TextStyle(
+      color: theme.secondaryText,
+    ),
   );
 }
 
@@ -34,6 +37,23 @@ DialogButton defaultDialogButton(String text, context, Function onPressed) {
     ),
     onPressed: () => onPressed(),
     color: theme.accent,
+  );
+}
+
+DialogButton coloredDialogButton(
+  String text,
+  context,
+  Function onPressed,
+  Color color,
+  Color contrastColor,
+) {
+  return DialogButton(
+    child: Text(
+      text,
+      style: TextStyle(fontSize: 20, color: contrastColor),
+    ),
+    onPressed: () => onPressed(),
+    color: color,
   );
 }
 

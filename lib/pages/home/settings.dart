@@ -24,8 +24,8 @@ class _SettingsState extends State<Settings> {
   Future futureThemes = rootBundle.loadString('assets/themes.toml');
 
   //variables for form
-  //final _formKey = GlobalKey<FormState>();
   bool uiColors = true;
+  bool confetti = true;
   int? selectedTheme;
   String? selectedThemeName;
   String currentTheme = 'default';
@@ -43,6 +43,12 @@ class _SettingsState extends State<Settings> {
       uiColors = settings['uiColors'];
     } catch (e) {
       uiColors = true;
+    }
+
+    try {
+      confetti = settings['confetti'];
+    } catch (e) {
+      confetti = true;
     }
 
     settings['theme'] ??= 0;
@@ -137,7 +143,8 @@ class _SettingsState extends State<Settings> {
   Future<bool> saveSettings() async {
     await box.put('settings', {
       'uiColors': uiColors,
-      'theme': selectedThemeName,
+      'confetti': confetti,
+      'theme': selectedThemeName ?? settings['theme'],
     });
     return true;
   }
@@ -146,6 +153,8 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
     getSettings();
+
+    selectedThemeName = settings['theme'];
   }
 
   @override
@@ -220,6 +229,20 @@ class _SettingsState extends State<Settings> {
                               onChanged: (bool value) {
                                 setState(() {
                                   uiColors = value;
+                                });
+                              },
+                              activeColor: theme.accent,
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          ListTile(
+                            title: Text(text['confetti'], style: defaultPrimaryTextStyle()),
+                            leading: Icon(Icons.celebration, color: theme.accent),
+                            trailing: Switch(
+                              value: confetti,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  confetti = value;
                                 });
                               },
                               activeColor: theme.accent,

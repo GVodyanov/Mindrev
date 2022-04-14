@@ -7,6 +7,7 @@ import 'package:mindrev/services/text.dart';
 import 'package:mindrev/services/text_color.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 
 class Flashcards extends StatefulWidget {
@@ -41,6 +42,7 @@ class _FlashcardsState extends State<Flashcards> {
     //route data to get class information
     routeData =
         routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
+    routeData['reverse'] == false;
 
     //set contrast color according to color passed through route data, if uiColors isn't set
     Color? contrastAccentColor = routeData['accentColor'] == theme.accent
@@ -65,7 +67,7 @@ class _FlashcardsState extends State<Flashcards> {
           //data loaded with FutureBuilder
           Map text = snapshot.data![0];
           MindrevFlashcards flashcards = snapshot.data![1];
-          List displayCards = flashcards.displayCards() ?? [];
+          List displayCards = flashcards.displayCards(null) ?? [];
 
           return Scaffold(
             backgroundColor: theme.primary,
@@ -167,12 +169,108 @@ class _FlashcardsState extends State<Flashcards> {
                               context: context,
                               tiles: [
                                 ListTile(
-                                  leading: Icon(Icons.book, color: routeData['accentColor']),
-                                  title: Text(text['learn'], style: defaultPrimaryTextStyle()),
+                                  leading: Icon(
+                                    Icons.menu_book_rounded,
+                                    color: routeData['accentColor'],
+                                  ),
+                                  title:
+                                      Text(text['learn'], style: defaultPrimaryTextStyle()),
                                   trailing: Icon(
                                     Icons.keyboard_arrow_right,
                                     color: theme.primaryText,
                                   ),
+                                  onTap: () {
+                                    Alert(
+                                      context: context,
+                                      style: defaultAlertStyle(),
+                                      title: text['termOrDef'],
+                                      desc: text['termOrDefDesc'],
+                                      buttons: [
+                                        coloredDialogButton(
+                                          text['term'],
+                                          context,
+                                          () {
+                                            routeData['reverse'] = false;
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/learnFlashcards',
+                                              arguments: routeData,
+                                            );
+                                          },
+                                          routeData['accentColor'],
+                                          contrastAccentColor!,
+                                        ),
+                                        coloredDialogButton(
+                                          text['def'],
+                                          context,
+                                          () {
+                                            routeData['reverse'] = true;
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/learnFlashcards',
+                                              arguments: routeData,
+                                            );
+                                          },
+                                          routeData['accentColor'],
+                                          contrastAccentColor,
+                                        )
+                                      ],
+                                    ).show();
+                                  },
+                                ),
+                                ListTile(
+                                  leading: Icon(
+                                    Icons.fitness_center,
+                                    color: routeData['accentColor'],
+                                  ),
+                                  title:
+                                  Text(text['practice'], style: defaultPrimaryTextStyle()),
+                                  trailing: Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: theme.primaryText,
+                                  ),
+                                  onTap: () {
+                                    Alert(
+                                      context: context,
+                                      style: defaultAlertStyle(),
+                                      title: text['termOrDef'],
+                                      desc: text['termOrDefDesc'],
+                                      buttons: [
+                                        coloredDialogButton(
+                                          text['term'],
+                                          context,
+                                              () {
+                                            routeData['reverse'] = false;
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/practiceFlashcards',
+                                              arguments: routeData,
+                                            );
+                                          },
+                                          routeData['accentColor'],
+                                          contrastAccentColor!,
+                                        ),
+                                        coloredDialogButton(
+                                          text['def'],
+                                          context,
+                                              () {
+                                            routeData['reverse'] = true;
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/practiceFlashcards',
+                                              arguments: routeData,
+                                            );
+                                          },
+                                          routeData['accentColor'],
+                                          contrastAccentColor,
+                                        )
+                                      ],
+                                    ).show();
+                                  },
                                 ),
                                 ListTile(
                                   leading: Icon(Icons.quiz, color: routeData['accentColor']),
@@ -181,6 +279,46 @@ class _FlashcardsState extends State<Flashcards> {
                                     Icons.keyboard_arrow_right,
                                     color: theme.primaryText,
                                   ),
+                                  onTap: () {
+                                    Alert(
+                                      context: context,
+                                      style: defaultAlertStyle(),
+                                      title: text['termOrDef'],
+                                      desc: text['termOrDefDesc'],
+                                      buttons: [
+                                        coloredDialogButton(
+                                          text['term'],
+                                          context,
+                                          () {
+                                            routeData['reverse'] = false;
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/quizFlashcards',
+                                              arguments: routeData,
+                                            );
+                                          },
+                                          routeData['accentColor'],
+                                          contrastAccentColor!,
+                                        ),
+                                        coloredDialogButton(
+                                          text['def'],
+                                          context,
+                                          () {
+                                            routeData['reverse'] = true;
+                                            Navigator.pop(context);
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/quizFlashcards',
+                                               arguments: routeData,
+                                            );
+                                          },
+                                          routeData['accentColor'],
+                                          contrastAccentColor,
+                                        )
+                                      ],
+                                    ).show();
+                                  },
                                 ),
                               ],
                             ).toList(),

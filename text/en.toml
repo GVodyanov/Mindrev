@@ -32,6 +32,7 @@ title = "Settings"
 apply = "Apply"
 ui = "User interface"
 uiColors = "Would you like the accent color of the application to change with the selected class?"
+confetti = "Would you like confetti effects to be displayed?"
 theme = "Theme"
 language = "Language"
 
@@ -60,9 +61,14 @@ close = "Close"
 
 [flashcards]
 learn = "Learn"
+practice = "Practice"
 quiz = "Quiz"
 new = "Flashcards"
 create = "It seems like you haven't created any flashcards yet, click the button below to get started"
+termOrDef = "Term or definition"
+termOrDefDesc = "What would you like to see first?"
+term = "Term"
+def = "Definition"
 
 [newFlashcards]
 title = "New Flashcards"
@@ -71,4 +77,27 @@ front = "Front"
 back = "Back"
 
 [learnFlashcards]
+title = "Learn"
+
+[practiceFlashcards]
 title = "Practice"
+term = "Term"
+def = "Definition"
+perfect = "Correct!"
+right = "Typo, precise answer"
+wrong = "Not quite"
+correctAnswer = "Correct answer"
+next = "Next"
+
+[quizFlashcards]
+title = "Quiz"
+term = "Term"
+def = "Definition"
+perfect = "Correct!"
+right = "Close"
+wrong = "Not quite"
+close = "Close"
+results = "Quiz results"
+question = "Question"
+correctAnswer = "Correct answer"
+responded = "Your answer"
