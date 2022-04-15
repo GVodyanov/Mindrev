@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:mindrev/models/mindrev_class.dart';
 import 'package:mindrev/services/text.dart';
 import 'package:mindrev/services/text_color.dart';
 import 'package:mindrev/extra/theme.dart';
@@ -20,11 +21,20 @@ class _TopicsState extends State<Topics> {
   Map routeData = {};
 
   //this is a function which retrieves all saved topics and their properties
-  Future<List> getTopics(String className) async {
+  Future<List?>? getTopics(String className) async {
     var box = Hive.lazyBox('mindrev');
     List classes = await box.get('classes');
-    //check which class in the list of classes has the name that we want, and return its topics property
-    return await classes.firstWhere((element) => element.name == className).topics;
+    //check which class in the list of classes has the name that we want, and return
+    // its topics property
+    if (classes.isNotEmpty){
+      try {
+        return classes.firstWhere((element) => element.name == className).topics;
+      } catch (e, s) {
+        s;
+        //happens on renaming
+      }
+    }
+    return [MindrevClass('', '')];
   }
 
   //function to display topics when getTopics() retrieves them
@@ -75,12 +85,10 @@ class _TopicsState extends State<Topics> {
         ? theme.secondaryText
         : textColor(routeData['secondaryColor']);
 
-    //futures that will be awaited by FutureBuilder that need to be in build
-    Future futureTopics = getTopics(routeData['topicName']);
     return FutureBuilder(
       future: Future.wait([
         futureText,
-        futureTopics,
+        getTopics(routeData['className'])!,
       ]),
       builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
         //only show page when data is loaded
@@ -93,10 +101,17 @@ class _TopicsState extends State<Topics> {
             backgroundColor: theme.primary,
             appBar: AppBar(
               foregroundColor: contrastSecondaryColor,
-              title: Text(routeData['topicName']),
+              title: Text(routeData['className']),
               elevation: 4,
               centerTitle: true,
               backgroundColor: routeData['secondaryColor'],
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/classExtra', arguments: routeData),
+                ),
+              ],
             ),
 
             //add new topic
@@ -109,9 +124,7 @@ class _TopicsState extends State<Topics> {
                 text['new'],
               ),
               backgroundColor: routeData['accentColor'],
-              onPressed: () {
-                Navigator.pushNamed(context, '/newTopic', arguments: routeData);
-              },
+              onPressed: () => Navigator.pushNamed(context, '/newTopic', arguments: routeData),
             ),
             //body with everything
             body: SingleChildScrollView(
@@ -133,7 +146,7 @@ class _TopicsState extends State<Topics> {
                                 topics,
                                 routeData['accentColor'],
                                 routeData['secondaryColor'],
-                                routeData['topicName'],
+                                routeData['className'],
                               ))
                                 i
                             ],

@@ -161,7 +161,6 @@ class _QuizFlashcardsState extends State<QuizFlashcards> {
               popped = true;
             }
             if (index > shuffledCards!.length - 1 && !popped) {
-              _confettiController.play();
               Alert(
                 context: context,
                 title: text['results'],
@@ -184,8 +183,10 @@ class _QuizFlashcardsState extends State<QuizFlashcards> {
                                 if (i['result'] == 'perfect')
                                   ListTile(
                                     leading: Icon(Icons.done_all, color: theme.primaryText),
-                                    trailing: Text(text['perfect'],
-                                        style: defaultPrimaryTextStyle()),
+                                    trailing: Text(
+                                      text['perfect'],
+                                      style: defaultPrimaryTextStyle(),
+                                    ),
                                   ),
                                 if (i['result'] == 'right')
                                   ListTile(
@@ -210,7 +211,7 @@ class _QuizFlashcardsState extends State<QuizFlashcards> {
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  i['question'],
+                                  i['question'] ?? ' ',
                                   style: defaultPrimaryTextStyle(),
                                 ),
                                 //what user responded and correct answer, if needed
@@ -226,24 +227,24 @@ class _QuizFlashcardsState extends State<QuizFlashcards> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    i['responded'],
+                                    i['responded'] ?? ' ',
                                     style: defaultPrimaryTextStyle(),
                                   ),
-                                  const SizedBox(height: 20),
-                                  Text(
-                                    text['correctAnswer'],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: theme.primaryText,
-                                      fontSize: 18,
-                                    ),
+                                ],
+                                const SizedBox(height: 20),
+                                Text(
+                                  text['correctAnswer'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.primaryText,
+                                    fontSize: 18,
                                   ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    i['correctAnswer'],
-                                    style: defaultPrimaryTextStyle(),
-                                  ),
-                                ]
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  i['correctAnswer'] ?? ' ',
+                                  style: defaultPrimaryTextStyle(),
+                                ),
                               ],
                             ),
                           ),
@@ -264,6 +265,7 @@ class _QuizFlashcardsState extends State<QuizFlashcards> {
                   )
                 ],
               ).show();
+              _confettiController.play();
               popped = true;
             }
           });
@@ -293,6 +295,7 @@ class _QuizFlashcardsState extends State<QuizFlashcards> {
                           Flexible(
                             child: shuffledCards![index]['question'],
                           ),
+                        const SizedBox(height: 50),
                         ConfettiWidget(
                           confettiController: _confettiController,
                           blastDirectionality: BlastDirectionality.explosive,
@@ -300,71 +303,76 @@ class _QuizFlashcardsState extends State<QuizFlashcards> {
                           gravity: 0.95,
                           shouldLoop: false,
                         ),
-                        const SizedBox(height: 50),
                         if (index <= shuffledCards!.length - 1)
                           Flexible(
                             child: ConstrainedBox(
                               constraints: const BoxConstraints(maxWidth: 600, minWidth: 50),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      cursorColor: routeData['accentColor'],
-                                      style: defaultSecondaryTextStyle(),
-                                      decoration: defaultSecondaryInputDecoration(
-                                        text[routeData['reverse'] ? 'term' : 'def'],
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(15, 0, 5, 0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        cursorColor: routeData['accentColor'],
+                                        style: defaultSecondaryTextStyle(),
+                                        decoration: defaultSecondaryInputDecoration(
+                                          text[routeData['reverse'] ? 'term' : 'def'],
+                                        ),
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            input = value;
+                                          });
+                                        },
+                                        controller: fieldController,
                                       ),
-                                      onChanged: (String? value) {
+                                    ),
+                                    //note to self maybe remove old flip cards from list
+                                    IconButton(
+                                      onPressed: () {
+                                        //clear text
+                                        fieldController.clear();
                                         setState(() {
-                                          input = value;
+                                          num similarity = StringSimilarity.compareTwoStrings(
+                                            shuffledCards![index]['answer'],
+                                            input,
+                                          );
+
+                                          if (shuffledCards![index]['answer'] == input) {
+                                            //what we do if answer is identical
+                                            score.add({
+                                              'result': 'perfect',
+                                              'question': shuffledCards![index]
+                                                  ['questionText'],
+                                              'correctAnswer': shuffledCards![index]['answer'],
+                                              'responded': null,
+                                            });
+                                          } else if (similarity >= 0.82) {
+                                            //what we do if answer is largely correct
+                                            score.add({
+                                              'result': 'right',
+                                              'question': shuffledCards![index]
+                                                  ['questionText'],
+                                              'correctAnswer': shuffledCards![index]['answer'],
+                                              'responded': input
+                                            });
+                                          } else {
+                                            //here is what we do if the answer is wrong
+                                            score.add({
+                                              'result': 'wrong',
+                                              'question': shuffledCards![index]
+                                                  ['questionText'],
+                                              'correctAnswer': shuffledCards![index]['answer'],
+                                              'responded': input
+                                            });
+                                          }
+                                          index++;
                                         });
                                       },
-                                      controller: fieldController,
+                                      icon: Icon(Icons.check, color: theme.secondaryText),
                                     ),
-                                  ),
-                                  //note to self maybe remove old flip cards from list
-                                  IconButton(
-                                    onPressed: () {
-                                      //clear text
-                                      fieldController.clear();
-                                      setState(() {
-                                        num similarity = StringSimilarity.compareTwoStrings(
-                                          shuffledCards![index]['answer'],
-                                          input,
-                                        );
-
-                                        if (shuffledCards![index]['answer'] == input) {
-                                          //what we do if answer is identical
-                                          score.add({
-                                            'result': 'perfect',
-                                            'question': shuffledCards![index]['questionText'],
-                                            'correct': null,
-                                            'responded': input
-                                          });
-                                        } else if (similarity >= 0.82) {
-                                          //what we do if answer is largely correct
-                                          score.add({
-                                            'result': 'right',
-                                            'question': shuffledCards![index]['questionText'],
-                                            'correct': shuffledCards![index]['answer'],
-                                            'responded': input
-                                          });
-                                        } else {
-                                          //here is what we do if the answer is wrong
-                                          score.add({
-                                            'result': 'wrong',
-                                            'question': shuffledCards![index]['questionText'],
-                                            'correctAnswer': shuffledCards![index]['answer'],
-                                            'responded': input
-                                          });
-                                        }
-                                        index++;
-                                      });
-                                    },
-                                    icon: Icon(Icons.check, color: theme.secondaryText),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),

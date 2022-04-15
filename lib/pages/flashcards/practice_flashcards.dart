@@ -222,81 +222,84 @@ class _PracticeFlashcardsState extends State<PracticeFlashcards> {
                           Flexible(
                             child: ConstrainedBox(
                               constraints: const BoxConstraints(maxWidth: 600, minWidth: 50),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      cursorColor: routeData['accentColor'],
-                                      style: defaultSecondaryTextStyle(),
-                                      decoration: defaultSecondaryInputDecoration(
-                                        text[routeData['reverse'] ? 'term' : 'def'],
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(15, 0, 5, 0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        cursorColor: routeData['accentColor'],
+                                        style: defaultSecondaryTextStyle(),
+                                        decoration: defaultSecondaryInputDecoration(
+                                          text[routeData['reverse'] ? 'term' : 'def'],
+                                        ),
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            input = value;
+                                          });
+                                        },
+                                        controller: fieldController,
                                       ),
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          input = value;
-                                        });
-                                      },
-                                      controller: fieldController,
                                     ),
-                                  ),
-                                  //note to self maybe remove old flip cards from list
-                                  IconButton(
-                                    onPressed: () {
-                                      //clear text
-                                      fieldController.clear();
-                                      setState(() {
-                                        num similarity = StringSimilarity.compareTwoStrings(
-                                          shuffledCards![index]['answer'],
-                                          input,
-                                        );
-
-                                        if (shuffledCards![index]['answer'] == input) {
-                                          //what we do if answer is identical
-                                          if (confetti) {
-                                            _confettiController.play();
-                                          }
-                                          ScaffoldMessenger.of(context).showSnackBar(perfect!);
-                                        } else if (similarity >= 0.82) {
-                                          //what we do if answer is largely correct
-                                          if (confetti) {
-                                            _confettiController.play();
-                                          }
-                                          ScaffoldMessenger.of(context).showSnackBar(correct!);
-                                        } else {
-                                          //here is what we do if the answer is wrong
-                                          //add wrong question to the list to be reviewed
-                                          shuffledCards!.add(
-                                            shuffledCards![index],
+                                    //note to self maybe remove old flip cards from list
+                                    IconButton(
+                                      onPressed: () {
+                                        //clear text
+                                        fieldController.clear();
+                                        setState(() {
+                                          num similarity = StringSimilarity.compareTwoStrings(
+                                            shuffledCards![index]['answer'],
+                                            input,
                                           );
 
-                                          Alert(
-                                            context: context,
-                                            style: defaultAlertStyle(),
-                                            title: text['wrong'],
-                                            desc: text['correctAnswer'] +
-                                                ': ' +
-                                                shuffledCards![index]['answer'],
-                                            buttons: [
-                                              coloredDialogButton(
-                                                text['next'],
-                                                context,
-                                                () {
-                                                  Navigator.pop(context);
-                                                },
-                                                routeData['accentColor'],
-                                                contrastAccentColor!,
-                                              ),
-                                            ],
-                                          ).show();
-                                        }
+                                          if (shuffledCards![index]['answer'] == input) {
+                                            //what we do if answer is identical
+                                            if (confetti) {
+                                              _confettiController.play();
+                                            }
+                                            ScaffoldMessenger.of(context).showSnackBar(perfect!);
+                                          } else if (similarity >= 0.82) {
+                                            //what we do if answer is largely correct
+                                            if (confetti) {
+                                              _confettiController.play();
+                                            }
+                                            ScaffoldMessenger.of(context).showSnackBar(correct!);
+                                          } else {
+                                            //here is what we do if the answer is wrong
+                                            //add wrong question to the list to be reviewed
+                                            shuffledCards!.add(
+                                              shuffledCards![index],
+                                            );
 
-                                        index++;
-                                      });
-                                    },
-                                    icon: Icon(Icons.check, color: theme.secondaryText),
-                                  ),
-                                ],
+                                            Alert(
+                                              context: context,
+                                              style: defaultAlertStyle(),
+                                              title: text['wrong'],
+                                              desc: text['correctAnswer'] +
+                                                  ': ' +
+                                                  shuffledCards![index]['answer'],
+                                              buttons: [
+                                                coloredDialogButton(
+                                                  text['next'],
+                                                  context,
+                                                  () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  routeData['accentColor'],
+                                                  contrastAccentColor!,
+                                                ),
+                                              ],
+                                            ).show();
+                                          }
+
+                                          index++;
+                                        });
+                                      },
+                                      icon: Icon(Icons.check, color: theme.secondaryText),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

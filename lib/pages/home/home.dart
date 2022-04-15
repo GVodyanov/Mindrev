@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
                 context,
                 '/topics',
                 arguments: {
-                  'topicName': i.name,
+                  'className': i.name,
                   'accentColor': uiColors == false ? theme.accent : HexColor(i.color),
                   'secondaryColor': uiColors == false ? theme.secondary : HexColor(i.color)
                 },
@@ -139,7 +139,7 @@ class _HomeState extends State<Home> {
                       ListTile(
                         title: Text(sidebar['home'], style: defaultSecondaryTextStyle()),
                         leading: Icon(Icons.home, color: theme.secondaryText),
-                        onTap: () {},
+                        onTap: () {Navigator.pop(context);},
                       ),
                       ListTile(
                         title: Text(sidebar['settings'], style: defaultSecondaryTextStyle()),

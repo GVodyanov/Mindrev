@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:mindrev/models/mindrev_material.dart';
 import 'package:mindrev/services/text_color.dart';
 import 'package:mindrev/services/text.dart';
 import 'package:mindrev/extra/theme.dart';
@@ -24,11 +25,19 @@ class _MaterialsState extends State<Materials> {
   Future futureTypeIcons = rootBundle.loadString('assets/materials.toml');
 
   //function which retrieves all materials and their properties
-  Future<List> getMaterials(String topicName, String className) async {
+  Future<List?>? getMaterials(String topicName, String className) async {
     var box = Hive.lazyBox('mindrev');
     List classes = await box.get('classes');
     List topics = classes.firstWhere((element) => element.name == className).topics;
-    return topics.firstWhere((element) => element.name == topicName).materials;
+    if (topics.isNotEmpty) {
+      try {
+        return topics.firstWhere((element) => element.name == topicName).materials;
+      } catch (e, s) {
+        s;
+        //happens on renaming
+      }
+    }
+    return [MindrevMaterial('', '')];
   }
 
   //function to display materials when getMaterials() retrieves them
@@ -46,8 +55,9 @@ class _MaterialsState extends State<Materials> {
       //check what type corresponds to what icon
       String? icon;
       for (Map j in icons['materials']) {
-        if (i.type == j['name']) icon = j['icon'];
+        if (i!.type == j['name']) icon = j['icon'];
       }
+      icon ??= 'flashcards'; //in case flashcard null when renaming
       result.add(
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -84,11 +94,11 @@ class _MaterialsState extends State<Materials> {
         : textColor(routeData['secondaryColor']);
 
     //futures that will be awaited by FutureBuilder that need to be in build
-    Future futureMaterials = getMaterials(routeData['topicName'], routeData['className']);
+    Future? futureMaterials = getMaterials(routeData['topicName'], routeData['className']);
     return FutureBuilder(
       future: Future.wait([
         futureText,
-        futureMaterials,
+        futureMaterials!,
         futureTypeIcons,
       ]),
       builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
@@ -108,6 +118,13 @@ class _MaterialsState extends State<Materials> {
               elevation: 4,
               centerTitle: true,
               backgroundColor: routeData['secondaryColor'],
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/topicExtra', arguments: routeData),
+                ),
+              ],
             ),
 
             //add new topic

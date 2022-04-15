@@ -114,7 +114,7 @@ class _NewTopicState extends State<NewTopic> {
                                   if (_formKey.currentState!.validate()) {
                                     _formKey.currentState?.save();
                                     if (newTopicName != null) {
-                                      await newTopic('$newTopicName', routeData['topicName']);
+                                      await newTopic('$newTopicName', routeData['className']);
                                       Navigator.pop(context);
                                       Navigator.pushReplacementNamed(
                                         context,

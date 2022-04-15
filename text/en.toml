@@ -46,6 +46,16 @@ label = "Topic name"
 submit = "Submit"
 errorNoText = "Please enter some text"
 
+[classExtra]
+creationDate = "Creation date"
+delete = "Delete class"
+rename = "Rename class"
+newName = "New name"
+errorNoText = "Please enter some text"
+sure = "Are you sure you want to delete"
+confirm = "Delete"
+cancel = "Cancel"
+
 [materials]
 create = "It seems like you don't have any material to study yet, click the button below to get started"
 new = "Material"
@@ -58,6 +68,26 @@ errorNoText = "Please enter some text"
 type = "Choose a material type"
 duplicate = "Looks like a material with that name already exists"
 close = "Close"
+
+[topicExtra]
+creationDate = "Creation date"
+delete = "Delete topic"
+rename = "Rename topic"
+newName = "New name"
+errorNoText = "Please enter some text"
+sure = "Are you sure you want to delete"
+confirm = "Delete"
+cancel = "Cancel"
+
+[materialExtra]
+creationDate = "Creation date"
+delete = "Delete material"
+rename = "Rename material"
+newName = "New name"
+errorNoText = "Please enter some text"
+sure = "Are you sure you want to delete"
+confirm = "Delete"
+cancel = "Cancel"
 
 [flashcards]
 learn = "Learn"
@@ -94,7 +124,7 @@ title = "Quiz"
 term = "Term"
 def = "Definition"
 perfect = "Correct!"
-right = "Close"
+right = "Typo"
 wrong = "Not quite"
 close = "Close"
 results = "Quiz results"

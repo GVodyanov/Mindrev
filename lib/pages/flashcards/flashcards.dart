@@ -29,7 +29,7 @@ class _FlashcardsState extends State<Flashcards> {
   Future futureText = readText('flashcards');
   Map routeData = {};
 
-  Future<MindrevFlashcards> getFlashcards(
+  Future<MindrevFlashcards?>? getFlashcards(
     String materialName,
     String topicName,
     String className,
@@ -59,15 +59,15 @@ class _FlashcardsState extends State<Flashcards> {
           routeData['name'],
           routeData['topicName'],
           routeData['className'],
-        ),
+        )!,
       ]),
       builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
         //only show page when data is loaded
         if (snapshot.hasData) {
           //data loaded with FutureBuilder
           Map text = snapshot.data![0];
-          MindrevFlashcards flashcards = snapshot.data![1];
-          List displayCards = flashcards.displayCards(null) ?? [];
+          MindrevFlashcards? flashcards = snapshot.data![1];
+          List displayCards = flashcards?.displayCards(null) ?? [];
 
           return Scaffold(
             backgroundColor: theme.primary,
@@ -79,6 +79,13 @@ class _FlashcardsState extends State<Flashcards> {
               elevation: 4,
               centerTitle: true,
               backgroundColor: routeData['secondaryColor'],
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/materialExtra', arguments: routeData),
+                ),
+              ],
             ),
 
             //new flashcard button

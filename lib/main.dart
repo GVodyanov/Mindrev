@@ -12,8 +12,11 @@ import 'package:mindrev/pages/home/new_class.dart';
 import 'package:mindrev/pages/home/settings.dart';
 import 'package:mindrev/pages/topics/topics.dart';
 import 'package:mindrev/pages/topics/new_topic.dart';
+import 'package:mindrev/pages/topics/class_extra.dart';
 import 'package:mindrev/pages/materials/materials.dart';
 import 'package:mindrev/pages/materials/new_material.dart';
+import 'package:mindrev/pages/materials/topic_extra.dart';
+import 'package:mindrev/pages/materials/material_extra.dart';
 import 'package:mindrev/pages/flashcards/flashcards.dart';
 import 'package:mindrev/pages/flashcards/new_flashcards.dart';
 import 'package:mindrev/pages/flashcards/learn_flashcards.dart';
@@ -59,8 +62,11 @@ void main() async {
         '/settings': (context) => const Settings(),
         '/topics': (context) => const Topics(),
         '/newTopic': (context) => const NewTopic(),
+        '/classExtra': (context) => const ClassExtra(),
         '/materials': (context) => const Materials(),
         '/newMaterial': (context) => const NewMaterial(),
+        '/topicExtra': (context) => const TopicExtra(),
+        '/materialExtra': (context) => const MaterialExtra(),
         '/flashcards': (context) => const Flashcards(),
         '/newFlashcards': (context) => const NewFlashcards(),
         '/learnFlashcards' : (context) => const LearnFlashcards(),
