@@ -1,11 +1,13 @@
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:mindrev/extra/theme.dart';
+import 'package:mindrev/models/mindrev_structure.dart';
 import 'package:mindrev/models/mindrev_class.dart';
 import 'package:mindrev/models/mindrev_topic.dart';
 import 'package:mindrev/models/mindrev_material.dart';
+import 'package:mindrev/models/mindrev_settings.dart';
 import 'package:mindrev/models/mindrev_flashcards.dart';
 import 'package:mindrev/pages/home/home.dart';
 import 'package:mindrev/pages/home/new_class.dart';
@@ -39,9 +41,11 @@ void main() async {
     await Hive.initFlutter();
   }
   //register adapters
+  Hive.registerAdapter(MindrevStructureAdapter());
   Hive.registerAdapter(MindrevClassAdapter());
   Hive.registerAdapter(MindrevTopicAdapter());
   Hive.registerAdapter(MindrevMaterialAdapter());
+  Hive.registerAdapter(MindrevSettingsAdapter());
   Hive.registerAdapter(MindrevFlashcardsAdapter());
 
   //open box
@@ -69,9 +73,9 @@ void main() async {
         '/materialExtra': (context) => const MaterialExtra(),
         '/flashcards': (context) => const Flashcards(),
         '/newFlashcards': (context) => const NewFlashcards(),
-        '/learnFlashcards' : (context) => const LearnFlashcards(),
-        '/practiceFlashcards' : (context) => const PracticeFlashcards(),
-        '/quizFlashcards' : (context) => const QuizFlashcards(),
+        '/learnFlashcards': (context) => const LearnFlashcards(),
+        '/practiceFlashcards': (context) => const PracticeFlashcards(),
+        '/quizFlashcards': (context) => const QuizFlashcards(),
       },
     ),
   );

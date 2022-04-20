@@ -18,7 +18,7 @@ author = "Author"
 source = "Source Code"
 license = "License"
 
-[newClass]
+[home.newClass]
 title = "Create a new class"
 label = "Class name"
 submit = "Submit"
@@ -35,18 +35,20 @@ uiColors = "Would you like the accent color of the application to change with th
 confetti = "Would you like confetti effects to be displayed?"
 theme = "Theme"
 language = "Language"
+moreThemes = "More themes"
+lessThemes = "Less themes"
 
 [topics]
 create = "It seems like you haven't created any topics yet, click the button below to get started"
 new = "Topic"
 
-[newTopic]
+[topics.newTopic]
 title = "Create a new topic"
 label = "Topic name"
 submit = "Submit"
 errorNoText = "Please enter some text"
 
-[classExtra]
+[topics.classExtra]
 creationDate = "Creation date"
 delete = "Delete class"
 rename = "Rename class"
@@ -60,16 +62,16 @@ cancel = "Cancel"
 create = "It seems like you don't have any material to study yet, click the button below to get started"
 new = "Material"
 
-[newMaterial]
+[materials.newMaterial]
 title = "Create some new study material"
 label = "Material name"
 submit = "Submit"
 errorNoText = "Please enter some text"
+errorNoType = "Please select a type"
 type = "Choose a material type"
-duplicate = "Looks like a material with that name already exists"
 close = "Close"
 
-[topicExtra]
+[materials.topicExtra]
 creationDate = "Creation date"
 delete = "Delete topic"
 rename = "Rename topic"
@@ -100,16 +102,16 @@ termOrDefDesc = "What would you like to see first?"
 term = "Term"
 def = "Definition"
 
-[newFlashcards]
+[flashcards.newFlashcards]
 title = "New Flashcards"
 new = "Flashcard"
 front = "Front"
 back = "Back"
 
-[learnFlashcards]
+[flashcards.learnFlashcards]
 title = "Learn"
 
-[practiceFlashcards]
+[flashcards.practiceFlashcards]
 title = "Practice"
 term = "Term"
 def = "Definition"
@@ -119,7 +121,7 @@ wrong = "Not quite"
 correctAnswer = "Correct answer"
 next = "Next"
 
-[quizFlashcards]
+[flashcards.quizFlashcards]
 title = "Quiz"
 term = "Term"
 def = "Definition"

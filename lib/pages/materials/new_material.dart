@@ -2,15 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mindrev/models/mindrev_material.dart';
 
-import 'package:mindrev/extra/theme.dart';
-import 'package:mindrev/services/text.dart';
-import 'package:mindrev/services/text_color.dart';
+import 'package:mindrev/services/db.dart';
 import 'package:mindrev/widgets/widgets.dart';
-import 'package:mindrev/models/mindrev_flashcards.dart';
 
 import 'package:toml/toml.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class NewMaterial extends StatefulWidget {
   const NewMaterial({Key? key}) : super(key: key);
@@ -20,63 +16,28 @@ class NewMaterial extends StatefulWidget {
 }
 
 class _NewMaterialState extends State<NewMaterial> {
-  //futures that will be awaited by FutureBuilder
-  Future futureText = readText('newMaterial');
-  Future futureMaterials = rootBundle.loadString('assets/materials.toml');
+  //values determined in initState
+  Map? materialTypes;
 
-  Map routeData = {};
-
-  //variables for form
-  final _formKey = GlobalKey<FormState>();
-  String? newMaterialName;
   int? selected;
-  String? type;
+  String? materialType;
 
-  //function to create a new material
-  Future<bool> newMaterial(
-    String name,
-    String type,
-    String topicName,
-    String className,
-  ) async {
-    var box = Hive.lazyBox('mindrev');
-    //get list of materials from right topic
-    List classes = await box.get('classes');
-    List topics = classes.firstWhere((element) => element.name == className).topics;
-    List materials = topics.firstWhere((element) => element.name == topicName).materials;
-
-    //check if the material already exists
-    for (MindrevMaterial i in materials) {
-      if (i.name == name) return false;
-    }
-
-    MindrevMaterial newMaterial = MindrevMaterial(name, type);
-    materials.add(newMaterial);
-
-    topics[topics.indexWhere((element) => element.name == topicName)].materials = materials;
-    classes[classes.indexWhere((element) => element.name == className)].topics = topics;
-    await box.put('classes', classes);
-
-    if (type == 'Flashcards') {
-      await box.put('$className/$topicName/$name', MindrevFlashcards(name));
-    }
-    return true;
-  }
+  //controllers
+  final TextEditingController _materialNameController = TextEditingController();
 
   //function to return a list of materials to display
-  List<Widget> displayMaterial(rawTOML, Color accentColor, Color contrastColor) {
-    var material = TomlDocument.parse(rawTOML).toMap();
+  List<Widget> displayMaterial(materialTypes, var theme) {
     List<Widget> result = [];
-    int j = material['materials'].length;
-    for (int i = j - 1; i >= 0; i--) {
-      if (selected == i) type = material['materials'][i]['name'];
+    //cycle through materials and add them to result, if selected change colors
+    for (int i = materialTypes['materials'].length - 1; i >= 0; i--) {
+      if (selected == i) materialType = materialTypes['materials'][i]['name'];
       result.add(
         Padding(
           padding: const EdgeInsets.all(8),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(20),
-              primary: selected == i ? accentColor : theme.primary,
+              primary: selected == i ? theme.accent : theme.primary,
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
@@ -86,13 +47,14 @@ class _NewMaterialState extends State<NewMaterial> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SvgPicture.asset(
-                  'assets/study_material_icons/${material['materials'][i]['icon']}.svg',
-                  color: selected == i ? contrastColor : accentColor,
+                  'assets/study_material_icons/${materialTypes['materials'][i]['icon']}.svg',
+                  color: selected == i ? theme.accentText : theme.accent,
                 ),
                 const SizedBox(height: 10, width: 100),
                 Text(
-                  material['materials'][i]['name'],
-                  style: TextStyle(color: selected == i ? contrastColor : theme.primaryText),
+                  materialTypes['materials'][i]['name'],
+                  style:
+                      TextStyle(color: selected == i ? theme.accentText : theme.primaryText),
                 )
               ],
             ),
@@ -109,148 +71,123 @@ class _NewMaterialState extends State<NewMaterial> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    //wait for materials to load from file
+    rootBundle
+        .loadString('assets/materials.toml')
+        .then((value) => setState(() => materialTypes = TomlDocument.parse(value).toMap()));
+  }
+
+  @override
+  dispose() {
+    _materialNameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    //route data to get class information
-    routeData =
-        routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
+    Map routeData = ModalRoute.of(context)?.settings.arguments as Map;
+    //calling it mClass as class is reserved
+    var topic = routeData['topic'];
+    var theme = routeData['theme'];
+    Map text = routeData['text'];
 
-    //set contrast color according to color passed through route data, if uiColors isn't set
-    Color? contrastAccentColor = routeData['accentColor'] == theme.accent
-        ? theme.accentText
-        : textColor(routeData['accentColor']);
-    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary
-        ? theme.secondaryText
-        : textColor(routeData['secondaryColor']);
+    if (materialTypes != null) {
+      return Scaffold(
+        backgroundColor: theme.primary,
+        appBar: AppBar(
+          foregroundColor: theme.secondaryText,
+          title: Text(
+            text['title'],
+            style: defaultSecondaryTextStyle(),
+          ),
+          elevation: 4,
+          centerTitle: true,
+          backgroundColor: theme.secondary,
+        ),
 
-    return FutureBuilder(
-      future: Future.wait([futureText, futureMaterials]),
-      builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
-        //only show page when data is loaded
-        if (snapshot.hasData) {
-          Map text = snapshot.data![0];
-          String materials = snapshot.data![1];
-          return Scaffold(
-            backgroundColor: theme.primary,
-            appBar: AppBar(
-              foregroundColor: contrastSecondaryColor,
-              title: Text(text['title']),
-              elevation: 4,
-              centerTitle: true,
-              backgroundColor: routeData['secondaryColor'],
-            ),
-            body: SingleChildScrollView(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 600),
-                    child: Form(
-                      key: _formKey,
+        //body with everything
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 600),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _materialNameController,
+                    cursorColor: theme.accent,
+                    style: defaultPrimaryTextStyle(),
+                    decoration: defaultPrimaryInputDecoration(
+                      text['label'],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Material(
+                    color: theme.primary,
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Column(
                         children: [
-                          TextFormField(
-                            cursorColor: routeData['accentColor'],
-                            style: defaultPrimaryTextStyle(),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return text['errorNoText'];
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              setState(() {
-                                newMaterialName = value;
-                              });
-                            },
-                            decoration: defaultPrimaryInputDecoration(text['label']),
-                          ),
-                          const SizedBox(height: 20),
-                          Material(
-                            color: theme.primary,
-                            borderRadius: const BorderRadius.all(Radius.circular(15)),
-                            elevation: 4,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Column(
-                                children: [
-                                  Text(text['type'], style: defaultPrimaryTextStyle()),
-                                  const SizedBox(height: 20, width: double.infinity),
-                                  Wrap(
-                                    children: [
-                                      for (Widget i in displayMaterial(
-                                        materials,
-                                        routeData['accentColor'],
-                                        contrastAccentColor ?? Colors.white,
-                                      ))
-                                        i
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-                          coloredButton(
-                            text['submit'],
-                            (() async {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState?.save();
-                                if (newMaterialName != null && type != null) {
-                                  bool outcome = await newMaterial(
-                                    '$newMaterialName',
-                                    '$type',
-                                    routeData['topicName'],
-                                    routeData['className'],
-                                  );
-                                  if (outcome == true) {
-                                    Navigator.pop(context);
-                                    Navigator.pushReplacementNamed(
-                                      context,
-                                      '/materials',
-                                      arguments: routeData,
-                                    );
-                                  } else {
-                                    showDialog<String>(
-                                      context: ctx,
-                                      builder: (BuildContext ctx) => AlertDialog(
-                                        title: Text(
-                                          text['duplicate'],
-                                          style: defaultPrimaryTextStyle(),
-                                        ),
-                                        actions: <Widget>[
-                                          coloredButton(
-                                            text['close'],
-                                            () {
-                                              Navigator.pop(context, text['close']);
-                                            },
-                                            routeData['accentColor'],
-                                            contrastAccentColor ?? Colors.white,
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                }
-                              }
-                            }),
-                            routeData['accentColor'],
-                            contrastAccentColor ?? Colors.white,
+                          Text(text['type'], style: defaultPrimaryTextStyle()),
+                          const SizedBox(height: 20, width: double.infinity),
+                          Wrap(
+                            children: [
+                              for (Widget i in displayMaterial(materialTypes, theme)) i
+                            ],
                           )
                         ],
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 30),
+                  coloredButton(
+                    text['submit'],
+                    (() async {
+                      //check if class name is empty
+                      if (_materialNameController.text.isEmpty) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(defaultSnackbar(text['errorNoText']));
+
+                        if (materialType == null) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(defaultSnackbar(text['errorNoType']));
+                        }
+                      } else {
+                        //if not go ahead and create class
+                        await local.newMaterial(
+                          MindrevMaterial(
+                            _materialNameController.text,
+                            materialType!,
+                          ),
+                          topic,
+                          routeData['class'],
+                          routeData['structure'],
+                        );
+                        Navigator.pop(context);
+                        //update routeData and go back to topics page
+                        routeData['topic'] = topic;
+                        Navigator.pushReplacementNamed(
+                          context,
+                          '/materials',
+                          arguments: routeData,
+                        );
+                      }
+                    }),
+                    theme.accent,
+                    theme.accentText,
+                  ),
+                ],
               ),
             ),
-          );
-        } else {
-          return Scaffold(
-            //loading() screen to be shown until Future is found
-            body: loading(),
-          );
-        }
-      },
-    );
+          ),
+        ),
+      );
+    } else {
+      return loading();
+    }
   }
 }

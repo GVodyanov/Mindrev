@@ -8,7 +8,7 @@ import 'package:mindrev/widgets/widgets.dart';
 part 'mindrev_flashcards.g.dart';
 
 //flashcards material model
-@HiveType(typeId: 3)
+@HiveType(typeId: 5)
 class MindrevFlashcards {
   @HiveField(0)
   String name = '';

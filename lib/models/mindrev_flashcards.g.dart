@@ -8,7 +8,7 @@ part of 'mindrev_flashcards.dart';
 
 class MindrevFlashcardsAdapter extends TypeAdapter<MindrevFlashcards> {
   @override
-  final int typeId = 3;
+  final int typeId = 5;
 
   @override
   MindrevFlashcards read(BinaryReader reader) {

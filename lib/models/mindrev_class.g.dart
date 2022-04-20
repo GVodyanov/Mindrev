@@ -8,7 +8,7 @@ part of 'mindrev_class.dart';
 
 class MindrevClassAdapter extends TypeAdapter<MindrevClass> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
   MindrevClass read(BinaryReader reader) {

@@ -1,7 +1,7 @@
 materials = [
 	{name = "Notes", icon = "notes"},
-	{name = "Ordered notes", icon = "ordered_notes"},
+	{name = "Ordered notes", icon = "orderedNotes"},
 	{name = "Flashcards", icon = "flashcards"},
 	{name = "Graphs", icon = "graphs"},
-	{name = "Mind-map", icon = "mind_map"},
+	{name = "Mind-map", icon = "mindMap"},
 ]

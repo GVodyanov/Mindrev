@@ -1,37 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'mindrev_material.dart';
+part of 'mindrev_structure.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class MindrevMaterialAdapter extends TypeAdapter<MindrevMaterial> {
+class MindrevStructureAdapter extends TypeAdapter<MindrevStructure> {
   @override
-  final int typeId = 3;
+  final int typeId = 0;
 
   @override
-  MindrevMaterial read(BinaryReader reader) {
+  MindrevStructure read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MindrevMaterial(
-      fields[0] as String,
-      fields[1] as String,
-    )..date = fields[2] as String;
+    return MindrevStructure()..classes = (fields[0] as List).cast<MindrevClass>();
   }
 
   @override
-  void write(BinaryWriter writer, MindrevMaterial obj) {
+  void write(BinaryWriter writer, MindrevStructure obj) {
     writer
-      ..writeByte(3)
-      ..writeByte(0)
-      ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.type)
-      ..writeByte(2)
-      ..write(obj.date);
+      ..writeByte(0)
+      ..write(obj.classes);
   }
 
   @override
@@ -40,7 +33,7 @@ class MindrevMaterialAdapter extends TypeAdapter<MindrevMaterial> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MindrevMaterialAdapter &&
+      other is MindrevStructureAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

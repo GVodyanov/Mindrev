@@ -1,208 +1,112 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:mindrev/models/mindrev_material.dart';
-import 'package:mindrev/services/text_color.dart';
 import 'package:mindrev/services/text.dart';
-import 'package:mindrev/extra/theme.dart';
 import 'package:mindrev/widgets/widgets.dart';
 
 import 'package:toml/toml.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class Materials extends StatefulWidget {
   const Materials({Key? key}) : super(key: key);
 
   @override
-  _MaterialsState createState() => _MaterialsState();
+  State<Materials> createState() => _MaterialsState();
 }
 
 class _MaterialsState extends State<Materials> {
-  //futures that will be awaited by FutureBuilder
-  Future futureText = readText('materials');
-  Map routeData = {};
-  Future futureTypeIcons = rootBundle.loadString('assets/materials.toml');
+  Map? text;
+  Map? icons;
 
-  //function which retrieves all materials and their properties
-  Future<List?>? getMaterials(String topicName, String className) async {
-    var box = Hive.lazyBox('mindrev');
-    List classes = await box.get('classes');
-    List topics = classes.firstWhere((element) => element.name == className).topics;
-    if (topics.isNotEmpty) {
-      try {
-        return topics.firstWhere((element) => element.name == topicName).materials;
-      } catch (e, s) {
-        s;
-        //happens on renaming
-      }
-    }
-    return [MindrevMaterial('', '')];
-  }
-
-  //function to display materials when getMaterials() retrieves them
-  List<Widget> displayMaterials(
-    List gotMaterials,
-    String gotIcons,
-    Color accentColor,
-    Map routeData,
-  ) {
-    List<Widget> result = [];
-    Map icons = TomlDocument.parse(gotIcons).toMap();
-
-    //loop to add all materials to a list
-    for (var i in gotMaterials) {
-      //check what type corresponds to what icon
-      String? icon;
-      for (Map j in icons['materials']) {
-        if (i!.type == j['name']) icon = j['icon'];
-      }
-      icon ??= 'flashcards'; //in case flashcard null when renaming
-      result.add(
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListTile(
-            leading: SvgPicture.asset(
-              'assets/study_material_icons/$icon.svg',
-              color: accentColor,
-            ),
-            title: Text(i.name, style: defaultPrimaryTextStyle()),
-            trailing: Icon(Icons.keyboard_arrow_right, color: theme.primaryText),
-            onTap: () {
-              routeData['name'] = i.name;
-              Navigator.pushNamed(context, '/$icon', arguments: routeData);
-            },
-          ),
-        ),
-      );
-    }
-    return result.reversed.toList();
+  @override
+  void initState() {
+    super.initState();
+    Future.wait([
+      readText('materials'),
+      rootBundle.loadString('assets/materials.toml'),
+    ]).then((List<dynamic> values) {
+      setState(() {
+        text = values[0] as Map;
+        icons = TomlDocument.parse(values[1]).toMap();
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    //route data to get class information
-    routeData =
-        routeData.isNotEmpty ? routeData : ModalRoute.of(context)?.settings.arguments as Map;
+    //route data to get class and theme information
+    Map routeData = ModalRoute.of(context)?.settings.arguments as Map;
+    //calling it mClass as class is reserved
+    var topic = routeData['topic'];
+    var theme = routeData['theme'];
 
-    //set contrast color according to color passed through route data, if uiColors isn't set
-    Color? contrastAccentColor = routeData['accentColor'] == theme.accent
-        ? theme.accentText
-        : textColor(routeData['accentColor']);
-    Color? contrastSecondaryColor = routeData['secondaryColor'] == theme.secondary
-        ? theme.secondaryText
-        : textColor(routeData['secondaryColor']);
+    if (text != null) {
+      return Scaffold(
+        backgroundColor: theme.primary,
 
-    //futures that will be awaited by FutureBuilder that need to be in build
-    Future? futureMaterials = getMaterials(routeData['topicName'], routeData['className']);
-    return FutureBuilder(
-      future: Future.wait([
-        futureText,
-        futureMaterials!,
-        futureTypeIcons,
-      ]),
-      builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
-        //only show page when data is loaded
-        if (snapshot.hasData) {
-          //data loaded with FutureBuilder
-          Map text = snapshot.data![0];
-          List materials = snapshot.data![1] ?? List.empty();
-          var typeIcons = snapshot.data![2];
-
-          return Scaffold(
-            backgroundColor: theme.primary,
-            //appbar
-            appBar: AppBar(
-              foregroundColor: contrastSecondaryColor,
-              title: Text(routeData['topicName']),
-              elevation: 4,
-              centerTitle: true,
-              backgroundColor: routeData['secondaryColor'],
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () =>
-                      Navigator.pushNamed(context, '/topicExtra', arguments: routeData),
-                ),
-              ],
-            ),
-
-            //add new topic
-            floatingActionButton: FloatingActionButton.extended(
-              foregroundColor: contrastAccentColor,
-              icon: const Icon(
-                Icons.add,
-              ),
-              label: Text(
-                text['new'],
-              ),
-              backgroundColor: routeData['accentColor'],
+        appBar: AppBar(
+          foregroundColor: theme.secondaryText,
+          title: Text(topic.name),
+          elevation: 4,
+          centerTitle: true,
+          backgroundColor: theme.secondary,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.menu),
               onPressed: () {
-                Navigator.pushNamed(context, '/newMaterial', arguments: routeData);
+                routeData['text'] = text?['topicExtra'];
+                Navigator.pushNamed(context, '/topicExtra', arguments: routeData);
               },
             ),
+          ],
+        ),
 
-            //body with everything
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //check if there are any topics, and if there are display them
-                  if (materials.isNotEmpty)
-                    Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 600),
-                        child: ListView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          children: ListTile.divideTiles(
-                            context: context,
-                            tiles: [
-                              for (Widget i in displayMaterials(
-                                materials,
-                                typeIcons,
-                                routeData['accentColor'],
-                                routeData,
-                              ))
-                                i
-                            ],
-                          ).toList(),
-                        ),
-                      ),
+        //add new topic
+        floatingActionButton: FloatingActionButton.extended(
+          foregroundColor: theme.accentText,
+          icon: const Icon(
+            Icons.add,
+          ),
+          label: Text(
+            text?['new'],
+          ),
+          backgroundColor: theme.accent,
+          onPressed: () {
+            routeData['text'] = text?['newMaterial'];
+            Navigator.pushNamed(context, '/newMaterial', arguments: routeData);
+          },
+        ),
+
+        body: SingleChildScrollView(
+          child: Center(
+            //check if there are any materials, and if there are display them
+            child: topic.materials.isNotEmpty
+                ? ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    child: ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      children: ListTile.divideTiles(
+                        context: context,
+                        tiles: [
+                          for (Widget i in topic.displayMaterials(
+                            context,
+                            topic,
+                            routeData['class'],
+                            routeData['structure'],
+                            theme,
+                            icons,
+                          ))
+                            i
+                        ],
+                      ).toList(),
                     ),
-                  //if there are no classes prompt user to create some
-                  if (materials.isEmpty)
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
-                        child: ConstrainedBox(
-                          child: Material(
-                            color: theme.primary,
-                            elevation: 4,
-                            borderRadius: const BorderRadius.all(Radius.circular(15)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Text(
-                                text['create'],
-                                style: TextStyle(fontSize: 20, color: theme.primaryText),
-                              ),
-                            ),
-                          ),
-                          constraints: const BoxConstraints(maxWidth: 500, maxHeight: 300),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          );
-        } else {
-          return Scaffold(
-            //loading() screen to be shown until Future is found
-            body: loading(),
-          );
-        }
-      },
-    );
+                  )
+                : empty(text?['create']),
+          ),
+        ),
+      );
+    } else {
+      return loading();
+    }
   }
 }

@@ -175,16 +175,51 @@ InputDecoration defaultSecondaryInputDecoration(String text) {
   );
 }
 
-Center loading() => Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Mindrev', style: TextStyle(color: theme.accent, fontSize: 40)),
-          const SizedBox(height: 30),
-          SpinKitFadingGrid(
-            color: theme.accent,
-            size: 50.0,
-          )
-        ],
+Scaffold loading() => Scaffold(
+      backgroundColor: theme.primary,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Mindrev', style: TextStyle(color: theme.accent, fontSize: 40)),
+            const SizedBox(height: 30),
+            SpinKitFadingGrid(
+              color: theme.accent,
+              size: 50.0,
+            )
+          ],
+        ),
       ),
+    );
+
+Padding empty(String text) => Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
+      child: ConstrainedBox(
+        child: Material(
+          color: theme.primary,
+          elevation: 4,
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 20,
+                color: theme.primaryText,
+              ),
+            ),
+          ),
+        ),
+        constraints: const BoxConstraints(
+          maxWidth: 600,
+          maxHeight: 300,
+        ),
+      ),
+    );
+
+SnackBar defaultSnackbar(String text) => SnackBar(
+      content: Text(text, style: defaultSecondaryTextStyle()),
+      backgroundColor: theme.secondary,
+      elevation: 20,
+      duration: const Duration(seconds: 3),
     );

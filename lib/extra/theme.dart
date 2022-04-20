@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:mindrev/models/mindrev_settings.dart';
+import 'package:mindrev/services/db.dart';
+
 import 'package:toml/toml.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class MindrevTheme {
   Color? primary;
@@ -21,6 +23,17 @@ class MindrevTheme {
     this.accent,
     this.accentText,
   );
+
+  //clone method to be able to modify for uiColors
+  MindrevTheme.clone(MindrevTheme theme)
+      : this(
+          theme.primary,
+          theme.primaryText,
+          theme.secondary,
+          theme.secondaryText,
+          theme.accent,
+          theme.accentText,
+        );
 }
 
 dynamic theme;
@@ -30,29 +43,18 @@ Future<bool> getTheme() async {
   //load and parse theme file
   dynamic themesMap = await rootBundle.loadString('assets/themes.toml');
   themesMap = TomlDocument.parse(themesMap).toMap();
-
-  //get theme set in settings from hive
-  var box = Hive.lazyBox('mindrev');
-  var settings = await box.get('settings');
-
-  //find the actual theme colors for the selected theme
   //convert map to list for easier cycling
   List themesList = [];
   themesMap['themes'].forEach((k, v) => themesList.add(v));
 
-  //if nothing is found just return default
-  theme = MindrevTheme(
-    HexColor(themesList[0]['primary']),
-    HexColor(themesList[0]['primaryText']),
-    HexColor(themesList[0]['secondary']),
-    HexColor(themesList[0]['secondaryText']),
-    HexColor(themesList[0]['accent']),
-    HexColor(themesList[0]['accentText']),
-  );
+  //get theme set in settings from hive
+  MindrevSettings settings = await local.getSettings();
 
+  //find the actual theme colors for the selected theme
   try {
+    //cycle through themes until theme matches name in settings
     for (int i = themesList.length - 1; i >= 0; i--) {
-      if (themesList[i]!['name'] == settings!['theme']) {
+      if (themesList[i]!['name'] == settings.theme) {
         theme = MindrevTheme(
           HexColor(themesList[i]['primary']),
           HexColor(themesList[i]['primaryText']),
