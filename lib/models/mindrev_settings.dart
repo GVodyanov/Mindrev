@@ -15,4 +15,8 @@ class MindrevSettings {
 
   @HiveField(3)
   String lang = 'en';
+
+  //for notes material
+  @HiveField(4)
+  bool? markdownEdit = false;
 }

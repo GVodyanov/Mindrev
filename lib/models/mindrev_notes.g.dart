@@ -1,43 +1,40 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'mindrev_settings.dart';
+part of 'mindrev_notes.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class MindrevSettingsAdapter extends TypeAdapter<MindrevSettings> {
+class MindrevNotesAdapter extends TypeAdapter<MindrevNotes> {
   @override
-  final int typeId = 4;
+  final int typeId = 6;
 
   @override
-  MindrevSettings read(BinaryReader reader) {
+  MindrevNotes read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MindrevSettings()
-      ..uiColors = fields[0] as bool
-      ..confetti = fields[1] as bool
-      ..theme = fields[2] as String
-      ..lang = fields[3] as String
-      ..markdownEdit = fields[4] as bool?;
+    return MindrevNotes()
+      ..name = fields[0] as String
+      ..date = fields[1] as String
+      ..notus = fields[3] as NotusDocument
+      ..markdown = fields[4] as String;
   }
 
   @override
-  void write(BinaryWriter writer, MindrevSettings obj) {
+  void write(BinaryWriter writer, MindrevNotes obj) {
     writer
-      ..writeByte(5)
-      ..writeByte(0)
-      ..write(obj.uiColors)
-      ..writeByte(1)
-      ..write(obj.confetti)
-      ..writeByte(2)
-      ..write(obj.theme)
-      ..writeByte(3)
-      ..write(obj.lang)
       ..writeByte(4)
-      ..write(obj.markdownEdit);
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.date)
+      ..writeByte(3)
+      ..write(obj.notus)
+      ..writeByte(4)
+      ..write(obj.markdown);
   }
 
   @override
@@ -46,7 +43,7 @@ class MindrevSettingsAdapter extends TypeAdapter<MindrevSettings> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MindrevSettingsAdapter &&
+      other is MindrevNotesAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -60,7 +60,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   child: ConstrainedBox(
                     constraints:
-                        const BoxConstraints(maxWidth: 80, minWidth: 50, maxHeight: 80),
+                    const BoxConstraints(maxWidth: 80, minWidth: 50, maxHeight: 80),
                     child: Row(
                       children: [
                         Expanded(
@@ -164,6 +164,9 @@ class _SettingsState extends State<Settings> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  /* UI SECTION */
+
                   Text(
                     text?['ui'],
                     style: TextStyle(
@@ -201,6 +204,49 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                   const SizedBox(height: 30),
+
+                  /* NOTES SECTION */
+
+                  Text(
+                    text?['notes'],
+                    style: TextStyle(
+                      color: theme.primaryText,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    title: Text(text?['editor'], style: defaultPrimaryTextStyle()),
+                    leading: Icon(Icons.edit, color: theme.accent),
+                    trailing: DropdownButton(
+                      value: settings?.markdownEdit ?? false,
+                      items: [
+                        DropdownMenuItem(
+                          child: Text(text?['editorZefyrka']),
+                          value: false,
+                        ),
+                        DropdownMenuItem(
+                          child: Text(text?['editorMarkdown']),
+                          value: true,
+                        ),
+                      ],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          settings?.markdownEdit = value;
+                        });
+                      },
+                      dropdownColor: theme.primary,
+                      style: defaultPrimaryTextStyle(),
+                      underline: Container(),
+                      icon: Icon(Icons.arrow_drop_down, color: theme.accent),
+                      focusColor: theme.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  /* THEME SECTION */
+
                   Text(
                     text?['theme'],
                     style: TextStyle(
@@ -222,20 +268,19 @@ class _SettingsState extends State<Settings> {
                         const SizedBox(width: 25),
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 600),
-                          child: Expanded(
-                            child: Material(
-                              color: theme.primary,
-                              elevation: 4,
-                              borderRadius: const BorderRadius.all(Radius.circular(15)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Wrap(
-                                  alignment: WrapAlignment.center,
-                                  direction: Axis.horizontal,
-                                  children: [
-                                    for (int i = 0; i <= showThemes; i++) displayedThemes[i]
-                                  ],
-                                ),
+
+                          child: Material(
+                            color: theme.primary,
+                            elevation: 4,
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                direction: Axis.horizontal,
+                                children: [
+                                  for (int i = 0; i <= showThemes; i++) displayedThemes[i]
+                                ],
                               ),
                             ),
                           ),
@@ -243,7 +288,7 @@ class _SettingsState extends State<Settings> {
                         const SizedBox(width: 25),
                         defaultButton(
                           text?[showThemes == 2 ? 'moreThemes' : 'lessThemes'],
-                          () {
+                              () {
                             setState(() {
                               if (showThemes == 2) {
                                 showThemes = displayedThemes.length - 1;

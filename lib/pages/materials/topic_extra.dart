@@ -79,8 +79,8 @@ class _TopicExtraState extends State<TopicExtra> {
                       child: TextFormField(
                         controller: _newNameController,
                         cursorColor: theme.accent,
-                        style: defaultSecondaryTextStyle(),
-                        decoration: defaultSecondaryInputDecoration(
+                        style: defaultPrimaryTextStyle(),
+                        decoration: defaultPrimaryInputDecoration(
                           text['newName'],
                         ),
                       ),

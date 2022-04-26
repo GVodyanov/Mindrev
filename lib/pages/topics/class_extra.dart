@@ -12,7 +12,7 @@ class ClassExtra extends StatefulWidget {
   @override
   State<ClassExtra> createState() => _ClassExtraState();
 }
-
+///TODO THEME ERRORS
 class _ClassExtraState extends State<ClassExtra> {
   final TextEditingController _newNameController = TextEditingController();
 
@@ -79,8 +79,8 @@ class _ClassExtraState extends State<ClassExtra> {
                       child: TextFormField(
                         controller: _newNameController,
                         cursorColor: theme.accent,
-                        style: defaultSecondaryTextStyle(),
-                        decoration: defaultSecondaryInputDecoration(
+                        style: defaultPrimaryTextStyle(),
+                        decoration: defaultPrimaryInputDecoration(
                           text['newName'],
                         ),
                       ),

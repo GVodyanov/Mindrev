@@ -137,7 +137,7 @@ InputDecoration defaultSecondaryInputDecoration(String text) {
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(
-        color: theme.secondaryText ??= Colors.white,
+        color: theme.secondaryText,
       ),
     ),
     disabledBorder: OutlineInputBorder(

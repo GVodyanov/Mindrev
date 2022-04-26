@@ -162,6 +162,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.17.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -345,6 +352,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.2"
+  html:
+    dependency: transitive
+    description:
+      name: html
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.15.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -457,6 +471,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  notus_format:
+    dependency: transitive
+    description:
+      name: notus_format
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
+  notus_to_html_to_notus:
+    dependency: "direct main"
+    description:
+      name: notus_to_html_to_notus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   package_config:
     dependency: transitive
     description:
@@ -590,6 +618,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  quill_format:
+    dependency: transitive
+    description:
+      name: quill_format
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   quiver:
     dependency: transitive
     description:
@@ -617,7 +652,7 @@ packages:
       name: scroll_snap_list
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.6"
   selectable:
     dependency: "direct main"
     description:
@@ -741,7 +776,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.20"
+    version: "6.1.0"
   url_launcher_android:
     dependency: transitive
     description:
@@ -840,6 +875,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
+  zefyrka:
+    dependency: "direct main"
+    description:
+      name: zefyrka
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
 sdks:
   dart: ">=2.16.0 <3.0.0"
   flutter: ">=2.10.0"

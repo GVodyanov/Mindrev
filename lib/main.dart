@@ -9,6 +9,7 @@ import 'package:mindrev/models/mindrev_topic.dart';
 import 'package:mindrev/models/mindrev_material.dart';
 import 'package:mindrev/models/mindrev_settings.dart';
 import 'package:mindrev/models/mindrev_flashcards.dart';
+import 'package:mindrev/models/mindrev_notes.dart';
 import 'package:mindrev/pages/home/home.dart';
 import 'package:mindrev/pages/home/new_class.dart';
 import 'package:mindrev/pages/home/settings.dart';
@@ -24,6 +25,7 @@ import 'package:mindrev/pages/flashcards/new_flashcards.dart';
 import 'package:mindrev/pages/flashcards/learn_flashcards.dart';
 import 'package:mindrev/pages/flashcards/practice_flashcards.dart';
 import 'package:mindrev/pages/flashcards/quiz_flashcards.dart';
+import 'package:mindrev/pages/notes/notes.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -47,6 +49,7 @@ void main() async {
   Hive.registerAdapter(MindrevMaterialAdapter());
   Hive.registerAdapter(MindrevSettingsAdapter());
   Hive.registerAdapter(MindrevFlashcardsAdapter());
+  Hive.registerAdapter(MindrevNotesAdapter());
 
   //open box
   await Hive.openLazyBox('mindrev');
@@ -76,6 +79,7 @@ void main() async {
         '/learnFlashcards': (context) => const LearnFlashcards(),
         '/practiceFlashcards': (context) => const PracticeFlashcards(),
         '/quizFlashcards': (context) => const QuizFlashcards(),
+        '/notes': (context) => const Notes(),
       },
     ),
   );
