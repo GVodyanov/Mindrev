@@ -39,7 +39,6 @@ class _NewFlashcardsState extends State<NewFlashcards> {
             ),
             onPressed: () async {
               //we don't want to save default card
-
               await local.updateMaterialData(
                 flashcards,
                 routeData['topic'],

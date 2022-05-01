@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import 'package:mindrev/models/mindrev_settings.dart';
 import 'package:mindrev/models/mindrev_notes.dart';
 import 'package:mindrev/services/db.dart';
 import 'package:mindrev/widgets/widgets.dart';
-
-import 'package:notus_to_html_to_notus/notus_to_html_to_notus.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key}) : super(key: key);
@@ -20,22 +19,34 @@ class _NotesState extends State<Notes> {
   //defined in settings, and route to correct editor
   MindrevSettings? settings;
   MindrevNotes? notes;
+  Map? routeData;
 
   @override
   void initState() {
     super.initState();
     local.getSettings().then((MindrevSettings settings) => setState(() => this.settings = settings));
-    ///TODO fetch notes and route
+  }
+
+  @override
+  void didChangeDependencies() {
+    routeData = ModalRoute.of(context)?.settings.arguments as Map;
+    local
+        .getMaterialData(routeData!['material'], routeData!['topic'], routeData!['class'])
+        .then((value) => setState(() => notes = value));
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (settings != null) {
-      if (settings?.markdownEdit == true) {
-        print('markdown');
-      } else {
-        print('zefyrka');
-      }
+    if (settings != null && notes != null) {
+      SchedulerBinding.instance!.addPostFrameCallback((_) async {
+        routeData!['notes'] = notes;
+        if (settings?.markdownEdit == true) {
+          Navigator.pushReplacementNamed(context, '/markdownEditor', arguments: routeData);
+        } else {
+          Navigator.pushReplacementNamed(context, '/normalEditor', arguments: routeData);
+        }
+      });
     }
     return loading();
   }

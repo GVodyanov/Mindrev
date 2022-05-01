@@ -1,5 +1,4 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:zefyrka/zefyrka.dart';
 
 part 'mindrev_notes.g.dart';
 
@@ -12,8 +11,7 @@ class MindrevNotes {
   String date = DateTime.now().toIso8601String();
 
   @HiveField(3)
-  NotusDocument notus = NotusDocument();
+  String content = '';
 
-  @HiveField(4)
-  String markdown = '';
+  MindrevNotes(this.name);
 }

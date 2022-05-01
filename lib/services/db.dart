@@ -1,4 +1,5 @@
 import 'package:mindrev/models/mindrev_flashcards.dart';
+import 'package:mindrev/models/mindrev_notes.dart';
 import 'package:mindrev/models/mindrev_structure.dart';
 import 'package:mindrev/models/mindrev_settings.dart';
 import 'package:mindrev/models/mindrev_class.dart';
@@ -208,6 +209,12 @@ class Local {
       await box.put(
         mClass.name + '/' + topic.name + '/' + newMaterial.name,
         MindrevFlashcards(newMaterial.name),
+      );
+    }
+    if (newMaterial.type == 'Notes') {
+      await box.put(
+        mClass.name + '/' + topic.name + '/' + newMaterial.name,
+        MindrevNotes(newMaterial.name),
       );
     }
     //check if topic already exists and if doesn't add it to the topics list

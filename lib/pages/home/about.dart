@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:mindrev/widgets/widgets.dart';
 import 'package:mindrev/extra/theme.dart';
 
-import 'package:url_launcher/url_launcher.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 //simple function that displays an alert with about information, to be used in home.dart
 void showAbout(Map text, var context) {
@@ -33,7 +33,7 @@ void showAbout(Map text, var context) {
           title: Text(text['author'], style: defaultSecondaryTextStyle()),
           trailing: TextButton(
             onPressed: () async {
-              await launch('https://github.com/ScratchX98');
+              await launchUrlString('https://github.com/ScratchX98');
             },
             child: const Text('ScratchX98'),
             style: ButtonStyle(
@@ -46,7 +46,7 @@ void showAbout(Map text, var context) {
           title: Text(text['source'], style: defaultSecondaryTextStyle()),
           trailing: TextButton(
             onPressed: () async {
-              await launch('https://github.com/ScratchX98/Mindrev');
+              await launchUrlString('https://github.com/ScratchX98/Mindrev');
             },
             child: const Text('Github'),
             style: ButtonStyle(
@@ -59,7 +59,7 @@ void showAbout(Map text, var context) {
           title: Text(text['license'], style: defaultSecondaryTextStyle()),
           trailing: TextButton(
             onPressed: () async {
-              await launch('https://github.com/ScratchX98/Mindrev/blob/main/LICENSE');
+              await launchUrlString('https://github.com/ScratchX98/Mindrev/blob/main/LICENSE');
             },
             child: const Text('AGPLv3 +\nCommons clause'),
             style: ButtonStyle(

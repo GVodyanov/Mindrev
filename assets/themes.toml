@@ -54,12 +54,12 @@ accentText = "#93a1a1"
 
 [themes.andromeda]
 name = "Andromeda"
-primary = "#D5CED9"
-primaryText = "#23262e"
-secondary = "#23262e"
-secondaryText = "#D5CED9"
+primary = "#23262e"
+primaryText = "#f3f8ff"
+secondary = "#15191e"
+secondaryText = "#f3f8ff"
 accent = "#07c1a6"
-accentText = "#23262e"
+accentText = "#f3f8ff"
 
 [themes.darcula]
 name = "Darcula"

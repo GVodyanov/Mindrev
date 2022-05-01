@@ -16,25 +16,23 @@ class MindrevNotesAdapter extends TypeAdapter<MindrevNotes> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MindrevNotes()
-      ..name = fields[0] as String
+    return MindrevNotes(
+      fields[0] as String,
+    )
       ..date = fields[1] as String
-      ..notus = fields[3] as NotusDocument
-      ..markdown = fields[4] as String;
+      ..content = fields[3] as String;
   }
 
   @override
   void write(BinaryWriter writer, MindrevNotes obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
       ..write(obj.date)
       ..writeByte(3)
-      ..write(obj.notus)
-      ..writeByte(4)
-      ..write(obj.markdown);
+      ..write(obj.content);
   }
 
   @override

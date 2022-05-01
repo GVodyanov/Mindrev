@@ -36,8 +36,8 @@ dependencies:
   confetti: ^0.6.0
   flutter_launcher_icons: ^0.9.2
   intl: ^0.17.0
-  zefyrka: ^1.1.1
-  notus_to_html_to_notus: ^1.0.3
+  super_editor: ^0.2.0
+  expandable: ^5.0.1
 
 dev_dependencies:
   flutter_test:
