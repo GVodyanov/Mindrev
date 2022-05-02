@@ -64,8 +64,8 @@ class _NormalEditorState extends State<NormalEditor> {
         // stylesheet: Stylesheet(
         //   documentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 200),
         //   rules: [],
-        //   inlineTextStyler: () {
-        //     return
+        //   inlineTextStyler: (idk, sad) {
+        //
         //   }
         // ),
       ),

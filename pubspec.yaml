@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.17.0
   super_editor: ^0.2.0
   expandable: ^5.0.1
+  flutter_markdown: ^0.6.9+1
 
 dev_dependencies:
   flutter_test:
@@ -63,3 +64,8 @@ flutter:
        - asset: assets/fonts/SourceSansPro-Bold.ttf
        - asset: assets/fonts/SourceSansPro-Italic.ttf
        - asset: assets/fonts/SourceSansPro-Regular.ttf
+    - family: SourceCodePro
+      fonts:
+      - asset: assets/fonts/SourceCodePro-Bold.ttf
+      - asset: assets/fonts/SourceCodePro-Italic.ttf
+      - asset: assets/fonts/SourceCodePro-Regular.ttf
