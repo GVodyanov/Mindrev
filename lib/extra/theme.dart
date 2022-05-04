@@ -68,5 +68,11 @@ Future<bool> getTheme() async {
     // ignore: empty_catches
   } catch (e) {}
 
+  //update android navigation bar
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      systemNavigationBarColor: theme.primary, // navigation bar color
+    ),
+  );
   return true;
 }

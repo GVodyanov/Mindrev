@@ -16,8 +16,7 @@ class MindrevStructureAdapter extends TypeAdapter<MindrevStructure> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MindrevStructure()
-      ..classes = (fields[0] as List).cast<MindrevClass>();
+    return MindrevStructure()..classes = (fields[0] as List).cast<MindrevClass>();
   }
 
   @override

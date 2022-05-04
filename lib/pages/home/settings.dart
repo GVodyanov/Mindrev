@@ -60,7 +60,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   child: ConstrainedBox(
                     constraints:
-                    const BoxConstraints(maxWidth: 80, minWidth: 50, maxHeight: 80),
+                        const BoxConstraints(maxWidth: 80, minWidth: 50, maxHeight: 80),
                     child: Row(
                       children: [
                         Expanded(
@@ -164,7 +164,6 @@ class _SettingsState extends State<Settings> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   /* UI SECTION */
 
                   Text(
@@ -268,7 +267,6 @@ class _SettingsState extends State<Settings> {
                         const SizedBox(width: 25),
                         ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 600),
-
                           child: Material(
                             color: theme.primary,
                             elevation: 4,
@@ -288,7 +286,7 @@ class _SettingsState extends State<Settings> {
                         const SizedBox(width: 25),
                         defaultButton(
                           text?[showThemes == 2 ? 'moreThemes' : 'lessThemes'],
-                              () {
+                          () {
                             setState(() {
                               if (showThemes == 2) {
                                 showThemes = displayedThemes.length - 1;

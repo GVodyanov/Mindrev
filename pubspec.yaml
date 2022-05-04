@@ -2,6 +2,9 @@ name: mindrev
 description: A study app
 repository: https://github.com/ScratchX98/Mindrev
 
+flutter_app_name:
+  name: "Mindrev"
+
 publish_to: 'none'
 
 version: 0.1.0
@@ -39,6 +42,8 @@ dependencies:
   super_editor: ^0.2.0
   expandable: ^5.0.1
   flutter_markdown: ^0.6.9+1
+  scroll_app_bar: ^2.0.0
+  flutter_app_name: ^0.1.1
 
 dev_dependencies:
   flutter_test:

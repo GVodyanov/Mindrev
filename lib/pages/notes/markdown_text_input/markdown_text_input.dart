@@ -35,6 +35,9 @@ class MarkdownTextInput extends StatefulWidget {
   //theme
   final MindrevTheme theme;
 
+  //scroll controller for hiding appBar
+  final ScrollController scrollController;
+
   /// Constructor for [MarkdownTextInput]
   const MarkdownTextInput(
     this.onTextChanged,
@@ -52,6 +55,7 @@ class MarkdownTextInput extends StatefulWidget {
     ],
     this.controller,
     required this.theme,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -108,107 +112,126 @@ class _MarkdownTextInputState extends State<MarkdownTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height - 150,
-          ),
-          child: SingleChildScrollView(
-            child: Material(
-              elevation: 3,
-              color: theme.primary,
-              child: TextFormField(
-                autofocus: true,
-                textInputAction: TextInputAction.newline,
-                maxLines: widget.maxLines,
-                controller: _controller,
-                textCapitalization: TextCapitalization.sentences,
-                validator: (value) => widget.validators!(value),
-                cursorColor: theme.accent,
-                style: defaultPrimaryTextStyle(),
-                textDirection: widget.textDirection,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                  border: InputBorder.none,
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Stack(
+        fit: StackFit.expand,
+        alignment: AlignmentDirectional.topStart,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Positioned(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+              child: SingleChildScrollView(
+                controller: widget.scrollController,
+                child: Material(
+                  elevation: 3,
+                  color: theme.primary,
+                  child: TextFormField(
+                    autofocus: true,
+                    textInputAction: TextInputAction.newline,
+                    maxLines: widget.maxLines,
+                    controller: _controller,
+                    textCapitalization: TextCapitalization.sentences,
+                    validator: (value) => widget.validators!(value),
+                    cursorColor: theme.accent,
+                    style: defaultPrimaryTextStyle(),
+                    textDirection: widget.textDirection,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(8),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 44,
-          child: Material(
-            color: theme.secondary,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            elevation: 4,
-            child: ListView(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              children: widget.actions.map((type) {
-                return type == MarkdownType.title
-                    ? ExpandableNotifier(
-                        child: Expandable(
-                          key: const Key('H#_button'),
-                          collapsed: ExpandableButton(
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Text(
-                                  'H#',
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: theme.secondaryText),
-                                ),
-                              ),
-                            ),
-                          ),
-                          expanded: Container(
-                            color: Colors.white10,
-                            child: Row(
-                              children: [
-                                for (int i = 1; i <= 6; i++)
-                                  InkWell(
-                                    key: Key('H${i}_button'),
-                                    onTap: () => onTap(MarkdownType.title, titleSize: i),
+          Positioned(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 0,
+            right: 0,
+            child: SizedBox(
+              height: 44,
+              child: Material(
+                color: theme.secondary,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                elevation: 4,
+                child: Center(
+                  child: ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    children: widget.actions.map((type) {
+                      return type == MarkdownType.title
+                          ? ExpandableNotifier(
+                              child: Expandable(
+                                key: const Key('H#_button'),
+                                collapsed: ExpandableButton(
+                                  child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Text(
-                                        'H$i',
+                                        'H#',
                                         style: TextStyle(
-                                          fontSize: (18 - i).toDouble(),
-                                          fontWeight: FontWeight.w700,
-                                          color: theme.secondaryText,
-                                        ),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: theme.secondaryText),
                                       ),
                                     ),
                                   ),
-                                ExpandableButton(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Icon(
-                                      Icons.close,
-                                      color: theme.secondaryText,
-                                    ),
+                                ),
+                                expanded: Container(
+                                  color: Colors.white10,
+                                  child: Row(
+                                    children: [
+                                      for (int i = 1; i <= 6; i++)
+                                        InkWell(
+                                          key: Key('H${i}_button'),
+                                          onTap: () => onTap(MarkdownType.title, titleSize: i),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Text(
+                                              'H$i',
+                                              style: TextStyle(
+                                                fontSize: (18 - i).toDouble(),
+                                                fontWeight: FontWeight.w700,
+                                                color: theme.secondaryText,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ExpandableButton(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Icon(
+                                            Icons.close,
+                                            color: theme.secondaryText,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    : InkWell(
-                        key: Key(type.key),
-                        onTap: () => onTap(type),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Icon(type.icon, color: theme.secondaryText,),
-                        ),
-                      );
-              }).toList(),
+                              ),
+                            )
+                          : InkWell(
+                              key: Key(type.key),
+                              onTap: () => onTap(type),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Icon(
+                                  type.icon,
+                                  color: theme.secondaryText,
+                                ),
+                              ),
+                            );
+                    }).toList(),
+                  ),
+                ),
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

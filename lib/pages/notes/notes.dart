@@ -14,7 +14,6 @@ class Notes extends StatefulWidget {
 }
 
 class _NotesState extends State<Notes> {
-
   //what this file does is determine whether we want to edit with markdown or zefyrka, as
   //defined in settings, and route to correct editor
   MindrevSettings? settings;
@@ -24,7 +23,9 @@ class _NotesState extends State<Notes> {
   @override
   void initState() {
     super.initState();
-    local.getSettings().then((MindrevSettings settings) => setState(() => this.settings = settings));
+    local
+        .getSettings()
+        .then((MindrevSettings settings) => setState(() => this.settings = settings));
   }
 
   @override

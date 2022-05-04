@@ -10,20 +10,20 @@ class NormalEditor extends StatefulWidget {
 }
 
 class _NormalEditorState extends State<NormalEditor> {
-
   // A MutableDocument is an in-memory Document. Create the starting
 // content that you want your editor to display.
 //
 // Your MutableDocument does not need to contain any content/nodes.
 // In that case, your editor will initially display nothing.
-  final myDoc = deserializeMarkdownToDocument('''hi
-  ''',);
+  final myDoc = deserializeMarkdownToDocument(
+    '''hi
+  ''',
+  );
 
 // With a MutableDocument, create a DocumentEditor, which knows how
 // to apply changes to the MutableDocument.
 
 // Next: pass the docEditor to your Editor widget.
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,6 @@ class _NormalEditorState extends State<NormalEditor> {
     var notes = routeData['notes'];
     // Map text = routeData['text'];
     var theme = routeData['theme'];
-
 
     final docEditor = DocumentEditor(document: myDoc);
 
@@ -49,9 +48,7 @@ class _NormalEditorState extends State<NormalEditor> {
               Icons.check,
               color: theme.secondaryText,
             ),
-            onPressed: () async {
-
-            },
+            onPressed: () async {},
           )
         ],
       ),
