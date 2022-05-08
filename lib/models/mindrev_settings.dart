@@ -16,7 +16,7 @@ class MindrevSettings {
   @HiveField(3)
   String lang = 'en';
 
-  //for notes material
+  //for notes material, whether to show formatting bar
   @HiveField(4)
-  bool? markdownEdit = false;
+  bool? markdownEdit = true;
 }

@@ -34,6 +34,20 @@ class _NewFlashcardsState extends State<NewFlashcards> {
         actions: <Widget>[
           IconButton(
             icon: Icon(
+              Icons.download,
+              color: theme.secondaryText,
+            ),
+            onPressed: () async {
+              routeData['flashcards'] = flashcards;
+              Navigator.pushNamed(
+                context,
+                '/bulkImport',
+                arguments: routeData,
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(
               Icons.check,
               color: theme.secondaryText,
             ),
@@ -54,7 +68,7 @@ class _NewFlashcardsState extends State<NewFlashcards> {
                 arguments: routeData,
               );
             },
-          )
+          ),
         ],
       ),
 

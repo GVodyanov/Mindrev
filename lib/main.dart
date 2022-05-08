@@ -25,8 +25,8 @@ import 'package:mindrev/pages/flashcards/new_flashcards.dart';
 import 'package:mindrev/pages/flashcards/learn_flashcards.dart';
 import 'package:mindrev/pages/flashcards/practice_flashcards.dart';
 import 'package:mindrev/pages/flashcards/quiz_flashcards.dart';
+import 'package:mindrev/pages/flashcards/bulk_import.dart';
 import 'package:mindrev/pages/notes/notes.dart';
-import 'package:mindrev/pages/notes/normal_editor.dart';
 import 'package:mindrev/pages/notes/markdown_editor.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
@@ -81,8 +81,8 @@ void main() async {
         '/learnFlashcards': (context) => const LearnFlashcards(),
         '/practiceFlashcards': (context) => const PracticeFlashcards(),
         '/quizFlashcards': (context) => const QuizFlashcards(),
+        '/bulkImport': (context) => const BulkImport(),
         '/notes': (context) => const Notes(),
-        '/normalEditor': (context) => const NormalEditor(),
         '/markdownEditor': (context) => const MarkdownEditor(),
       },
     ),

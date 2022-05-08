@@ -44,6 +44,8 @@ dependencies:
   flutter_markdown: ^0.6.9+1
   scroll_app_bar: ^2.0.0
   flutter_app_name: ^0.1.1
+  file_picker: ^4.5.1
+  string_splitter: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:

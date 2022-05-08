@@ -218,28 +218,14 @@ class _SettingsState extends State<Settings> {
                   ListTile(
                     title: Text(text?['editor'], style: defaultPrimaryTextStyle()),
                     leading: Icon(Icons.edit, color: theme.accent),
-                    trailing: DropdownButton(
-                      value: settings?.markdownEdit ?? false,
-                      items: [
-                        DropdownMenuItem(
-                          child: Text(text?['editorZefyrka']),
-                          value: false,
-                        ),
-                        DropdownMenuItem(
-                          child: Text(text?['editorMarkdown']),
-                          value: true,
-                        ),
-                      ],
-                      onChanged: (bool? value) {
+                    trailing: Switch(
+                      value: settings!.markdownEdit!,
+                      onChanged: (bool value) {
                         setState(() {
-                          settings?.markdownEdit = value;
+                          settings!.markdownEdit = value;
                         });
                       },
-                      dropdownColor: theme.primary,
-                      style: defaultPrimaryTextStyle(),
-                      underline: Container(),
-                      icon: Icon(Icons.arrow_drop_down, color: theme.accent),
-                      focusColor: theme.primary,
+                      activeColor: theme.accent,
                     ),
                   ),
                   const SizedBox(height: 30),

@@ -42,11 +42,8 @@ class _NotesState extends State<Notes> {
     if (settings != null && notes != null) {
       SchedulerBinding.instance!.addPostFrameCallback((_) async {
         routeData!['notes'] = notes;
-        if (settings?.markdownEdit == true) {
-          Navigator.pushReplacementNamed(context, '/markdownEditor', arguments: routeData);
-        } else {
-          Navigator.pushReplacementNamed(context, '/normalEditor', arguments: routeData);
-        }
+        routeData!['formatBar'] = settings!.markdownEdit;
+        Navigator.pushReplacementNamed(context, '/markdownEditor', arguments: routeData);
       });
     }
     return loading();

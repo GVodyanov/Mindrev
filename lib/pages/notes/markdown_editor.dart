@@ -30,7 +30,6 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
 
     var theme = routeData['theme'];
     var notes = routeData['notes'];
-    // Map text = routeData['text'];
 
     if (notes.content == '') edit = true;
 
@@ -86,6 +85,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                   controller: controller,
                   theme: theme,
                   scrollController: scrollController,
+                  formatBar: routeData['formatBar'],
                 )
               : Markdown(
                   controller: scrollController,

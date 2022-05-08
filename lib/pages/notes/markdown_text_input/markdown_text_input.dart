@@ -38,6 +38,9 @@ class MarkdownTextInput extends StatefulWidget {
   //scroll controller for hiding appBar
   final ScrollController scrollController;
 
+  // show bar or not
+  final bool formatBar;
+
   /// Constructor for [MarkdownTextInput]
   const MarkdownTextInput(
     this.onTextChanged,
@@ -56,6 +59,7 @@ class MarkdownTextInput extends StatefulWidget {
     this.controller,
     required this.theme,
     required this.scrollController,
+    required this.formatBar,
   }) : super(key: key);
 
   @override
@@ -146,7 +150,7 @@ class _MarkdownTextInputState extends State<MarkdownTextInput> {
               ),
             ),
           ),
-          Positioned(
+          if (widget.formatBar) Positioned(
             bottom: MediaQuery.of(context).viewInsets.bottom,
             left: 0,
             right: 0,
@@ -174,7 +178,7 @@ class _MarkdownTextInputState extends State<MarkdownTextInput> {
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w700,
-                                            color: theme.secondaryText),
+                                            color: theme.secondaryText,),
                                       ),
                                     ),
                                   ),
