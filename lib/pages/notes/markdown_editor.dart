@@ -30,6 +30,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
 
     var theme = routeData['theme'];
     var notes = routeData['notes'];
+    String imgDirectory = routeData['imgDirectory'];
 
     if (notes.content == '') edit = true;
 
@@ -72,6 +73,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
               ? MarkdownTextInput(
                   (String value) => setState(() {
                     //update notes when modified
+
                     notes.content = value;
                     local.updateMaterialData(
                       notes,
@@ -86,6 +88,11 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                   theme: theme,
                   scrollController: scrollController,
                   formatBar: routeData['formatBar'],
+                  materialDetails: {
+                    'class': routeData['class'].name,
+                    'topic': routeData['topic'].name,
+                    'material': routeData['material'].name
+                  },
                 )
               : Markdown(
                   controller: scrollController,
@@ -122,6 +129,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                   },
                   data: notes.content,
                   shrinkWrap: true,
+                  imageDirectory: imgDirectory,
                 ),
         ),
       ),

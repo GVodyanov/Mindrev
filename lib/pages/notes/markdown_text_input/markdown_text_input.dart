@@ -41,6 +41,8 @@ class MarkdownTextInput extends StatefulWidget {
   // show bar or not
   final bool formatBar;
 
+  final Map materialDetails;
+
   /// Constructor for [MarkdownTextInput]
   const MarkdownTextInput(
     this.onTextChanged,
@@ -60,6 +62,7 @@ class MarkdownTextInput extends StatefulWidget {
     required this.theme,
     required this.scrollController,
     required this.formatBar,
+    required this.materialDetails,
   }) : super(key: key);
 
   @override
@@ -74,15 +77,16 @@ class _MarkdownTextInputState extends State<MarkdownTextInput> {
 
   _MarkdownTextInputState(this._controller);
 
-  void onTap(MarkdownType type, {int titleSize = 1}) {
+  void onTap(MarkdownType type, {int titleSize = 1}) async {
     final basePosition = textSelection.baseOffset;
     var noTextSelected = (textSelection.baseOffset - textSelection.extentOffset) == 0;
 
-    final result = FormatMarkdown.convertToMarkdown(
+    final result = await FormatMarkdown.convertToMarkdown(
       type,
       _controller.text,
       textSelection.baseOffset,
       textSelection.extentOffset,
+      widget.materialDetails,
       titleSize: titleSize,
     );
 

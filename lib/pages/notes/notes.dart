@@ -5,6 +5,7 @@ import 'package:mindrev/models/mindrev_settings.dart';
 import 'package:mindrev/models/mindrev_notes.dart';
 import 'package:mindrev/services/db.dart';
 import 'package:mindrev/widgets/widgets.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class _NotesState extends State<Notes> {
   MindrevSettings? settings;
   MindrevNotes? notes;
   Map? routeData;
+  late String imgDirectory;
 
   @override
   void initState() {
@@ -30,10 +32,24 @@ class _NotesState extends State<Notes> {
 
   @override
   void didChangeDependencies() {
-    routeData = ModalRoute.of(context)?.settings.arguments as Map;
+    routeData = ModalRoute
+        .of(context)
+        ?.settings
+        .arguments as Map;
     local
         .getMaterialData(routeData!['material'], routeData!['topic'], routeData!['class'])
-        .then((value) => setState(() => notes = value));
+        .then((value) =>
+        setState(() async {
+          //get support directory and material path to display images
+          await getApplicationSupportDirectory().then((value) =>
+          imgDirectory = value.path +
+              '/${routeData!['class'].name}' +
+              '/${routeData!['topic'].name}' +
+              '/${routeData!['material'].name}/',
+          );
+          routeData?['imgDirectory'] = imgDirectory;
+          return notes = value;
+        }),);
     super.didChangeDependencies();
   }
 

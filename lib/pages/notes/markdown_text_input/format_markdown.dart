@@ -1,13 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// Use this class for converting String to [ResultMarkdown]
 class FormatMarkdown {
   /// Convert [data] part into [ResultMarkdown] from [type].
   /// Use [fromIndex] and [toIndex] for converting part of [data]
   /// [titleSize] is used for markdown titles
-  static ResultMarkdown convertToMarkdown(
-      MarkdownType type, String data, int fromIndex, int toIndex,
-      {int titleSize = 1,}) {
+  static Future<ResultMarkdown> convertToMarkdown(
+    MarkdownType type,
+    String data,
+    int fromIndex,
+    int toIndex,
+    Map materialDetails, {
+    int titleSize = 1,
+  }) async {
     late String changedData;
     late int replaceCursorIndex;
 
@@ -35,10 +45,10 @@ class FormatMarkdown {
         break;
       case MarkdownType.list:
         var index = 0;
-        final splitedData = data.substring(fromIndex, toIndex).split('\n');
-        changedData = splitedData.map((value) {
+        final splitData = data.substring(fromIndex, toIndex).split('\n');
+        changedData = splitData.map((value) {
           index++;
-          return index == splitedData.length ? '* $value' : '* $value\n';
+          return index == splitData.length ? '* $value' : '* $value\n';
         }).join();
         replaceCursorIndex = 0;
         break;
@@ -48,10 +58,10 @@ class FormatMarkdown {
         break;
       case MarkdownType.blockquote:
         var index = 0;
-        final splitedData = data.substring(fromIndex, toIndex).split('\n');
-        changedData = splitedData.map((value) {
+        final splitData = data.substring(fromIndex, toIndex).split('\n');
+        changedData = splitData.map((value) {
           index++;
-          return index == splitedData.length ? '> $value' : '> $value\n';
+          return index == splitData.length ? '> $value' : '> $value\n';
         }).join();
         replaceCursorIndex = 0;
         break;
@@ -60,8 +70,38 @@ class FormatMarkdown {
         replaceCursorIndex = 0;
         break;
       case MarkdownType.image:
-        changedData =
-            '![${data.substring(fromIndex, toIndex)}](${data.substring(fromIndex, toIndex)})';
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+          allowMultiple: false,
+          // allowedExtensions: ['webp', 'jpg', 'jpeg', 'png', 'gif'],
+        );
+
+        if (result != null) {
+          File file = File(result.files.single.path!);
+          var dir = await getApplicationSupportDirectory();
+          print(dir.path);
+          //needed if directories have not yet been created
+          await File(
+            dir.path +
+                '/${materialDetails['class']}' +
+                '/${materialDetails['topic']}' +
+                '/${materialDetails['material']}/' +
+                file.path.split('/').last,
+          ).create(recursive: true);
+          //copy file to application support directory for easier referencing
+          file.copy(
+            dir.path +
+                '/${materialDetails['class']}' +
+                '/${materialDetails['topic']}' +
+                '/${materialDetails['material']}/' +
+                file.path.split('/').last,
+          );
+          changedData =
+              '![${data.substring(fromIndex, toIndex)}](${file.path.split('/').last})';
+        } else {
+          // User canceled the picker
+          changedData =
+              '![${data.substring(fromIndex, toIndex)}](${data.substring(fromIndex, toIndex)})';
+        }
         replaceCursorIndex = 3;
         break;
     }
@@ -69,15 +109,16 @@ class FormatMarkdown {
     final cursorIndex = changedData.length;
 
     return ResultMarkdown(
-        data.substring(0, fromIndex) + changedData + data.substring(toIndex, data.length),
-        cursorIndex,
-        replaceCursorIndex,);
+      data.substring(0, fromIndex) + changedData + data.substring(toIndex, data.length),
+      cursorIndex,
+      replaceCursorIndex,
+    );
   }
 }
 
 /// [ResultMarkdown] give you the converted [data] to markdown and the [cursorIndex]
 class ResultMarkdown {
-  /// String converted to mardown
+  /// String converted to markdown
   String data;
 
   /// cursor index just after the converted part in markdown
