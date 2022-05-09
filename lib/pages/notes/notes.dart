@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 
 import 'package:mindrev/models/mindrev_settings.dart';
 import 'package:mindrev/models/mindrev_notes.dart';
 import 'package:mindrev/services/db.dart';
 import 'package:mindrev/widgets/widgets.dart';
+
 import 'package:path_provider/path_provider.dart';
 
 class Notes extends StatefulWidget {
@@ -20,7 +23,7 @@ class _NotesState extends State<Notes> {
   MindrevSettings? settings;
   MindrevNotes? notes;
   Map? routeData;
-  late String imgDirectory;
+  String imgDirectory = '';
 
   @override
   void initState() {
@@ -32,24 +35,28 @@ class _NotesState extends State<Notes> {
 
   @override
   void didChangeDependencies() {
-    routeData = ModalRoute
-        .of(context)
-        ?.settings
-        .arguments as Map;
+    routeData = ModalRoute.of(context)?.settings.arguments as Map;
     local
         .getMaterialData(routeData!['material'], routeData!['topic'], routeData!['class'])
-        .then((value) =>
-        setState(() async {
-          //get support directory and material path to display images
-          await getApplicationSupportDirectory().then((value) =>
-          imgDirectory = value.path +
-              '/${routeData!['class'].name}' +
-              '/${routeData!['topic'].name}' +
-              '/${routeData!['material'].name}/',
+        .then(
+      (value) async {
+        if (!kIsWeb) {
+          await getApplicationSupportDirectory().then(
+                (value) =>
+            //get support directory and material path to display images
+            imgDirectory = value.path +
+                '/data' +
+                '/${routeData!['class'].name}' +
+                '/${routeData!['topic'].name}' +
+                '/${routeData!['material'].name}/',
           );
+        }
+        setState(() {
           routeData?['imgDirectory'] = imgDirectory;
-          return notes = value;
-        }),);
+          notes = value;
+        });
+      },
+    );
     super.didChangeDependencies();
   }
 

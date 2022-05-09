@@ -22,6 +22,20 @@ class MindrevFlashcards {
   //constructor
   MindrevFlashcards(this.name);
 
+  Map toJson() {
+    return {
+      'name': name,
+      'date': date,
+      'cards': cards,
+    };
+  }
+
+  MindrevFlashcards.fromJson(Map json) {
+    name = json['name'];
+    date = json['date'];
+    cards = json['cards'];
+  }
+
   //method to give a list of all the flashcards
   List<Widget>? displayCards(bool? reverse) {
     List<Widget> result = [];

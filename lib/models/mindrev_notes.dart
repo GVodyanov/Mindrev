@@ -14,4 +14,16 @@ class MindrevNotes {
   String content = '';
 
   MindrevNotes(this.name);
+
+  Map toJson() => {
+    'name': name,
+    'date': date,
+    'content': content,
+  };
+
+  MindrevNotes.fromJson(Map json) {
+    name = json['name'];
+    date = json['date'];
+    content = json['content'];
+  }
 }

@@ -14,4 +14,16 @@ class MindrevMaterial {
   String date = DateTime.now().toIso8601String();
 
   MindrevMaterial(this.name, this.type);
+
+  Map toJson() => {
+        'name': name,
+        'type': type,
+        'date': date,
+      };
+
+  MindrevMaterial.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    type = json['type'];
+    date = json['date'];
+  }
 }

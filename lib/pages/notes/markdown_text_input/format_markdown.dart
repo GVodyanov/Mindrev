@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 
@@ -70,33 +71,40 @@ class FormatMarkdown {
         replaceCursorIndex = 0;
         break;
       case MarkdownType.image:
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
-          allowMultiple: false,
-          // allowedExtensions: ['webp', 'jpg', 'jpeg', 'png', 'gif'],
-        );
-
-        if (result != null) {
-          File file = File(result.files.single.path!);
-          var dir = await getApplicationSupportDirectory();
-          print(dir.path);
-          //needed if directories have not yet been created
-          await File(
-            dir.path +
-                '/${materialDetails['class']}' +
-                '/${materialDetails['topic']}' +
-                '/${materialDetails['material']}/' +
-                file.path.split('/').last,
-          ).create(recursive: true);
-          //copy file to application support directory for easier referencing
-          file.copy(
-            dir.path +
-                '/${materialDetails['class']}' +
-                '/${materialDetails['topic']}' +
-                '/${materialDetails['material']}/' +
-                file.path.split('/').last,
+        if (!kIsWeb) {
+          FilePickerResult? result = await FilePicker.platform.pickFiles(
+            allowMultiple: false,
+            type: FileType.image,
+            allowedExtensions: ['webp', 'jpg', 'jpeg', 'png', 'gif'],
           );
-          changedData =
-              '![${data.substring(fromIndex, toIndex)}](${file.path.split('/').last})';
+
+          if (result != null) {
+            File file = File(result.files.single.path!);
+            var dir = await getApplicationSupportDirectory();
+            //needed if directories have not yet been created
+            await File(
+              dir.path +
+                  '/data' +
+                  '/${materialDetails['class']}' +
+                  '/${materialDetails['topic']}' +
+                  '/${materialDetails['material']}/' +
+                  file.path.split('/').last,
+            ).create(recursive: true);
+            //copy file to application support directory for easier referencing
+            file.copy(
+              dir.path +
+                  '/data' +
+                  '/${materialDetails['class']}' +
+                  '/${materialDetails['topic']}' +
+                  '/${materialDetails['material']}/' +
+                  file.path.split('/').last,
+            );
+            changedData =
+                '![${data.substring(fromIndex, toIndex)}](${file.path.split('/').last})';
+          } else {
+            changedData =
+            '![${data.substring(fromIndex, toIndex)}](${data.substring(fromIndex, toIndex)})';
+          }
         } else {
           // User canceled the picker
           changedData =

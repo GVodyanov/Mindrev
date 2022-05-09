@@ -84,6 +84,8 @@ cancel = "Cancel"
 
 [materialExtra]
 creationDate = "Creation date"
+export = "Export material"
+import = "Import material"
 delete = "Delete material"
 rename = "Rename material"
 newName = "New name"
@@ -111,7 +113,7 @@ back = "Back"
 
 [flashcards.newFlashcards.bulkImport]
 title = "Bulk import"
-sideSplit = "Split between front and back "
+sideSplit = "Split front and back "
 cardSplit = "Split between cards "
 importData = "Insert data to import"
 preview = "Preview"

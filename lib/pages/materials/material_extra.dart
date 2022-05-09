@@ -4,6 +4,7 @@ import 'package:mindrev/widgets/widgets.dart';
 import 'package:mindrev/services/db.dart';
 
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class MaterialExtra extends StatefulWidget {
@@ -20,6 +21,12 @@ class _MaterialExtraState extends State<MaterialExtra> {
   dispose() {
     _newNameController.dispose();
     super.dispose();
+  }
+
+  Future<bool> exportMaterial() async {
+    var dir = await getApplicationSupportDirectory();
+
+    return true;
   }
 
   @override
@@ -59,6 +66,31 @@ class _MaterialExtraState extends State<MaterialExtra> {
                     dateFormat.format(DateTime.parse(material!.date)),
                     style: defaultPrimaryTextStyle(),
                   ),
+                ),
+                const SizedBox(height: 30),
+                //delete class
+                Row(
+                  children: [
+                    Text(
+                      text['export'],
+                      style: TextStyle(
+                        color: theme.primaryText,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Icon(Icons.upload, color: theme.primaryText),
+                  ],
+                ),
+                const Divider(),
+                const SizedBox(height: 10),
+                coloredButton(
+                  text['export'],
+                  () async {
+                  },
+                  theme.accent,
+                  theme.accentText,
                 ),
                 const SizedBox(height: 30),
                 //rename class
@@ -107,7 +139,7 @@ class _MaterialExtraState extends State<MaterialExtra> {
                               .showSnackBar(defaultSnackbar(text['errorNoText']));
                         }
                       },
-                      icon: Icon(Icons.check, color: theme.secondaryText),
+                      icon: Icon(Icons.check, color: theme.primaryText),
                     ),
                   ],
                 ),

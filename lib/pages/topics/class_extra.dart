@@ -108,7 +108,7 @@ class _ClassExtraState extends State<ClassExtra> {
                               .showSnackBar(defaultSnackbar(text['errorNoText']));
                         }
                       },
-                      icon: Icon(Icons.check, color: theme.secondaryText),
+                      icon: Icon(Icons.check, color: theme.primaryText),
                     ),
                   ],
                 ),
