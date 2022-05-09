@@ -74,7 +74,7 @@ class FormatMarkdown {
         if (!kIsWeb) {
           FilePickerResult? result = await FilePicker.platform.pickFiles(
             allowMultiple: false,
-            type: FileType.image,
+            type: FileType.custom,
             allowedExtensions: ['webp', 'jpg', 'jpeg', 'png', 'gif'],
           );
 
