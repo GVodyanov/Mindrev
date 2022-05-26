@@ -136,6 +136,13 @@ class _SettingsState extends State<Settings> {
           centerTitle: true,
           elevation: 4,
           backgroundColor: theme.secondary,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          ),
         ),
 
         //button to save

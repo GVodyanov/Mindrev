@@ -7,6 +7,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 TextStyle defaultPrimaryTextStyle() => TextStyle(color: theme.primaryText, fontSize: 17);
 
+TextStyle largePrimaryTextStyle() => TextStyle(color: theme.primaryText, fontSize: 19);
+
 TextStyle defaultSecondaryTextStyle() => TextStyle(color: theme.secondaryText, fontSize: 17);
 
 AlertStyle defaultAlertStyle() {

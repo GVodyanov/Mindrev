@@ -112,7 +112,7 @@ class _QuizFlashcardsState extends State<QuizFlashcards> {
       shuffledCards ??= shuffle(displayCards);
 
       //check if there are cards to display and in case index too high quit
-      SchedulerBinding.instance!.addPostFrameCallback((_) async {
+      SchedulerBinding.instance.addPostFrameCallback((_) async {
         //also make sure we only pop once
         if (displayCards.isEmpty && !popped) {
           Navigator.pop(context);

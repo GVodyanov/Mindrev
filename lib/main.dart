@@ -26,11 +26,11 @@ import 'package:mindrev/pages/flashcards/learn_flashcards.dart';
 import 'package:mindrev/pages/flashcards/practice_flashcards.dart';
 import 'package:mindrev/pages/flashcards/quiz_flashcards.dart';
 import 'package:mindrev/pages/flashcards/bulk_import.dart';
-import 'package:mindrev/pages/notes/notes.dart';
 import 'package:mindrev/pages/notes/markdown_editor.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:page_transition/page_transition.dart';
 
 //main
 void main() async {
@@ -63,28 +63,85 @@ void main() async {
       theme: ThemeData(
         fontFamily: 'SourceSansPro',
       ),
-      //routes for navigation
-      initialRoute: '/home',
-      routes: {
-        '/home': (context) => const Home(),
-        '/newClass': (context) => const NewClass(),
-        '/settings': (context) => const Settings(),
-        '/topics': (context) => const Topics(),
-        '/newTopic': (context) => const NewTopic(),
-        '/classExtra': (context) => const ClassExtra(),
-        '/materials': (context) => const Materials(),
-        '/newMaterial': (context) => const NewMaterial(),
-        '/topicExtra': (context) => const TopicExtra(),
-        '/materialExtra': (context) => const MaterialExtra(),
-        '/flashcards': (context) => const Flashcards(),
-        '/newFlashcards': (context) => const NewFlashcards(),
-        '/learnFlashcards': (context) => const LearnFlashcards(),
-        '/practiceFlashcards': (context) => const PracticeFlashcards(),
-        '/quizFlashcards': (context) => const QuizFlashcards(),
-        '/bulkImport': (context) => const BulkImport(),
-        '/notes': (context) => const Notes(),
-        '/markdownEditor': (context) => const MarkdownEditor(),
+      //custom routes
+      onGenerateRoute: (settings) {
+        Widget widget = const Home();
+        switch (settings.name) {
+          case '/home':
+            widget = const Home();
+            break;
+          case '/newClass':
+            widget = const NewClass();
+            break;
+          case '/settings':
+            widget = const Settings();
+            break;
+          case '/topics':
+            widget = const Topics();
+            break;
+          case '/newTopic':
+            widget = const NewTopic();
+            break;
+          case '/classExtra':
+            widget = const ClassExtra();
+            break;
+          case '/materials':
+            widget = const Materials();
+            break;
+          case '/newMaterial':
+            widget = const NewMaterial();
+            break;
+          case '/topicExtra':
+            widget = const TopicExtra();
+            break;
+          case '/materialExtra':
+            widget = const MaterialExtra();
+            break;
+          case '/flashcards':
+            widget = const Flashcards();
+            break;
+          case '/newFlashcards':
+            widget = const NewFlashcards();
+            break;
+          case '/learnFlashcards':
+            widget = const LearnFlashcards();
+            break;
+          case '/practiceFlashcards':
+            widget = const PracticeFlashcards();
+            break;
+          case '/quizFlashcards':
+            widget = const QuizFlashcards();
+            break;
+          case '/bulkImport':
+            widget = const BulkImport();
+            break;
+          case '/notes':
+            widget = const MarkdownEditor();
+            break;
+        }
+        List<String> specialTransitionList = [
+          '/topics',
+          '/materials',
+          '/notes',
+          '/flashcards',
+        ];
+        if (specialTransitionList.contains(settings.name)) {
+          return PageTransition(
+            child: widget,
+            type: PageTransitionType.rightToLeft,
+            settings: settings,
+            duration: const Duration(milliseconds: 150),
+          );
+        } else {
+          return PageTransition(
+            child: widget,
+            type: PageTransitionType.fade,
+            settings: settings,
+            duration: const Duration(milliseconds: 150),
+          );
+        }
       },
+      initialRoute: '/home',
     ),
   );
 }
