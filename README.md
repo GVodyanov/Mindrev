@@ -10,9 +10,8 @@ A flutter application to help you study
 - [x] Divided into classes, topics, and materials
 - [x] Themable
 - [x] Flashcards
+- [x] Notes
 - [ ] Multilingual
-- [ ] Notes
-- [ ] Ordered Notes
 - [ ] Graphs
 - [ ] Mind Maps
 - [ ] Maybe online synchronization?
