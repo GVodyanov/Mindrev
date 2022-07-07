@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:scroll_app_bar/scroll_app_bar.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class MarkdownEditor extends StatefulWidget {
   const MarkdownEditor({Key? key}) : super(key: key);
@@ -29,6 +30,8 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
   String imgDirectory = '';
   bool edit = false;
   MindrevSettings? settings;
+  Box? box;
+  bool gotBox = false; //only if web is it necessary
 
   //controller for hiding/showing appBar
   final scrollController = ScrollController();
@@ -44,25 +47,38 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
 
   @override
   void didChangeDependencies() {
-    routeData = ModalRoute.of(context)?.settings.arguments as Map;
+    routeData = ModalRoute
+        .of(context)
+        ?.settings
+        .arguments as Map;
     local
         .getMaterialData(routeData!['material'], routeData!['topic'], routeData!['class'])
         .then(
           (value) async {
         if (!kIsWeb) {
           await getApplicationSupportDirectory().then(
-                (value) =>
-            //get support directory and material path to display images
-            imgDirectory = value.path +
-                '/data' +
-                '/${routeData!['class'].name}' +
-                '/${routeData!['topic'].name}' +
-                '/${routeData!['material'].name}/',
+                (value) {
+              gotBox = true;
+              return imgDirectory = value.path +
+                  '/data' +
+                  '/${routeData!['class'].name}' +
+                  '/${routeData!['topic'].name}' +
+                  '/${routeData!['material'].name}/';
+            },
           );
+        } else {
+          await Hive.openBox(
+            '/${routeData!['class'].name}' '/${routeData!['topic'].name}' '/${routeData!['material'].name}/',
+          ).then((value) {
+            gotBox = true;
+            return box = value;
+          });
         }
         setState(() {
           routeData?['imgDirectory'] = imgDirectory;
           notes = value;
+          box;
+          gotBox;
         });
       },
     );
@@ -117,7 +133,6 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                   (String value) =>
                   setState(() {
                     //update notes when modified
-
                     notes!.content = value;
                     local.updateMaterialData(
                       notes,
@@ -142,6 +157,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
               builders: <String, MarkdownElementBuilder>{
                 'math': MathBuilder(),
               },
+              //extend markdown spec to add MathTex
               extensionSet: md.ExtensionSet(
                 <md.BlockSyntax>[],
                 <md.InlineSyntax>[MathSyntax()],
@@ -181,6 +197,10 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
               data: notes!.content,
               shrinkWrap: true,
               imageDirectory: imgDirectory,
+              //if platform web display a custom image from hive
+              imageBuilder: !kIsWeb ? null : (uri, first, second) {
+                return displayImageWeb(uri, box!);
+              },
             ),
           ),
         ),
@@ -190,27 +210,46 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
     }
   }
 }
+
 //frankly I have no idea how half of this works, see flutter_markdown documentation, GL
 class MathBuilder extends MarkdownElementBuilder {
   @override
   Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
     if (element.textContent.substring(0, 2) == '\$\$') {
       return Center(
-        child: Math.tex(
-          element.textContent
-              .substring(0, element.textContent.length - 2)
-              .substring(2, element.textContent.length - 2),
-          mathStyle: MathStyle.text,
-          textStyle: largePrimaryTextStyle(),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 30),
+          child: ListView(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            children: [
+              Math.tex(
+                element.textContent
+                    .substring(0, element.textContent.length - 2)
+                    .substring(2, element.textContent.length - 2),
+                mathStyle: MathStyle.text,
+                textStyle: largePrimaryTextStyle(),
+              ),
+            ],
+          ),
         ),
       );
     } else {
-      return Math.tex(
-        element.textContent
-            .substring(0, element.textContent.length - 1)
-            .substring(1, element.textContent.length - 1),
-        mathStyle: MathStyle.text,
-        textStyle: largePrimaryTextStyle(),
+      return ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 15),
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          children: [
+            Math.tex(
+              element.textContent
+                  .substring(0, element.textContent.length - 1)
+                  .substring(1, element.textContent.length - 1),
+              mathStyle: MathStyle.text,
+              textStyle: defaultPrimaryTextStyle(),
+            ),
+          ],
+        ),
       );
     }
   }
@@ -226,4 +265,10 @@ class MathSyntax extends md.InlineSyntax {
     parser.addNode(md.Element.text('math', match[0]!));
     return true;
   }
+}
+
+///TODO add zoom in/out
+//get image bytes from hive and return a full image widget
+Widget displayImageWeb(Uri uri, Box box) {
+  return Image.memory(box.get(uri.toString()));
 }

@@ -25,6 +25,28 @@ class MindrevClass {
 
   MindrevClass(this.name, this.color); //constructor
 
+  Map toJson() {
+    List jsonTopics = [];
+    for (MindrevTopic topic in topics) {
+      jsonTopics.add(topic.toJson());
+    }
+    return {
+      'name': name,
+      'date': date,
+      'topics': jsonTopics,
+    };
+  }
+
+  MindrevClass.fromJson(Map json) {
+    List<MindrevTopic> objTopics = [];
+    for (var topic in json['topics']) {
+      objTopics.add(MindrevTopic.fromJson(topic));
+    }
+    name = json['name'];
+    date = json['date'];
+    topics = objTopics;
+  }
+
   void addTopic(MindrevTopic topic) {
     //add a new topic
     topics.add(topic);

@@ -21,6 +21,28 @@ class MindrevTopic {
 
   MindrevTopic(this.name);
 
+  Map toJson() {
+    List jsonMaterials = [];
+    for (MindrevMaterial material in materials) {
+      jsonMaterials.add(material.toJson());
+    }
+    return {
+    'name': name,
+    'date': date,
+    'materials': jsonMaterials,
+  };
+  }
+
+  MindrevTopic.fromJson(Map json) {
+    List<MindrevMaterial> objMaterials = [];
+    for (var material in json['materials']) {
+      objMaterials.add(MindrevMaterial.fromJson(material));
+    }
+    name = json['name'];
+    date = json['date'];
+    materials = objMaterials;
+  }
+
   List<Widget> displayMaterials(
     var context,
     MindrevTopic topic,

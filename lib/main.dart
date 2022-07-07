@@ -32,6 +32,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:page_transition/page_transition.dart';
 
+
+///TODO general import
+///TODO rename path of web images when renaming higher path
+
 //main
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

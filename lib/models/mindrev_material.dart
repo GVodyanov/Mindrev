@@ -15,13 +15,13 @@ class MindrevMaterial {
 
   MindrevMaterial(this.name, this.type);
 
-  Map toJson() => {
+  toJson() => {
         'name': name,
         'type': type,
         'date': date,
       };
 
-  MindrevMaterial.fromJson(Map<String, dynamic> json) {
+  MindrevMaterial.fromJson(Map<dynamic, dynamic> json) {
     name = json['name'];
     type = json['type'];
     date = json['date'];

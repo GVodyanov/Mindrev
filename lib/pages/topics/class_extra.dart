@@ -13,7 +13,6 @@ class ClassExtra extends StatefulWidget {
   State<ClassExtra> createState() => _ClassExtraState();
 }
 
-///TODO THEME ERRORS
 class _ClassExtraState extends State<ClassExtra> {
   final TextEditingController _newNameController = TextEditingController();
 

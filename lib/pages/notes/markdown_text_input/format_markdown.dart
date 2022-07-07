@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 /// Use this class for converting String to [ResultMarkdown]
 class FormatMarkdown {
@@ -19,7 +20,7 @@ class FormatMarkdown {
     Map materialDetails, {
     int titleSize = 1,
   }) async {
-    late String changedData;
+    String changedData;
     late int replaceCursorIndex;
 
     switch (type) {
@@ -106,9 +107,28 @@ class FormatMarkdown {
             '![${data.substring(fromIndex, toIndex)}](${data.substring(fromIndex, toIndex)})';
           }
         } else {
-          // User canceled the picker
-          changedData =
-              '![${data.substring(fromIndex, toIndex)}](${data.substring(fromIndex, toIndex)})';
+          FilePickerResult? result = await FilePicker.platform.pickFiles(
+            allowMultiple: false,
+            type: FileType.custom,
+            allowedExtensions: ['webp', 'jpg', 'jpeg', 'png', 'gif'],
+          );
+
+          if (result != null) {
+            PlatformFile file = result.files.first;
+
+            //create/open a hive box with the material path
+            var box = await Hive.openBox(
+              '/${materialDetails['class']}' '/${materialDetails['topic']}' '/${materialDetails['material']}/',
+            );
+
+            //put image bytes into the file name key
+            await box.put(file.name, file.bytes);
+            changedData =
+            '![](${file.name})';
+          } else {
+            changedData =
+          '![${data.substring(fromIndex, toIndex)}](${data.substring(fromIndex, toIndex)})';
+          }
         }
         replaceCursorIndex = 3;
         break;
@@ -116,7 +136,7 @@ class FormatMarkdown {
 
     final cursorIndex = changedData.length;
 
-    return ResultMarkdown(
+     return ResultMarkdown(
       data.substring(0, fromIndex) + changedData + data.substring(toIndex, data.length),
       cursorIndex,
       replaceCursorIndex,
