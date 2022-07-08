@@ -38,7 +38,8 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
   void initState() {
     super.initState();
     //we basically only need this to determine whether to show formatting bar
-    local.getSettings().then((MindrevSettings settings) => setState(() => this.settings = settings));
+    local.getSettings().then(
+        (MindrevSettings settings) => setState(() => this.settings = settings));
   }
 
   @override
@@ -84,7 +85,8 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
               icon: const Icon(Icons.menu),
               onPressed: () async {
                 routeData?['text'] = await readText('materialExtra');
-                Navigator.pushNamed(context, '/materialExtra', arguments: routeData);
+                Navigator.pushNamed(context, '/materialExtra',
+                    arguments: routeData);
               },
             ),
             IconButton(
@@ -120,11 +122,14 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                     theme: theme,
                     scrollController: scrollController,
                     formatBar: settings!.markdownEdit!,
-                    materialDetails: {'material': routeData?['material']},
+                    materialDetails: {
+                      'material': routeData?['material'],
+                      'notes': notes,
+                    },
                   )
                 : Snap(
-                  controller: scrollController.appBar,
-                  child: Markdown(
+                    controller: scrollController.appBar,
+                    child: Markdown(
                       builders: <String, MarkdownElementBuilder>{
                         'math': MathBuilder(),
                       },
@@ -144,7 +149,9 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                         h6: TextStyle(color: theme.primaryText, fontSize: 15.5),
                         listBullet: TextStyle(color: theme.primaryText),
                         p: TextStyle(color: theme.primaryText, fontSize: 14.5),
-                        a: TextStyle(color: theme.accent, decoration: TextDecoration.underline),
+                        a: TextStyle(
+                            color: theme.accent,
+                            decoration: TextDecoration.underline),
                         tableBody: TextStyle(color: theme.primaryText),
                         tableHead: TextStyle(color: theme.primaryText),
                         codeblockDecoration: const BoxDecoration(
@@ -172,7 +179,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                         return displayImageWeb(uri, box!, context);
                       },
                     ),
-                ),
+                  ),
           ),
         ),
       );

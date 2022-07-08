@@ -1,3 +1,7 @@
+import 'package:mindrev/models/mindrev_flashcards.dart';
+import 'package:mindrev/models/mindrev_notes.dart';
+import 'package:mindrev/services/db.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
 part 'mindrev_material.g.dart';
@@ -18,30 +22,52 @@ class MindrevMaterial {
 
   MindrevMaterial(this.name, this.type, this.id);
 
+  MindrevMaterial.fromFull (Map json) {
+    name = json['name'];
+    type = json['type'];
+    date = json['date'];
+    id = json['id'];
+  }
+
   static Future<MindrevMaterial> create(String name, String type) async {
-    int id = 0;
     //take last used ID, increment it, give it to the new material, and save it
     LazyBox box = Hive.lazyBox('mindrev');
     int? previousId = await box.get('materialId');
     previousId ??= 0; previousId += 1;
-    id = previousId;
+    int id = previousId;
     await box.put('materialId', previousId);
 
     return MindrevMaterial(name, type, id);
   }
 
 
-  toJson() => {
+  Future<Map> toJson() async {
+    //also get material data and transform to json, pass data and not ID
+    var materialData = await local.getMaterialData(this);
+    var data = materialData.toJson(id);
+    return {
         'name': name,
         'type': type,
         'date': date,
-        'id': id,
+        'data': data,
       };
+  }
 
-  MindrevMaterial.fromJson(Map<dynamic, dynamic> json) {
-    name = json['name'];
-    type = json['type'];
-    date = json['date'];
-    id = json['id'];
+  Future<MindrevMaterial> fromJson (Map json) async {
+    LazyBox box = Hive.lazyBox('mindrev');
+    int? previousId = await box.get('materialId');
+    previousId ??= 0; previousId += 1;
+    int id = previousId;
+
+    //notes has a different, async, fromJson method because of images, we have
+    //to account for that
+    if (json['type'] == 'notes') {
+       await box.put(id.toString(), await MindrevNotes.fromJson(json['data'], id.toString()));
+    } else if (json['type'] == 'flashcards'){
+      await box.put(id.toString(), MindrevFlashcards.fromJson(json['data']));
+    }
+
+    json['id'] = id;
+    return MindrevMaterial.fromFull(json);
   }
 }
