@@ -1,4 +1,4 @@
- // GENERATED CODE - DO NOT MODIFY BY HAND
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'mindrev_notes.dart';
 
@@ -20,19 +20,22 @@ class MindrevNotesAdapter extends TypeAdapter<MindrevNotes> {
       fields[0] as String,
     )
       ..date = fields[1] as String
-      ..content = fields[3] as String;
+      ..content = fields[3] as String
+      ..images = (fields[4] as List).cast<String>();
   }
 
   @override
   void write(BinaryWriter writer, MindrevNotes obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
       ..write(obj.date)
       ..writeByte(3)
-      ..write(obj.content);
+      ..write(obj.content)
+      ..writeByte(4)
+      ..write(obj.images);
   }
 
   @override

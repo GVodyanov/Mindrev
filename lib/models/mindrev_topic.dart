@@ -53,7 +53,7 @@ class MindrevTopic {
   ) {
     List<Widget> result = [];
     //loop to add all materials to a list
-    for (var i in topic.materials) {
+    for (MindrevMaterial i in topic.materials) {
       //check what type corresponds to what icon
       String? icon;
       for (Map j in icons['materials']) {

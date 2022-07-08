@@ -152,6 +152,7 @@ class _NewMaterialState extends State<NewMaterial> {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(defaultSnackbar(text['errorNoText']));
 
+                      } else if (materialType == null) {
                         if (materialType == null) {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(defaultSnackbar(text['errorNoType']));
@@ -159,7 +160,7 @@ class _NewMaterialState extends State<NewMaterial> {
                       } else {
                         //if not go ahead and create class
                         await local.newMaterial(
-                          MindrevMaterial(
+                          await MindrevMaterial.create(
                             _materialNameController.text,
                             materialType!,
                           ),

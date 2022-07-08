@@ -68,27 +68,6 @@ class Local {
     String? newName,
   ]) async {
     if (newName != null) {
-      List toRename = [];
-      List toDelete = [];
-
-      for (MindrevTopic i in mClass.topics) {
-        for (MindrevMaterial j in i.materials) {
-          toRename.add(
-            '/' + i.name + '/' + j.name,
-          );
-          toDelete.add(
-            mClass.name + '/' + i.name + '/' + j.name,
-          );
-        }
-      }
-
-      for (String path in toRename) {
-        await box.put(newName + path, await box.get(mClass.name + path));
-      }
-      for (String path in toDelete) {
-        await box.delete(path);
-      }
-
       mClass.name = newName;
     }
 
@@ -107,13 +86,13 @@ class Local {
     for (MindrevTopic i in mClass.topics) {
       for (MindrevMaterial j in i.materials) {
         toDelete.add(
-          mClass.name + '/' + i.name + '/' + j.name,
+          j.id.toString(),
         );
       }
     }
 
-    for (String path in toDelete) {
-      await box.delete(path);
+    for (String id in toDelete) {
+      await box.delete(id);
     }
 
     structure.classes.remove(mClass);
@@ -146,25 +125,6 @@ class Local {
     String? newName,
   ]) async {
     if (newName != null) {
-      List toRename = [];
-      List toDelete = [];
-
-      for (MindrevMaterial j in topic.materials) {
-        toRename.add(
-          '/' + topic.name + '/' + j.name,
-        );
-        toDelete.add(
-          mClass.name + '/' + topic.name + '/' + j.name,
-        );
-      }
-
-      for (String path in toRename) {
-        await box.put(newName + path, await box.get(topic.name + path));
-      }
-      for (String path in toDelete) {
-        await box.delete(path);
-      }
-
       topic.name = newName;
     }
     //update mClass
@@ -184,7 +144,7 @@ class Local {
 
     for (MindrevMaterial j in topic.materials) {
       toDelete.add(
-        mClass.name + '/' + topic.name + '/' + j.name,
+        j.id.toString(),
       );
     }
 
@@ -207,13 +167,13 @@ class Local {
   ) async {
     if (newMaterial.type == 'Flashcards') {
       await box.put(
-        mClass.name + '/' + topic.name + '/' + newMaterial.name,
+        newMaterial.id.toString(),
         MindrevFlashcards(newMaterial.name),
       );
     }
     if (newMaterial.type == 'Notes') {
       await box.put(
-        mClass.name + '/' + topic.name + '/' + newMaterial.name,
+        newMaterial.id.toString(),
         MindrevNotes(newMaterial.name),
       );
     }
@@ -235,17 +195,6 @@ class Local {
     MindrevStructure structure, [
     String? newName,
   ]) async {
-    //as always update material data as well
-    if (newName != null) {
-      var old = await box.get(mClass.name + '/' + topic.name + '/' + material.name);
-      old.name = newName;
-      await box.put(
-        mClass.name + '/' + topic.name + '/' + newName,
-        old,
-      );
-
-      await box.delete(mClass.name + '/' + topic.name + '/' + material.name);
-    }
     //change name and update topic parent
     material.name = newName!;
     await updateTopic(topic, mClass, structure);
@@ -263,7 +212,7 @@ class Local {
 
     for (MindrevMaterial j in topic.materials) {
       toDelete.add(
-        mClass.name + '/' + topic.name + '/' + j.name,
+        j.id.toString(),
       );
     }
 
@@ -280,18 +229,15 @@ class Local {
 
   Future getMaterialData(
     MindrevMaterial material,
-    MindrevTopic topic,
-    MindrevClass mClass,
   ) async {
-    return await box.get(mClass.name + '/' + topic.name + '/' + material.name);
+    return await box.get(material.id.toString());
   }
 
   Future<bool> updateMaterialData(
-    var material,
-    MindrevTopic topic,
-    MindrevClass mClass,
+    MindrevMaterial material,
+    var subMaterial,
   ) async {
-    await box.put(mClass.name + '/' + topic.name + '/' + material.name, material);
+    await box.put(material.id.toString(), subMaterial);
     return true;
   }
 }

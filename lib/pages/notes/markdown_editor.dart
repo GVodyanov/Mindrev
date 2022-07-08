@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:mindrev/pages/notes/markdown_text_input/markdown_text_input.dart';
 import 'package:mindrev/pages/notes/markdown_text_input/format_markdown.dart';
@@ -14,8 +13,8 @@ import 'package:mindrev/widgets/widgets.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:scroll_app_bar/scroll_app_bar.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 
 class MarkdownEditor extends StatefulWidget {
   const MarkdownEditor({Key? key}) : super(key: key);
@@ -31,7 +30,6 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
   bool edit = false;
   MindrevSettings? settings;
   Box? box;
-  bool gotBox = false; //only if web is it necessary
 
   //controller for hiding/showing appBar
   final scrollController = ScrollController();
@@ -40,45 +38,22 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
   void initState() {
     super.initState();
     //we basically only need this to determine whether to show formatting bar
-    local
-        .getSettings()
-        .then((MindrevSettings settings) => setState(() => this.settings = settings));
+    local.getSettings().then((MindrevSettings settings) => setState(() => this.settings = settings));
   }
 
   @override
   void didChangeDependencies() {
-    routeData = ModalRoute
-        .of(context)
-        ?.settings
-        .arguments as Map;
-    local
-        .getMaterialData(routeData!['material'], routeData!['topic'], routeData!['class'])
-        .then(
-          (value) async {
-        if (!kIsWeb) {
-          await getApplicationSupportDirectory().then(
-                (value) {
-              gotBox = true;
-              return imgDirectory = value.path +
-                  '/data' +
-                  '/${routeData!['class'].name}' +
-                  '/${routeData!['topic'].name}' +
-                  '/${routeData!['material'].name}/';
-            },
-          );
-        } else {
-          await Hive.openBox(
-            '/${routeData!['class'].name}' '/${routeData!['topic'].name}' '/${routeData!['material'].name}/',
-          ).then((value) {
-            gotBox = true;
-            return box = value;
-          });
-        }
+    routeData = ModalRoute.of(context)?.settings.arguments as Map;
+    local.getMaterialData(routeData!['material']).then(
+      (value) async {
+        await Hive.openBox(
+          '${routeData!['material'].id}-images',
+        ).then((value) async {
+          return box = value;
+        });
         setState(() {
-          routeData?['imgDirectory'] = imgDirectory;
           notes = value;
           box;
-          gotBox;
         });
       },
     );
@@ -89,7 +64,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
 
-    if (settings != null && notes != null) {
+    if (settings != null && notes != null && box != null) {
       var theme = routeData?['theme'];
 
       if (notes!.content == '') edit = true;
@@ -97,6 +72,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
         resizeToAvoidBottomInset: true,
         backgroundColor: theme.primary,
         appBar: ScrollAppBar(
+          automaticallyImplyLeading: true,
           controller: scrollController,
           foregroundColor: theme.secondaryText,
           title: Text(notes!.name),
@@ -124,84 +100,79 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
             )
           ],
         ),
-        // body: SingleChildScrollView(
         body: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 800),
             child: edit
                 ? MarkdownTextInput(
-                  (String value) =>
-                  setState(() {
-                    //update notes when modified
-                    notes!.content = value;
-                    local.updateMaterialData(
-                      notes,
-                      routeData?['topic'],
-                      routeData?['class'],
-                    );
-                  }),
-              notes!.content,
-              maxLines: null,
-              actions: MarkdownType.values,
-              controller: controller,
-              theme: theme,
-              scrollController: scrollController,
-              formatBar: settings!.markdownEdit!,
-              materialDetails: {
-                'class': routeData?['class'].name,
-                'topic': routeData?['topic'].name,
-                'material': routeData?['material'].name
-              },
-            )
-                : Markdown(
-              builders: <String, MarkdownElementBuilder>{
-                'math': MathBuilder(),
-              },
-              //extend markdown spec to add MathTex
-              extensionSet: md.ExtensionSet(
-                <md.BlockSyntax>[],
-                <md.InlineSyntax>[MathSyntax()],
-              ),
-              controller: scrollController,
-              styleSheet: MarkdownStyleSheet(
-                h1: TextStyle(color: theme.primaryText, fontSize: 25),
-                h1Align: WrapAlignment.center,
-                h2: TextStyle(color: theme.primaryText, fontSize: 23),
-                h3: TextStyle(color: theme.primaryText, fontSize: 21),
-                h4: TextStyle(color: theme.primaryText, fontSize: 19),
-                h5: TextStyle(color: theme.primaryText, fontSize: 17),
-                h6: TextStyle(color: theme.primaryText, fontSize: 15.5),
-                listBullet: TextStyle(color: theme.primaryText),
-                p: TextStyle(color: theme.primaryText, fontSize: 14.5),
-                a: TextStyle(color: theme.accent, decoration: TextDecoration.underline),
-                tableBody: TextStyle(color: theme.primaryText),
-                tableHead: TextStyle(color: theme.primaryText),
-                codeblockDecoration: const BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                    (String value) => setState(() {
+                      //update notes when modified
+                      notes!.content = value;
+                      local.updateMaterialData(
+                        routeData?['material'],
+                        notes,
+                      );
+                    }),
+                    notes!.content,
+                    maxLines: null,
+                    actions: MarkdownType.values,
+                    controller: controller,
+                    theme: theme,
+                    scrollController: scrollController,
+                    formatBar: settings!.markdownEdit!,
+                    materialDetails: {'material': routeData?['material']},
+                  )
+                : Snap(
+                  controller: scrollController.appBar,
+                  child: Markdown(
+                      builders: <String, MarkdownElementBuilder>{
+                        'math': MathBuilder(),
+                      },
+                      //extend markdown spec to add MathTex
+                      extensionSet: md.ExtensionSet(
+                        <md.BlockSyntax>[],
+                        <md.InlineSyntax>[MathSyntax()],
+                      ),
+                      controller: scrollController,
+                      styleSheet: MarkdownStyleSheet(
+                        h1: TextStyle(color: theme.primaryText, fontSize: 25),
+                        h1Align: WrapAlignment.center,
+                        h2: TextStyle(color: theme.primaryText, fontSize: 23),
+                        h3: TextStyle(color: theme.primaryText, fontSize: 21),
+                        h4: TextStyle(color: theme.primaryText, fontSize: 19),
+                        h5: TextStyle(color: theme.primaryText, fontSize: 17),
+                        h6: TextStyle(color: theme.primaryText, fontSize: 15.5),
+                        listBullet: TextStyle(color: theme.primaryText),
+                        p: TextStyle(color: theme.primaryText, fontSize: 14.5),
+                        a: TextStyle(color: theme.accent, decoration: TextDecoration.underline),
+                        tableBody: TextStyle(color: theme.primaryText),
+                        tableHead: TextStyle(color: theme.primaryText),
+                        codeblockDecoration: const BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        code: TextStyle(
+                          color: theme.primaryText,
+                          backgroundColor: Colors.transparent,
+                          fontFamily: 'SourceCodePro',
+                        ),
+                        blockquoteAlign: WrapAlignment.center,
+                        blockquoteDecoration: const BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                      ),
+                      onTapLink: (String text, String? href, String title) {
+                        launchUrlString(href!);
+                      },
+                      data: notes!.content,
+                      shrinkWrap: true,
+                      //display a custom image from hive
+                      imageBuilder: (uri, first, second) {
+                        return displayImageWeb(uri, box!, context);
+                      },
+                    ),
                 ),
-                code: TextStyle(
-                  color: theme.primaryText,
-                  backgroundColor: Colors.transparent,
-                  fontFamily: 'SourceCodePro',
-                ),
-                blockquoteAlign: WrapAlignment.center,
-                blockquoteDecoration: const BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-              ),
-              onTapLink: (String text, String? href, String title) {
-                launchUrlString(href!);
-              },
-              data: notes!.content,
-              shrinkWrap: true,
-              imageDirectory: imgDirectory,
-              //if platform web display a custom image from hive
-              imageBuilder: !kIsWeb ? null : (uri, first, second) {
-                return displayImageWeb(uri, box!);
-              },
-            ),
           ),
         ),
       );
@@ -259,7 +230,6 @@ class MathSyntax extends md.InlineSyntax {
   MathSyntax() : super(_pattern);
   static const String _pattern = r'\$+(.+?)\$+'; //I hate regex
 
-
   @override
   bool onMatch(md.InlineParser parser, Match match) {
     parser.addNode(md.Element.text('math', match[0]!));
@@ -269,6 +239,18 @@ class MathSyntax extends md.InlineSyntax {
 
 ///TODO add zoom in/out
 //get image bytes from hive and return a full image widget
-Widget displayImageWeb(Uri uri, Box box) {
-  return Image.memory(box.get(uri.toString()));
+Widget displayImageWeb(Uri uri, Box box, context) {
+  return GestureDetector(
+    onTap: () {
+      showImageViewer(
+        context,
+        Image.memory(
+          box.get(uri.toString()),
+        ).image,
+      );
+    },
+    child: Image.memory(
+      box.get(uri.toString()),
+    ),
+  );
 }

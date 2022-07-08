@@ -24,6 +24,7 @@ class _MaterialExtraState extends State<MaterialExtra> {
   }
 
   Future<bool> exportMaterial() async {
+    // ignore: unused_local_variable
     var dir = await getApplicationSupportDirectory();
 
     return true;

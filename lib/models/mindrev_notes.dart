@@ -13,17 +13,22 @@ class MindrevNotes {
   @HiveField(3)
   String content = '';
 
+  @HiveField(4)
+  List<String> images = [];
+
   MindrevNotes(this.name);
 
   Map toJson() => {
     'name': name,
     'date': date,
     'content': content,
+    'images': images,
   };
 
   MindrevNotes.fromJson(Map json) {
     name = json['name'];
     date = json['date'];
     content = json['content'];
+    images = json['images'];
   }
 }

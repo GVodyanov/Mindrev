@@ -1,10 +1,6 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb;
-
 import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Use this class for converting String to [ResultMarkdown]
@@ -72,53 +68,53 @@ class FormatMarkdown {
         replaceCursorIndex = 0;
         break;
       case MarkdownType.image:
-        if (!kIsWeb) {
+        // if (!kIsWeb) {
+        //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+        //     allowMultiple: false,
+        //     type: FileType.custom,
+        //     allowedExtensions: ['webp', 'jpg', 'jpeg', 'png', 'gif'],
+        //   );
+        //
+        //   if (result != null) {
+        //     File file = File(result.files.single.path!);
+        //     var dir = await getApplicationSupportDirectory();
+        //     //needed if directories have not yet been created
+        //     await File(
+        //       dir.path +
+        //           '/data' +
+        //           '/${materialDetails['class']}' +
+        //           '/${materialDetails['topic']}' +
+        //           '/${materialDetails['material']}/' +
+        //           file.path.split('/').last,
+        //     ).create(recursive: true);
+        //     //copy file to application support directory for easier referencing
+        //     file.copy(
+        //       dir.path +
+        //           '/data' +
+        //           '/${materialDetails['class']}' +
+        //           '/${materialDetails['topic']}' +
+        //           '/${materialDetails['material']}/' +
+        //           file.path.split('/').last,
+        //     );
+        //     changedData =
+        //         '![${data.substring(fromIndex, toIndex)}](${file.path.split('/').last})';
+        //   } else {
+        //     changedData =
+        //     '![${data.substring(fromIndex, toIndex)}](${data.substring(fromIndex, toIndex)})';
+        //   }
+        // } else {
           FilePickerResult? result = await FilePicker.platform.pickFiles(
             allowMultiple: false,
             type: FileType.custom,
             allowedExtensions: ['webp', 'jpg', 'jpeg', 'png', 'gif'],
-          );
-
-          if (result != null) {
-            File file = File(result.files.single.path!);
-            var dir = await getApplicationSupportDirectory();
-            //needed if directories have not yet been created
-            await File(
-              dir.path +
-                  '/data' +
-                  '/${materialDetails['class']}' +
-                  '/${materialDetails['topic']}' +
-                  '/${materialDetails['material']}/' +
-                  file.path.split('/').last,
-            ).create(recursive: true);
-            //copy file to application support directory for easier referencing
-            file.copy(
-              dir.path +
-                  '/data' +
-                  '/${materialDetails['class']}' +
-                  '/${materialDetails['topic']}' +
-                  '/${materialDetails['material']}/' +
-                  file.path.split('/').last,
-            );
-            changedData =
-                '![${data.substring(fromIndex, toIndex)}](${file.path.split('/').last})';
-          } else {
-            changedData =
-            '![${data.substring(fromIndex, toIndex)}](${data.substring(fromIndex, toIndex)})';
-          }
-        } else {
-          FilePickerResult? result = await FilePicker.platform.pickFiles(
-            allowMultiple: false,
-            type: FileType.custom,
-            allowedExtensions: ['webp', 'jpg', 'jpeg', 'png', 'gif'],
+            withData: true,
           );
 
           if (result != null) {
             PlatformFile file = result.files.first;
-
             //create/open a hive box with the material path
             var box = await Hive.openBox(
-              '/${materialDetails['class']}' '/${materialDetails['topic']}' '/${materialDetails['material']}/',
+              '${materialDetails['material'].id}-images',
             );
 
             //put image bytes into the file name key
@@ -129,7 +125,7 @@ class FormatMarkdown {
             changedData =
           '![${data.substring(fromIndex, toIndex)}](${data.substring(fromIndex, toIndex)})';
           }
-        }
+        // }
         replaceCursorIndex = 3;
         break;
     }

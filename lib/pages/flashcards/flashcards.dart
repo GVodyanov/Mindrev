@@ -36,7 +36,7 @@ class _FlashcardsState extends State<Flashcards> {
     Map routeData = ModalRoute.of(context)?.settings.arguments as Map;
 
     local
-        .getMaterialData(routeData['material'], routeData['topic'], routeData['class'])
+        .getMaterialData(routeData['material'])
         .then((value) => setState(() => flashcards = value));
     super.didChangeDependencies();
   }
