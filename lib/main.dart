@@ -35,6 +35,8 @@ import 'package:page_transition/page_transition.dart';
 
 ///TODO general import
 ///TODO rename path of web images when renaming higher path
+///TODO export directory
+///TODO image compression
 
 //main
 void main() async {

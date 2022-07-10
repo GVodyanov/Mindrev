@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:mindrev/services/db.dart';
@@ -86,7 +88,7 @@ class FormatMarkdown {
           );
 
           //put image bytes into the file name key
-          await box.put(file.name, file.bytes);
+          await box.put(file.name, base64Encode(file.bytes!.toList()));
           var notes = materialDetails['notes'];
           notes.images.add(file.name);
           await local.updateMaterialData(materialDetails['material'], notes);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:mindrev/pages/notes/markdown_text_input/markdown_text_input.dart';
@@ -39,7 +41,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
     super.initState();
     //we basically only need this to determine whether to show formatting bar
     local.getSettings().then(
-        (MindrevSettings settings) => setState(() => this.settings = settings));
+        (MindrevSettings settings) => setState(() => this.settings = settings),);
   }
 
   @override
@@ -86,7 +88,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
               onPressed: () async {
                 routeData?['text'] = await readText('materialExtra');
                 Navigator.pushNamed(context, '/materialExtra',
-                    arguments: routeData);
+                    arguments: routeData,);
               },
             ),
             IconButton(
@@ -151,7 +153,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                         p: TextStyle(color: theme.primaryText, fontSize: 14.5),
                         a: TextStyle(
                             color: theme.accent,
-                            decoration: TextDecoration.underline),
+                            decoration: TextDecoration.underline,),
                         tableBody: TextStyle(color: theme.primaryText),
                         tableHead: TextStyle(color: theme.primaryText),
                         codeblockDecoration: const BoxDecoration(
@@ -252,12 +254,12 @@ Widget displayImageWeb(Uri uri, Box box, context) {
       showImageViewer(
         context,
         Image.memory(
-          box.get(uri.toString()),
+          Uint8List.fromList(base64Decode(box.get(uri.toString()))),
         ).image,
       );
     },
     child: Image.memory(
-      box.get(uri.toString()),
+      Uint8List.fromList(base64Decode(box.get(uri.toString()))),
     ),
   );
 }

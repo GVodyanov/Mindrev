@@ -31,6 +31,26 @@ AlertStyle defaultAlertStyle() {
   );
 }
 
+AlertStyle exportAlertStyle() {
+  return AlertStyle(
+    animationType: AnimationType.grow,
+    isCloseButton: false,
+    isOverlayTapDismiss: true,
+    animationDuration: const Duration(milliseconds: 0),
+    alertBorder: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15),
+      side: const BorderSide(),
+    ),
+    backgroundColor: theme.secondary,
+    titleStyle: TextStyle(
+      color: theme.secondaryText,
+    ),
+    descStyle: TextStyle(
+      color: theme.secondaryText,
+    ),
+  );
+}
+
 DialogButton defaultDialogButton(String text, context, Function onPressed) {
   return DialogButton(
     child: Text(

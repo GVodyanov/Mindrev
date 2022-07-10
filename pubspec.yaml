@@ -49,6 +49,7 @@ dependencies:
   flutter_math_fork: ^0.6.2
   page_transition: ^2.0.5
   easy_image_viewer: ^1.0.4
+  download: ^0.0.1+1
 
 dev_dependencies:
   flutter_test:

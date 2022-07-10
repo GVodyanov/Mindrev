@@ -31,7 +31,7 @@ class MindrevNotes {
     var box = await Hive.openBox('$id-images');
     Map imageData = {};
     for (String i in images) {
-      imageData['i'] = await box.get(i);
+      imageData[i] = await box.get(i);
     }
 
     return {

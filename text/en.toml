@@ -153,3 +153,7 @@ results = "Quiz results"
 question = "Question"
 correctAnswer = "Correct answer"
 responded = "Your answer"
+
+[export]
+title = "Exporting your "
+find = "Exported! Find your file at"

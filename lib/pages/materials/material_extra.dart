@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:mindrev/widgets/widgets.dart';
 import 'package:mindrev/services/db.dart';
+import 'package:mindrev/services/export.dart';
 
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+
+import '../../services/text.dart';
 
 class MaterialExtra extends StatefulWidget {
   const MaterialExtra({Key? key}) : super(key: key);
@@ -21,13 +24,6 @@ class _MaterialExtraState extends State<MaterialExtra> {
   dispose() {
     _newNameController.dispose();
     super.dispose();
-  }
-
-  Future<bool> exportMaterial() async {
-    // ignore: unused_local_variable
-    var dir = await getApplicationSupportDirectory();
-
-    return true;
   }
 
   @override
@@ -62,7 +58,8 @@ class _MaterialExtraState extends State<MaterialExtra> {
                 ListTile(
                   textColor: theme.primaryText,
                   leading: Icon(Icons.calendar_today, color: theme.accent),
-                  title: Text(text['creationDate'], style: defaultPrimaryTextStyle()),
+                  title: Text(text['creationDate'],
+                      style: defaultPrimaryTextStyle(),),
                   trailing: Text(
                     dateFormat.format(DateTime.parse(material!.date)),
                     style: defaultPrimaryTextStyle(),
@@ -89,6 +86,30 @@ class _MaterialExtraState extends State<MaterialExtra> {
                 coloredButton(
                   text['export'],
                   () async {
+                    Map? text = await readText('export');
+                    //show an alert with a spinner while it's exporting
+                    Alert(
+                      context: context,
+                      title: '${text!['title']}material...',
+                      style: exportAlertStyle(),
+                      content: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: SpinKitFadingGrid(
+                          color: theme.accent,
+                          size: 50.0,
+                        ),
+                      ),
+                      buttons: [],
+                    ).show();
+
+                    await export(
+                      material.name,
+                      'material',
+                      await material.toJson(),
+                      context,
+                      text['find'],
+                    );
+                    Navigator.pop(context);
                   },
                   theme.accent,
                   theme.accentText,
@@ -134,10 +155,11 @@ class _MaterialExtraState extends State<MaterialExtra> {
                             _newNameController.text,
                           );
                           //update again
-                          Navigator.pushNamed(context, '/materials', arguments: routeData);
+                          Navigator.pushNamed(context, '/materials',
+                              arguments: routeData,);
                         } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(defaultSnackbar(text['errorNoText']));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              defaultSnackbar(text['errorNoText']),);
                         }
                       },
                       icon: Icon(Icons.check, color: theme.primaryText),

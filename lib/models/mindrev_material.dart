@@ -44,7 +44,8 @@ class MindrevMaterial {
   Future<Map> toJson() async {
     //also get material data and transform to json, pass data and not ID
     var materialData = await local.getMaterialData(this);
-    var data = materialData.toJson(id);
+    var data = await materialData.toJson(id.toString());
+
     return {
         'name': name,
         'type': type,
@@ -53,7 +54,7 @@ class MindrevMaterial {
       };
   }
 
-  Future<MindrevMaterial> fromJson (Map json) async {
+  static Future<MindrevMaterial> fromJson (Map json) async {
     LazyBox box = Hive.lazyBox('mindrev');
     int? previousId = await box.get('materialId');
     previousId ??= 0; previousId += 1;
