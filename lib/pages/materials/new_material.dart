@@ -26,7 +26,7 @@ class _NewMaterialState extends State<NewMaterial> {
   final TextEditingController _materialNameController = TextEditingController();
 
   //function to return a list of materials to display
-  List<Widget> displayMaterial(materialTypes, var theme) {
+  List<Widget> displayMaterial(materialTypes, var theme, Map text) {
     List<Widget> result = [];
     //cycle through materials and add them to result, if selected change colors
     for (int i = materialTypes['materials'].length - 1; i >= 0; i--) {
@@ -52,7 +52,7 @@ class _NewMaterialState extends State<NewMaterial> {
                 ),
                 const SizedBox(height: 10, width: 100),
                 Text(
-                  materialTypes['materials'][i]['name'],
+                  text[materialTypes['materials'][i]['name']],
                   style:
                       TextStyle(color: selected == i ? theme.accentText : theme.primaryText),
                 )
@@ -136,7 +136,7 @@ class _NewMaterialState extends State<NewMaterial> {
                           const SizedBox(height: 20, width: double.infinity),
                           Wrap(
                             children: [
-                              for (Widget i in displayMaterial(materialTypes, theme)) i
+                              for (Widget i in displayMaterial(materialTypes, theme, text)) i
                             ],
                           )
                         ],

@@ -90,7 +90,7 @@ class _MaterialExtraState extends State<MaterialExtra> {
                     //show an alert with a spinner while it's exporting
                     Alert(
                       context: context,
-                      title: '${text!['title']}material...',
+                      title: '${text!['title']}${text['material']}...',
                       style: exportAlertStyle(),
                       content: Padding(
                         padding: const EdgeInsets.all(20.0),

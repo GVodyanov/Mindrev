@@ -71,6 +71,8 @@ errorNoText = "Please enter some text"
 errorNoType = "Please select a type"
 type = "Choose a material type"
 close = "Close"
+notes = "Notes"
+flashcards = "Flashcards"
 
 [materials.topicExtra]
 creationDate = "Creation date"
@@ -157,3 +159,4 @@ responded = "Your answer"
 [export]
 title = "Exporting your "
 find = "Exported! Find your file at"
+material = "material"

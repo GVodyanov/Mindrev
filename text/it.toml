@@ -1,0 +1,162 @@
+[sidebar]
+home = "Home"
+settings = "Impostazioni"
+help = "Aiuto"
+about = "Info"
+header = "Ciao!"
+
+[home]
+create = "Non avete ancora materie, cliccate il tasto sotto per cominciare"
+new = "Materia"
+
+[about]
+title = "Info"
+close = "Chiudi"
+version = "Versione"
+versionNumber = "Alpha 0.1"
+author = "Autore"
+source = "Codice Sorgente"
+license = "Licenza"
+
+[home.newClass]
+title = "Crea una nuova materia"
+label = "Nome materia"
+submit = "Invia"
+cancel = "Annulla"
+errorNoText = "Inserite del testo"
+chooseColor = "Scegliete un colore"
+chooseColorDetails = "Scegliete un colore per la vostra materia"
+
+[settings]
+title = "Impostazioni"
+apply = "Applica"
+ui = "Interfaccia"
+uiColors = "Vorresti che il colore d'accento cambi con la materia selezionata?"
+confetti = "Vorresti vedere l'effetto coriandolo?"
+notes = "Appunti"
+editor = "Mostrare impostazioni di formattazione nell'editor?"
+theme = "Tema"
+moreThemes = "Più temi"
+lessThemes = "Meno temi"
+
+[topics]
+create = "Non avete ancora argomenti, cliccate il tasto sotto per cominciare"
+new = "Argomento"
+
+[topics.newTopic]
+title = "Crea un nuovo argomento"
+label = "Nome argomento"
+submit = "Invia"
+errorNoText = "Inserite del testo"
+
+[topics.classExtra]
+creationDate = "Data creazione"
+delete = "Cancella materia"
+rename = "Rinomina materia"
+newName = "Nuovo nome"
+errorNoText = "Inserite del testo"
+sure = "Siete sicuri di voler cancellare"
+confirm = "Cancella"
+cancel = "Annulla"
+
+[materials]
+create = "Non avete ancora materiale da studiare, cliccate il tasto sotto per cominciare"
+new = "Materiale"
+
+[materials.newMaterial]
+title = "Crea nuovo materiale da studiare"
+label = "Nome materiale"
+submit = "Invia"
+errorNoText = "Inserite del testo"
+errorNoType = "Inserite un tipo"
+type = "Scegliete un tipo di materiale"
+close = "Chiudi"
+notes = "Appunti"
+flashcards = "Flashcard"
+
+[materials.topicExtra]
+creationDate = "Data creazione"
+delete = "Cancella argomento"
+rename = "Rinomina argomento"
+newName = "Nuovo nome"
+errorNoText = "Inserite del testo"
+sure = "Siete sicuri di voler cancellare"
+confirm = "Cancella"
+cancel = "Annulla"
+
+[materialExtra]
+creationDate = "Data creazione"
+export = "Esporta materiale"
+import = "Importa materiale"
+delete = "Cancella materiale"
+rename = "Rinomina materiale"
+newName = "Nuovo nome"
+errorNoText = "Inserite del testo"
+sure = "Siete sicuri di voler cancellare"
+confirm = "Cancella"
+cancel = "Annulla"
+
+[flashcards]
+learn = "Impara"
+practice = "Allenati"
+quiz = "Quiz"
+new = "Flashcards"
+create = "Non avete ancora flashcard, cliccate il tasto sotto per cominciare"
+termOrDef = "Termine o definizione"
+termOrDefDesc = "Cosa volete vedere prima?"
+term = "Termine"
+def = "Definizione"
+
+[flashcards.newFlashcards]
+title = "Nuove Flashcard"
+new = "Flashcard"
+front = "Fronte"
+back = "Retro"
+
+[flashcards.newFlashcards.bulkImport]
+title = "Importazione in blocco"
+sideSplit = "Divisore fronte e retro "
+cardSplit = "Divisore tra carte "
+importData = "Seleziona dati da importare"
+preview = "Anteprima"
+split = "Dividi"
+tab = "Tabulazione"
+newLine = "Nuova linea"
+slash = "Barra"
+comma = "Virgola"
+semicolon = "Punto e virgola"
+colon = "Due punti"
+space = "Spazion"
+point = "Punto"
+custom = "Personalizzato"
+
+[flashcards.learnFlashcards]
+title = "Impara"
+
+[flashcards.practiceFlashcards]
+title = "Allenati"
+term = "Termine"
+def = "Definizione"
+perfect = "Giusto!"
+right = "Errore di battitura, risposta precisa"
+wrong = "Non proprio"
+correctAnswer = "Risposta giusta"
+next = "Prossimo"
+
+[flashcards.quizFlashcards]
+title = "Quiz"
+term = "Termine"
+def = "Definizione"
+perfect = "Giusto!"
+right = "Errore di battitura"
+wrong = "Non proprio"
+close = "Quasi"
+results = "Risultati"
+question = "Domanda"
+correctAnswer = "Risposta giusta"
+responded = "Vostra risposta"
+
+[export]
+title = "Esportando il vostro "
+find = "Esportato! Troverete il vostro file a "
+material = "materiale"
