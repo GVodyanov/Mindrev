@@ -11,7 +11,7 @@ A flutter application to help you study
 - [x] Themable
 - [x] Flashcards
 - [x] Notes
-- [ ] Multilingual
+- [x] Multilingual (English, Italian)
 - [ ] Graphs
 - [ ] Mind Maps
 - [ ] Maybe online synchronization?
