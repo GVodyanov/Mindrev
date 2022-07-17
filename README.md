@@ -3,7 +3,9 @@
 
 <h1 align="center"> Mindrev [WIP] </h1>
 
-A flutter application to help you study
+A flutter application to help you study 
+
+![Code quality score](https://api.codiga.io/project/34079/score/svg)
 
 ### Features
 
